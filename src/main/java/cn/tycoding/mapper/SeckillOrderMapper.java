@@ -3,6 +3,7 @@ package cn.tycoding.mapper;
 import cn.tycoding.entity.SeckillOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
  * @date 2018/10/8
  */
 @Mapper
+@Repository
 public interface SeckillOrderMapper {
 
     /**

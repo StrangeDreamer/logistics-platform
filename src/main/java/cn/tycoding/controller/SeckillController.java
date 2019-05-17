@@ -35,6 +35,11 @@ public class SeckillController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * thymeleaf 解析路径
+     * @param model
+     * @return
+     */
     @RequestMapping("/list")
     public String findSeckillList(Model model) {
         List<Seckill> list = seckillService.findAll();
@@ -42,11 +47,32 @@ public class SeckillController {
         return "page/seckill";
     }
 
+
+    @RequestMapping("/list_2")
+    @ResponseBody
+    public List<Seckill> findSeckillList_2() {
+
+        return seckillService.findAll();
+    }
+
+    /** @RsponseBody 用于返回json类型
+     * @RequestParam 表示在URL中带上规定的键值
+     * Test URL:http://localhost:8080/seckill/findById/?id=2
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/findById")
     public Seckill findById(@RequestParam("id") Long id) {
         return seckillService.findById(id);
     }
+
+    /**
+     * Test URL:http://localhost:8080/seckill/2/detail
+     * @param seckillId
+     * @param model
+     * @return
+     */
 
     @RequestMapping("/{seckillId}/detail")
     public String detail(@PathVariable("seckillId") Long seckillId, Model model) {
@@ -61,6 +87,11 @@ public class SeckillController {
         return "page/seckill_detail";
     }
 
+    /**
+     * Test URL  POST :http://localhost:8080/seckill/2/exposer
+     * @param seckillId
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/{seckillId}/exposer",
             method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})

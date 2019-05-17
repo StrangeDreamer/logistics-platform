@@ -3,6 +3,7 @@ package cn.tycoding.mapper;
 import cn.tycoding.entity.Seckill;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @date 2018/10/6
  */
 @Mapper
+@Repository
 public interface SeckillMapper {
 
     /**

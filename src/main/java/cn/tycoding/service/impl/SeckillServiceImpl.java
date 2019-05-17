@@ -49,17 +49,17 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public List<Seckill> findAll() {
         List<Seckill> seckillList = redisTemplate.boundHashOps("seckill").values();
-        if (seckillList == null || seckillList.size() == 0){
+        if (seckillList == null || seckillList.size() == 0) {
             //说明缓存中没有秒杀列表数据
             //查询数据库中秒杀列表数据，并将列表数据循环放入redis缓存中
             seckillList = seckillMapper.findAll();
-            for (Seckill seckill : seckillList){
+            for (Seckill seckill : seckillList) {
                 //将秒杀列表数据依次放入redis缓存中，key:秒杀表的ID值；value:秒杀商品数据
                 redisTemplate.boundHashOps(key).put(seckill.getSeckillId(), seckill);
-                logger.info("findAll -> 从数据库中读取放入缓存中");
+                logger.info("findAll -> 从Mysql数据库中读取并放入Redis缓存中");
             }
-        }else{
-            logger.info("findAll -> 从缓存中读取");
+        } else {
+            logger.info("findAll -> 从Redis缓存中读取");
         }
         return seckillList;
     }

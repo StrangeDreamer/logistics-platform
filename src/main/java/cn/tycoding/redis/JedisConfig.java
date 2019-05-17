@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-/**
- * @auther TyCoding
- * @date 2018/10/8
- */
+
+
 @Configuration
 public class JedisConfig {
     private Logger logger = LoggerFactory.getLogger(JedisConfig.class);
