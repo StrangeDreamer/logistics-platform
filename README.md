@@ -54,4 +54,7 @@
     └── test  -- 测试文件
 ```
 
+swagger editor 
+-  "#/definitions/Bank"
+
 
