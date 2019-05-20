@@ -54,7 +54,19 @@
     └── test  -- 测试文件
 ```
 
-swagger editor 
--  "#/definitions/Bank"
+swagger editor  TODO
+-  "#/definitions/Bank"各类entity定义
+-  抢单包含如下API
+   - Sender创建POST了一个订单，同时将所有订单放进Redis中（或者队列中）
+   - 承运方Trunk查询所有可以抢的订单
+   - 承运方Trunk发送抢单价格，返回抢单是否成功
+-  承运方Trunk的转单API
+   - Trunk更新UPDATE了一个订单，同时将所有订单放进Redis中（或者队列中）
+   - 承运方Trunk查询所有可以抢的订单
+   - 承运方Trunk发送抢单价格，返回抢单是否成功
 
-
+- 订单完成（给订单状态属性赋值——完成、失败【超时、验货不通过】）
+  - Reciever更新Update订单状态
+  - 平台将该运费支付给承运方？？？？？？？？？？？？？？
+- 订单超时？？？？？？？？？？？
+  - Trunk承运方获取超时计费额度

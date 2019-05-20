@@ -43,13 +43,13 @@ public class Cargo extends Parcel implements Actor {
     private Truck myTruck = null;
 
     //运费：发货方支付运费，接单报价运费
-    // 发布订单的人支付的运费
+    // 发布订单的人支付的运费,担保额????????
     private double freightFare = -1;
     // 原始发货方支付的运费
     private double originFreightFare = -1;
     //实际 被接单的价格
     private int orderPrice = -1;
-    //违约金 只有担保额大于违约金的承运方才可以接单
+    //违约金 只有担保额大于违约金的承运方才可以接单(liquidatedDamages<freightFare)
     private double liquidatedDamages = freightFare;
 
     //3 时间约束
