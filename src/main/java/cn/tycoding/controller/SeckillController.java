@@ -64,6 +64,7 @@ public class SeckillController {
     @ResponseBody
     @RequestMapping("/findById")
     public Seckill findById(@RequestParam("id") Long id) {
+
         return seckillService.findById(id);
     }
 

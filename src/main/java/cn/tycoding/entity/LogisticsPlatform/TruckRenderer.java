@@ -23,8 +23,7 @@ import java.util.Map.Entry;
 
 import static javafx.application.ConditionalFeature.SWT;
 
-*
- *  货车的界面渲染
+
 
 
 public class TruckRenderer extends AbstractCanvasRenderer {
