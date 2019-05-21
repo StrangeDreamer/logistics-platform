@@ -71,6 +71,7 @@ spring:
 
 #mybatis配置
 mybatis:
+# 配置mapper xml文件所在路径
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: cn.tycoding.entity
   configuration:

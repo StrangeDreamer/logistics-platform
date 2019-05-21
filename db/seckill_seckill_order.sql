@@ -1,0 +1,3 @@
+INSERT INTO seckill.seckill_order (seckill_id, money, user_phone, create_time, state) VALUES (1, 1100.00, 19023459876, '2019-05-15 16:31:27', -1);
+INSERT INTO seckill.seckill_order (seckill_id, money, user_phone, create_time, state) VALUES (2, 150.00, 19023459876, '2019-05-15 19:31:34', -1);
+INSERT INTO seckill.seckill_order (seckill_id, money, user_phone, create_time, state) VALUES (3, 130.00, 19023459876, '2019-05-15 16:42:12', -1);

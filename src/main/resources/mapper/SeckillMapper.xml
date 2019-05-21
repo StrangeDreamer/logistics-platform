@@ -21,4 +21,5 @@
         AND stock_count &gt; 0
     </update>
 
+
 </mapper>
