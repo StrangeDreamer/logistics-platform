@@ -27,10 +27,24 @@ public class CargoOrderResource {
     public Map<String, Object> chaseCargo(@RequestBody CargoOrder cargoOrder) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            WebSocketServer.sendInfo("有人出价"+cargoOrder.getCostPrice());
-            //存入redis缓存中。 key:秒杀表的ID值； value:秒杀表数据
-            redisTemplate.boundHashOps(key).put(cargoOrder.getId(), cargoOrder);
+
             logger.info("请求成功加入Redis缓存");
+            CargoOrder redisCargo = (CargoOrder) redisTemplate.boundHashOps(key).get(cargoOrder.getCargoId());
+            if (redisCargo==null){
+                //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
+                redisTemplate.boundHashOps(key).put(cargoOrder.getCargoId(), cargoOrder);
+                WebSocketServer.sendInfo("有人出价"+cargoOrder.getCostPrice());
+            }
+            else {
+                //redisCargo更大,则需要更新
+                if (redisCargo.getCostPrice().compareTo(cargoOrder.getCostPrice())==1){
+                    redisTemplate.boundHashOps(key).put(cargoOrder.getCargoId(), cargoOrder);
+                    WebSocketServer.sendInfo("有人出价"+cargoOrder.getCostPrice());
+                }
+            }
+
+            System.out.println(redisTemplate.boundHashOps(key).entries().size());
+            redisTemplate.boundHashOps(key).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 
             result.put("operationResult", "排队成功");
         } catch (Exception e) {

@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2018/10/11
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RedisTemplateConfigTest {
 
     @Autowired
@@ -38,5 +38,11 @@ public class RedisTemplateConfigTest {
     public void testRedis(){
         System.out.println(redisTemplate.boundHashOps("seckill").get(1));
     }
+
+    @Test
+    public void testRedis2(){
+        System.out.println(redisTemplate.boundHashOps("cargoOrders").get(1));
+    }
+
 
 }

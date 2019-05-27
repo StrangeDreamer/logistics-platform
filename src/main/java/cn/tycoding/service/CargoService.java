@@ -10,9 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class CargoService  {
-    private final Logger logger=LoggerFactory.getLogger(CargoService.class);
-
+public class CargoService {
+    private final Logger logger = LoggerFactory.getLogger(CargoService.class);
 
     private final CargoRepository cargoRepository;
 
@@ -20,17 +19,21 @@ public class CargoService  {
         this.cargoRepository = cargoRepository;
     }
 
+
     // TODO 一些逻辑判断
-    public Cargo createCargo(Cargo cargo){
-        Cargo c=new Cargo();
+    public Cargo createCargo(Cargo cargo) {
+        Cargo c = new Cargo();
+
         c.setShipperId(cargo.getShipperId());
-        c.setRecieverId(cargo.getRecieverId());
-        c.setStartTime(cargo.getStartTime());
-        c.setPrice(cargo.getPrice());
+        c.setFreightFare(cargo.getFreightFare());
+        c.setReceiverId(cargo.getReceiverId());
+        c.setWeight(cargo.getWeight());
+        c.setVolume(cargo.getVolume());
+        c.setDeparture(cargo.getDeparture());
+        c.setDestination(cargo.getDestination());
+
         cargoRepository.save(c);
-        logger.info("成功创建一个订单");
+        logger.info("成功创建一个货物");
         return c;
-
     }
-
 }

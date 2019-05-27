@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface ShipperMapper {
+public interface ReceiverMapper {
     List<Shipper> findAll();
     int insertShipper(@Param("id") String id, @Param("isActivated") boolean isActivated);
 
