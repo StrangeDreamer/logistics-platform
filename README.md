@@ -21,37 +21,148 @@
 **项目设计**
 
 ```
-.
-├── README  -- Doc文档
-├── db  -- 数据库约束文件
-├── mvnw  
-├── mvnw.cmd
-├── pom.xml  -- 项目依赖
-└── src
-    ├── main
-    │   ├── java
-    │   │   └── cn
-    │   │       └── tycoding
-    │   │           ├── SpringbootSeckillApplication.java  -- SpringBoot启动器
-    │   │           ├── controller  -- MVC的web层
-    │   │           ├── dto  -- 统一封装的一些结果属性，和entity类似
-    │   │           ├── entity  -- 实体类
-    │   │           ├── enums  -- 手动定义的字典枚举参数
-    │   │           ├── exception  -- 统一的异常结果
-    │   │           ├── mapper  -- Mybatis-Mapper层映射接口，或称为DAO层
-    │   │           ├── redis  -- redis,jedis 相关配置
-    │   │           └── service  -- 业务层
-    │   └── resources
-    │       ├── application.yml  -- SpringBoot核心配置
-    │       ├── mapper  -- Mybatis-Mapper层XML映射文件
-    │       ├── static  -- 存放页面静态资源，可通过浏览器直接访问
-    │       │   ├── css
-    │       │   ├── js
-    │       │   └── lib
-    │       └── templates  -- 存放Thymeleaf模板引擎所需的HTML，不能在浏览器直接访问
-    │           ├── page
-    │           └── public  -- HTML页面公共组件（头部、尾部）
-    └── test  -- 测试文件
+
+│
+├─db   数据库脚本
+├─src
+│  ├─main
+│  │  ├─java
+│  │  │  └─cn
+│  │  │      └─tycoding
+│  │  │          │  SpringbootSeckillApplication.java 启动类
+│  │  │          │
+│  │  │          ├─domain  
+│  │  │          │      Cargo.java
+│  │  │          │      CargoOrder.java
+│  │  │          │      Reciever.java
+│  │  │          │      Seckill.java
+│  │  │          │      SeckillOrder.java
+│  │  │          │      Shipper.java
+│  │  │          │      Trunk.java
+│  │  │          │
+│  │  │          ├─dto  暂时不管
+│  │  │          │      Exposer.java
+│  │  │          │      SeckillExecution.java
+│  │  │          │      SeckillResult.java
+│  │  │          │
+│  │  │          ├─enums 暂时不管
+│  │  │          │      SeckillStatEnum.java
+│  │  │          │
+│  │  │          ├─exception 暂时不管
+│  │  │          │      RepeatKillException.java
+│  │  │          │      SeckillCloseException.java
+│  │  │          │      SeckillException.java
+│  │  │          │
+│  │  │          ├─redis 暂时不管
+│  │  │          │      JedisConfig.java
+│  │  │          │      RedisTemplateConfig.java
+│  │  │          │
+│  │  │          ├─repository 操作entity的抽象接口，统一以**Repository命名文件
+│  │  │          │      CargoRepository.java
+│  │  │          │      RecieverMapper.java
+│  │  │          │      SeckillMapper.java
+│  │  │          │      SeckillOrderMapper.java
+│  │  │          │      ShipperMapper.java
+│  │  │          │      ShipperRepository.java
+│  │  │          │
+│  │  │          ├─resource 向外提供API服务类，统一以**Resource命名文件
+│  │  │          │      BaseController.java
+│  │  │          │      CargoResource.java
+│  │  │          │      pushWeb.java
+│  │  │          │      SeckillController.java
+│  │  │          │      ShipperResource.java
+│  │  │          │
+│  │  │          ├─service 操作entity的抽象接口实现类
+│  │  │          │  │  CargoService.java
+│  │  │          │  │  SeckillService.java
+│  │  │          │  │  ShipperService.java
+│  │  │          │  │
+│  │  │          │  └─impl 暂时不管
+│  │  │          │          SeckillServiceImpl.java
+│  │  │          │
+│  │  │          └─websocket websocket配置类
+│  │  │                  WebSocketConfig.java
+│  │  │                  WebSocketServer.java
+│  │  │
+│  │  └─resources
+│  │      │  application.yml 项目配置文件
+│  │      │
+│  │      ├─mapper 暂时不管
+│  │      │      SeckillMapper.xml
+│  │      │      SeckillOrderMapper.xml
+│  │      │
+│  │      ├─static 暂时不管
+│  │      │  ├─css
+│  │      │  │      public.css
+│  │      │  │      seckill.css
+│  │      │  │      seckill_item.css
+│  │      │  │
+│  │      │  ├─js
+│  │      │  │      seckill_detail.js
+│  │      │  │
+│  │      │  └─lib
+│  │      │      │  bootstrap.min.css
+│  │      │      │  bootstrap.min.js
+│  │      │      │  countdown.js
+│  │      │      │  jquery-3.3.1.min.js
+│  │      │      │  jquery.cookie.js
+│  │      │      │
+│  │      │      └─font
+│  │      │          ├─css
+│  │      │          │      font-awesome.min.css
+│  │      │          │
+│  │      │          ├─fonts
+│  │      │          │      fontawesome-webfont.eot
+│  │      │          │      fontawesome-webfont.svg
+│  │      │          │      fontawesome-webfont.ttf
+│  │      │          │      fontawesome-webfont.woff
+│  │      │          │      fontawesome-webfont.woff2
+│  │      │          │      FontAwesome.otf
+│  │      │          │      glyphicons-halflings-regular.eot
+│  │      │          │      glyphicons-halflings-regular.svg
+│  │      │          │      glyphicons-halflings-regular.ttf
+│  │      │          │      glyphicons-halflings-regular.woff
+│  │      │          │      glyphicons-halflings-regular.woff2
+│  │      │          │
+│  │      │          └─icon
+│  │      │                  clock.png
+│  │      │                  seckillbg.png
+│  │      │
+│  │      ├─swagger
+│  │      │      api-v0.0.1.yaml
+│  │      │
+│  │      └─templates
+│  │          ├─page
+│  │          │      seckill.html
+│  │          │      seckill_detail.html
+│  │          │
+│  │          ├─public
+│  │          │      footer.html
+│  │          │      header.html
+│  │          │
+│  │          └─static
+│  │                  index.html
+│  │                  index2.html
+│  │
+│  └─test 暂时不管
+│      └─java
+│          └─cn
+│              └─tycoding
+│                  │  SpringbootSeckillApplicationTests.java
+│                  │
+│                  ├─LogisticsPlatform
+│                  ├─redis
+│                  │      RedisTemplateConfigTest.java
+│                  │
+│                  ├─repository
+│                  │      SeckillMapperTest.java
+│                  │      SeckillOrderMapperTest.java
+│                  │
+│                  └─service
+│                      └─impl
+│                              SeckillServiceImplTest.java
+
+
 ```
 
 swagger editor  TODO
