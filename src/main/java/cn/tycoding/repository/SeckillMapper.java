@@ -1,6 +1,6 @@
-package cn.tycoding.mapper;
+package cn.tycoding.repository;
 
-import cn.tycoding.entity.Seckill;
+import cn.tycoding.domain.Seckill;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -40,4 +40,5 @@ public interface SeckillMapper {
      * @return 返回此SQL更新的记录数，如果>=1表示更新成功
      */
     int reduceStock(@Param("seckillId") long seckillId, @Param("killTime") Date killTime);
+
 }

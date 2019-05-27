@@ -34,4 +34,9 @@ public class RedisTemplateConfigTest {
         redisTemplate.boundHashOps("redis_for_list").put("list", list);
     }
 
+    @Test
+    public void testRedis(){
+        System.out.println(redisTemplate.boundHashOps("seckill").get(1));
+    }
+
 }

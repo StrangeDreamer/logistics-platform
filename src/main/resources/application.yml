@@ -24,6 +24,7 @@ spring:
       #间隔多久进行一次检测，检测需要关闭的空闲连接
       time-between-eviction-runs-millis: 60000
 
+
   thymeleaf:
     prefix: classpath:/templates/
     check-template-location: true
@@ -68,19 +69,31 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接
         min-idle: 0
+  jpa:
+    database: mysql
+    show-sql: true
+    #create：每次加载hibernate时都会删除上一次的生成的表，然后根据你的model类再重新来生成新表，哪怕两次没有任何改变也要这样执行，这就是导致数据库表数据丢失的一个重要原因。
+    # update：最常用的属性，第一次加载hibernate时根据model类会自动建立起表的结构（前提是先建立好数据库），以后加载hibernate时根据 model类自动更新表结构，即使表结构改变了但表中的行仍然存在不会删除以前的行。要注意的是当部署到服务器后，表结构是不会被马上建立起来的，是要等 应用第一次运行起来后才会。
+
+    hibernate:
+      ddl-auto: update
+
+
+
+
 
 #mybatis配置
-mybatis:
-# 配置mapper xml文件所在路径
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: cn.tycoding.entity
-  configuration:
-    # 使用jdbc的getGeneratedKeys 可以获取数据库自增主键值
-    use-generated-keys: true
-    # 使用列别名替换列名，默认true。如：select name as title from table
-    use-column-label: true
-    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
-    map-underscore-to-camel-case: true
+#mybatis:
+## 配置mapper xml文件所在路径
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: cn.tycoding.entity
+#  configuration:
+#    # 使用jdbc的getGeneratedKeys 可以获取数据库自增主键值
+#    use-generated-keys: true
+#    # 使用列别名替换列名，默认true。如：select name as title from table
+#    use-column-label: true
+#    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
+#    map-underscore-to-camel-case: true
 
 # 打印sql
 logging:

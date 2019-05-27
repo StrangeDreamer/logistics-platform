@@ -1,9 +1,9 @@
-package cn.tycoding.controller;
+package cn.tycoding.resource;
 
 import cn.tycoding.dto.Exposer;
 import cn.tycoding.dto.SeckillExecution;
 import cn.tycoding.dto.SeckillResult;
-import cn.tycoding.entity.Seckill;
+import cn.tycoding.domain.Seckill;
 import cn.tycoding.enums.SeckillStatEnum;
 import cn.tycoding.exception.RepeatKillException;
 import cn.tycoding.exception.SeckillCloseException;
@@ -48,12 +48,6 @@ public class SeckillController {
     }
 
 
-    @RequestMapping("/list_2")
-    @ResponseBody
-    public List<Seckill> findSeckillList_2() {
-
-        return seckillService.findAll();
-    }
 
     /** @RsponseBody 用于返回json类型
      * @RequestParam 表示在URL中带上规定的键值

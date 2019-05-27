@@ -57,11 +57,13 @@
 swagger editor  TODO
 - "#/definitions/Bank"各类entity定义
 
+- baseUrl= localhost:8080
+
 - 抢单包含如下API
    - Sender创建POST了一个订单，同时将所有订单放进Redis中（或者队列中）
-     - POST /sender
+     - POST /sender/cargo/create
    - 承运方Trunk查询所有可以抢的订单
-     - GET /truck/cargos
+     - GET /truck/cargos/list
    - 承运方Trunk发送抢单价格，返回抢单是否成功
      - POST /trunk/{price}  
 

@@ -2,7 +2,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.dto.Exposer;
 import cn.tycoding.dto.SeckillExecution;
-import cn.tycoding.entity.Seckill;
+import cn.tycoding.domain.Seckill;
 import cn.tycoding.exception.RepeatKillException;
 import cn.tycoding.exception.SeckillCloseException;
 import cn.tycoding.exception.SeckillException;

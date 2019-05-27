@@ -1,6 +1,6 @@
 package cn.tycoding.dto;
 
-import cn.tycoding.entity.SeckillOrder;
+import cn.tycoding.domain.SeckillOrder;
 import cn.tycoding.enums.SeckillStatEnum;
 
 /**

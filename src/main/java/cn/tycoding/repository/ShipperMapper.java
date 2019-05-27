@@ -1,6 +1,6 @@
-package cn.tycoding.mapper;
+package cn.tycoding.repository;
 
-import cn.tycoding.entity.Shipper;
+import cn.tycoding.domain.Shipper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

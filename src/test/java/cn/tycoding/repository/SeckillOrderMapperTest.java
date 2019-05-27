@@ -1,6 +1,6 @@
-package cn.tycoding.mapper;
+package cn.tycoding.repository;
 
-import cn.tycoding.entity.SeckillOrder;
+import cn.tycoding.domain.SeckillOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
