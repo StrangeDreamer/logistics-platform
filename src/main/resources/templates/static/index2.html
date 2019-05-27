@@ -5,7 +5,7 @@
     <title>Title</title>
  </head>
 <body>
-<h3>server地址 :</h3>  <input id="serveraddress" type="text" value="ws://localhost:8080/websocket/{user}" style="width: 500px;%"/><br/>
+<h3>server地址 :</h3>  <input id="serveraddress" type="text" value="ws://localhost:8080/websocket" style="width: 500px;%"/><br/>
 <h3>您的用户id :</h3>  <input id="userId" type="text"/><br/>
 <button onclick="initSocket()">连接</button>
 <br/>
@@ -57,7 +57,7 @@
             return false;
         }
 
-        webSocket = new WebSocket(serveraddress/* + "/" + userId*/);
+        webSocket = new WebSocket(serveraddress + "/" + userId);
 
         // 收到服务端消息
         webSocket.onmessage = function (msg) {

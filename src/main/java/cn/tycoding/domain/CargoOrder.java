@@ -3,10 +3,7 @@ package cn.tycoding.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
@@ -14,10 +11,10 @@ import java.math.BigDecimal;
 public class CargoOrder {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
-    private String cargoId;
+    private int id;
+    private int cargoId;
     private BigDecimal costPrice;
-    private String trunkId;
+    private int trunkId;
 
 
 }

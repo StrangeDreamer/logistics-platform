@@ -197,3 +197,6 @@ swagger editor  TODO
   - 承运方trunk请求订单要送达接口，获取当前时间与订单被抢单的时间相减，差值与订单规定的运送时间对比。返回是否超时以及超时时长
 
   - Trunk承运方获取超时计费额度
+  
+  
+  - 断线Notification：Push，Notification，Service Work
