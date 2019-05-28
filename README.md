@@ -2,9 +2,10 @@
 
 **技术栈**
 
-* 后端： SpringBoot-2.x + Redis-4.x+Mysql
+* 后端： SpringBoot-2.x + Redis-4.x+Mysql(docker容器)
 
-* 前端**(用于测试）**： Bootstrap + Jquery
+* 前端(用于测试)： Bootstrap + Jquery
+
 
 **测试环境**
 
@@ -16,6 +17,9 @@
 
 * 启动前，请创建数据库`seckill`，建表SQL语句放在：db。**（不完善）还需要进一步根据遗留代码提炼出entity**
 
+* 启动前，运行docker文件夹下配置文件
+`docker-compose -f docker/mysql.yml up -d`
+`docker-compose -f docker/rabbitmq.yml up -d`
 
 
 **项目设计**

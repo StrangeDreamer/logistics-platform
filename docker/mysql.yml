@@ -13,6 +13,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1234
 
+# web端的数据库管理工具
   adminer:
     image: adminer
     restart: always
