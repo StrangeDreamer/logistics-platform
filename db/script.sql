@@ -1,33 +1,76 @@
-create table bank
+create table bank_account
 (
-  id     VARCHAR(20) auto_increment
+  id               INT(10) auto_increment
     primary key,
-  amount DOUBLE(22) not null
+  disposable_money DOUBLE(22) not null,
+  frozen_money     DOUBLE(22) not null,
+  money            DOUBLE(22) not null
 );
 
-create unique index bank_id_uindex
-  on bank (id);
-
-create table guarantor
+create table bid
 (
-  id     VARCHAR(20) not null
+  id           INT(10) auto_increment
     primary key,
-  amount DOUBLE(22)  not null
-  comment '担保金额'
+  bidding_time DATETIME(19) null,
+  biding_money DOUBLE(22)   not null,
+  cargo_id     INT(10)      not null,
+  truck_id     INT(10)      not null
 );
 
-create unique index guarantor_id_uindex
-  on guarantor (id);
-
-create table reciever
+create table cargo
 (
-  id          VARCHAR(20) not null
+  id           INT(10) auto_increment
     primary key,
-  isActivated TINYINT(3)  null
+  departure    VARCHAR(255)  null,
+  destination  VARCHAR(255)  null,
+  freight_fare DOUBLE(22)    not null,
+  receiver_id  INT(10)       not null,
+  shipper_id   INT(10)       not null,
+  start_time   TIMESTAMP(19) not null,
+  volume       DOUBLE(22)    not null,
+  weight       DOUBLE(22)    not null
 );
 
-create unique index reciever_id_uindex
-  on reciever (id);
+create table cargo_order
+(
+  id            INT(10) auto_increment
+    primary key,
+  cargo_id      INT(10)        not null,
+  complete_time DATETIME(19)   null,
+  cost_price    DECIMAL(19, 2) null,
+  is_abnormal   BIT(1)         not null,
+  is_overtime   BIT(1)         not null,
+  order_price   DOUBLE(22)     not null,
+  register_time DATETIME(19)   null,
+  status        INT(10)        not null,
+  truck_id      INT(10)        not null
+);
+
+create table cargo_order_lite
+(
+  id         INT(10) auto_increment
+    primary key,
+  cargo_id   INT(10)        not null,
+  cost_price DECIMAL(19, 2) null,
+  truck_id   INT(10)        not null
+);
+
+create table guarantor_account
+(
+  id               INT(10) auto_increment
+    primary key,
+  disposable_money DOUBLE(22) not null,
+  frozen_money     DOUBLE(22) not null,
+  money            DOUBLE(22) not null
+);
+
+create table receiver
+(
+  id            INT(10) auto_increment
+    primary key,
+  name          VARCHAR(255) null,
+  register_time DATETIME(19) null
+);
 
 create table seckill
 (
@@ -78,67 +121,21 @@ create table seckill_order
 
 create table shipper
 (
-  id          VARCHAR(20) not null
+  id            INT(10) auto_increment
     primary key,
-  isActivated TINYINT(3)  null
+  name          VARCHAR(255)                            null,
+  register_time TIMESTAMP(19) default CURRENT_TIMESTAMP not null
 );
 
-create table cargo
+create table truck
 (
-  id           VARCHAR(20)    not null
+  id               INT(10) auto_increment
     primary key,
-  shipper_id   VARCHAR(20)    null,
-  reciever_id  VARCHAR(20)    null,
-  start_time   TIMESTAMP(19)  null,
-  cargo_status INT(10)        null,
-  price        DECIMAL(10, 2) null,
-  constraint cargo_shippe_rid
-  foreign key (shipper_id) references shipper (id),
-  constraint cargo_reciever_id
-  foreign key (reciever_id) references reciever (id)
+  available_volume DOUBLE(22)   not null,
+  available_weight DOUBLE(22)   not null,
+  name             VARCHAR(255) null,
+  register_time    DATETIME(19) null,
+  type             INT(10)      not null
 );
-
-create unique index cargo_id_uindex
-  on cargo (id);
-
-create index cargo_reciever_id
-  on cargo (reciever_id);
-
-create index cargo_shippe_rid
-  on cargo (shipper_id);
-
-create unique index shipper_id_uindex
-  on shipper (id);
-
-create table trunk
-(
-  id VARCHAR(20) not null
-    primary key
-);
-
-create table cargo_order
-(
-  id         BIGINT(19) auto_increment
-    primary key,
-  cargo_id   VARCHAR(20)    null,
-  cost_price DECIMAL(10, 2) null,
-  trunk_id   VARCHAR(20)    null,
-  constraint cargo_id
-  foreign key (cargo_id) references cargo (id),
-  constraint cargo_order_trunk_id
-  foreign key (trunk_id) references trunk (id)
-);
-
-create index cargo_id
-  on cargo_order (cargo_id);
-
-create unique index cargo_order_id_uindex
-  on cargo_order (id);
-
-create index cargo_order_trunk_id
-  on cargo_order (trunk_id);
-
-create unique index trunk_trunkId_uindex
-  on trunk (id);
 
 

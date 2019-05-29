@@ -31,7 +31,8 @@ public class CargoService {
         c.setVolume(cargo.getVolume());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
-
+        c.setStartTime(cargo.getStartTime());
+        c.setEndTime(cargo.getEndTime());
         cargoRepository.save(c);
         logger.info("成功创建一个货物");
         return c;

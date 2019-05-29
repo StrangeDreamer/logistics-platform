@@ -2,7 +2,7 @@
 
 **技术栈**
 
-* 后端： SpringBoot-2.x + Redis-4.x+Mysql(docker容器)
+* 后端(localhost:8080)： SpringBoot-2.x + Redis-4.x+Mysql(docker容器)
 
 * 前端(用于测试)： Bootstrap + Jquery
 
@@ -12,15 +12,12 @@
 * IDEA + Maven-10.13 + Tomcat8 + JDK8
 
 **启动说明**
-
-* 启动前，请配置好 [application.yml](https://github.com/TyCoding/springboot-seckill/blob/master/src/main/resources/application.yml) 中连接数据库的用户名和密码，以及Redis服务器的地址和端口信息。
-
-* 启动前，请创建数据库`seckill`，建表SQL语句放在：db。**（不完善）还需要进一步根据遗留代码提炼出entity**
-
-* 启动前，运行docker文件夹下配置文件
+* 如果不想安装mysql和rabbitmq组件，请在启动前安装其容器，命令行如下（前提安装docker和docker-compose）
 `docker-compose -f docker/mysql.yml up -d`
 `docker-compose -f docker/rabbitmq.yml up -d`
-
+* adminer(localhost:8000)是web端的mysql管理工具，用户名/密码是root/1234，
+* 如果已经安装相关组件，请配置好 [application.yml](https://github.com/TyCoding/springboot-seckill/blob/master/src/main/resources/application.yml) 中连接数据库的用户名和密码，以及Redis服务器的地址和端口信息。同时，请创建数据库`seckill`，建表SQL语句放在：db。
+* 数据库中的时间字段使用**TIMESTAMP**。
 
 **项目设计**
 

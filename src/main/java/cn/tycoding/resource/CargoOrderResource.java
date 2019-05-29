@@ -24,33 +24,50 @@ public class CargoOrderResource {
     //设置秒杀redis缓存的key
     private final String key = "CargoOrders";
 
+    private final String cargoKey = "Cargo";
+
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
     private CargoRepository cargoRepository;
 
+    /**抢单
+     * redis维护键值对<cargoId,cargoOrderLite>
+     * @param cargoOrderLite
+     * @return
+     */
     @PostMapping
     public Map<String, Object> chaseCargo(@RequestBody CargoOrderLite cargoOrderLite) {
         Map<String, Object> result = new HashMap<String, Object>();
         //获取系统时间
         Date nowTime = new Date();
-        Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).get();
+        //将要抢的订单放进redis中
+        Cargo redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
+        if (redisCargo==null){
 
-        if (nowTime.getTime()>cargo.getStartTime().getTime()){
+            Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).get();
+            redisTemplate.boundHashOps(cargo).put(cargoOrderLite.getCargoId(),cargo);
+        }
+
+
+        if (nowTime.getTime()>redisCargo.getEndTime().getTime()){
             logger.info("错过抢单时间");
             throw new CargoOrderException("错过抢单时间");
         }
+        if (nowTime.getTime()<redisCargo.getStartTime().getTime()){
+            logger.info("还未开抢");
+            throw new CargoOrderException("还未开强");
+        }
         try {
-            logger.info("请求成功加入Redis缓存");
-            CargoOrderLite redisCargo = (CargoOrderLite) redisTemplate.boundHashOps(key).get(cargoOrderLite.getCargoId());
-            if (redisCargo==null){
+            CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(key).get(cargoOrderLite.getCargoId());
+            if (redisCargoOrder==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
                 redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
                 WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getCostPrice());
             }
             else {
                 //redisCargo更大,则需要更新
-                if (redisCargo.getCostPrice().compareTo(cargoOrderLite.getCostPrice())==1){
+                if (redisCargoOrder.getCostPrice().compareTo(cargoOrderLite.getCostPrice())==1){
                     redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
                     WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getCostPrice());
                 }

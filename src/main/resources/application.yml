@@ -77,6 +77,17 @@ spring:
 
     hibernate:
       ddl-auto: update
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    # 开启消息发送确认
+    publisher-confirms: true
+    publisher-returns: true
+    # 返回无法插入队列的消息
+    template:
+      mandatory: true
 
 
 
@@ -99,6 +110,7 @@ spring:
 logging:
   level:
     cn.tycoding.mapper: DEBUG
+
 
 
 
