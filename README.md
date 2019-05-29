@@ -21,6 +21,13 @@
 
 **项目设计**
 
+
+* docker使用
+`docker kill dockerName`
+`dockcer rm dockerName`
+* docker容器重启之后MySQL里面的数据将全部清空
+* mac上的mysql的hostname是192.168.99.100,所以在Windows上开发时需要改回localhost
+
 ```
 
 │
