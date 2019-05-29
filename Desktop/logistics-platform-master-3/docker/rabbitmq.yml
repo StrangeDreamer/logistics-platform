@@ -1,0 +1,8 @@
+version: '2'
+services:
+  rabbitmq:
+    image: ruddell/docker-rabbitmq-stomp:latest
+    hostname: localhost
+    ports:
+      - 15672:15672
+      - 61613:61613
