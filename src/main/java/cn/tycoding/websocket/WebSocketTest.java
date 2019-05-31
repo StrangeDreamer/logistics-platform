@@ -31,7 +31,7 @@ public class WebSocketTest {
     /**
      * 连接建立成功调用的方法
      *
-     * @param session 可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
+     * @param WebSocketsession 可选的参数。WebSocketsession为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
     public void onOpen(@PathParam(value = "userno") String param, Session WebSocketsession, EndpointConfig config) {
@@ -57,12 +57,15 @@ public class WebSocketTest {
 
     /**
      * 收到客户端消息后调用的方法
-     *
+     * @OnMessage注解表示：被客户端调用 websocket.onmessage = function (event) {
+     *         setMessageInnerHTML(event.data);
+     *     }
      * @param message 客户端发送过来的消息
      * @param session 可选的参数
      */
     @SuppressWarnings("unused")
-//	@OnMessage
+	@OnMessage
+    //以下逻辑只能实现群发呀
     public void onMessage(String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
 //        session.get
@@ -79,7 +82,7 @@ public class WebSocketTest {
      * 给指定的人发送消息
      * @param message
      */
-    @OnMessage
+//    @OnMessage
     public void sendToUser(String message) {
         String sendUserno = message.split("[|]")[1];
         String sendMessage = message.split("[|]")[0];
