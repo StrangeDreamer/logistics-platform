@@ -33,6 +33,7 @@ public class CargoOrderResource {
 
     /**抢单
      * redis维护键值对<cargoId,cargoOrderLite>
+     *    <cargoId,Cargo>
      * @param cargoOrderLite
      * @return
      */
@@ -46,8 +47,10 @@ public class CargoOrderResource {
         if (redisCargo==null){
 
             Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).get();
-            redisTemplate.boundHashOps(cargo).put(cargoOrderLite.getCargoId(),cargo);
+            logger.info("开抢时间"+cargo.getStartTime().toString());
+            redisTemplate.boundHashOps(cargoKey).put(cargoOrderLite.getCargoId(),cargo);
         }
+        redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
 
 
         if (nowTime.getTime()>redisCargo.getEndTime().getTime()){
@@ -56,7 +59,7 @@ public class CargoOrderResource {
         }
         if (nowTime.getTime()<redisCargo.getStartTime().getTime()){
             logger.info("还未开抢");
-            throw new CargoOrderException("还未开强");
+            throw new CargoOrderException("还未开抢");
         }
         try {
             CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(key).get(cargoOrderLite.getCargoId());

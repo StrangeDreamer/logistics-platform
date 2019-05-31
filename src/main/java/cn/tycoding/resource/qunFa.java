@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class pushWeb {
+public class qunFa {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -17,7 +17,7 @@ public class pushWeb {
      * @param message
      * @return
      */
-    @GetMapping(value = "/pushWeb")
+    @GetMapping(value = "/qunfa")
     public Map<String, Object> pushVideoListToWeb(String message) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {

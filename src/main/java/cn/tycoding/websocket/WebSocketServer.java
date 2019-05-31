@@ -12,8 +12,11 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 
+import cn.tycoding.domain.Truck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 @ServerEndpoint("/websocket/{user}")
@@ -28,6 +31,7 @@ public class WebSocketServer {
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
     private String currentUser;
+
 
     /**
      * 连接建立成功调用的方法
@@ -46,22 +50,22 @@ public class WebSocketServer {
 //            log.error("websocket IO异常");
 //        }
 //    }
-    	//连接打开时执行
-    	@OnOpen
-    	public void onOpen(@PathParam("user") String user, Session session) {
-    		this.currentUser = user;
-    		this.session=session;
-    		webSocketSet.add(this);
-    		addOnlineCount();
-    		log.info("有新连接加入！当前在线人数为" + getOnlineCount());
-    		try {
-    		    sendMessage("连接成功****SessionId："+ session.getId()+"******请求的user:"+currentUser);
-            } catch (IOException e) {
-    		    log.error("websocket IO异常");
-                e.printStackTrace();
-            }
-
+    //连接打开时执行
+    @OnOpen
+    public void onOpen(@PathParam("user") String user, Session session) {
+        this.currentUser = user;
+        this.session = session;
+        webSocketSet.add(this);
+        addOnlineCount();
+        log.info("有新连接加入！当前在线人数为" + getOnlineCount());
+        try {
+            sendMessage("连接成功****SessionId：" + session.getId() + "******请求的user:" + currentUser);
+        } catch (IOException e) {
+            log.error("websocket IO异常");
+            e.printStackTrace();
         }
+
+    }
 
     /**
      * 连接关闭调用的方法
@@ -117,6 +121,7 @@ public class WebSocketServer {
             }
         }
     }
+
 
     private static synchronized int getOnlineCount() {
         return onlineCount;
