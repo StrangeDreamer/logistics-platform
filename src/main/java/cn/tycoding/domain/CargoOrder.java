@@ -3,6 +3,8 @@ package cn.tycoding.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
@@ -26,8 +28,11 @@ public class CargoOrder {
     private double orderPrice;
     private int status;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date registerTime;
-    private Date completeTime;
+    @CreatedDate
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    private Date createdDate ;
+
+    @LastModifiedDate
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    private Date modifyTime;
 }

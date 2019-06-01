@@ -29,77 +29,105 @@
 * mac上的mysql的hostname是192.168.99.100,所以在Windows上开发时需要改回localhost
 
 ```
-
+├─db
+│      script.sql
 │
-├─db   数据库脚本
+├─docker
+│      mysql.yml
+│      rabbitmq.yml
+│      redis.yml
+│
 ├─src
 │  ├─main
 │  │  ├─java
 │  │  │  └─cn
 │  │  │      └─tycoding
-│  │  │          │  SpringbootSeckillApplication.java 启动类
+│  │  │          │  SpringbootSeckillApplication.java
 │  │  │          │
-│  │  │          ├─domain  
+│  │  │          ├─domain
+│  │  │          │      BankAccount.java
+│  │  │          │      Bid.java
 │  │  │          │      Cargo.java
 │  │  │          │      CargoOrder.java
-│  │  │          │      Reciever.java
+│  │  │          │      CargoOrderLite.java
+│  │  │          │      GuarantorAccount.java
+│  │  │          │      Receiver.java
 │  │  │          │      Seckill.java
 │  │  │          │      SeckillOrder.java
 │  │  │          │      Shipper.java
-│  │  │          │      Trunk.java
+│  │  │          │      Truck.java
 │  │  │          │
-│  │  │          ├─dto  暂时不管
+│  │  │          ├─dto
+│  │  │          │      CargoInfoChangeDTO.java
 │  │  │          │      Exposer.java
 │  │  │          │      SeckillExecution.java
 │  │  │          │      SeckillResult.java
 │  │  │          │
-│  │  │          ├─enums 暂时不管
+│  │  │          ├─enums
 │  │  │          │      SeckillStatEnum.java
 │  │  │          │
-│  │  │          ├─exception 暂时不管
+│  │  │          ├─exception
+│  │  │          │      CargoException.java
+│  │  │          │      CargoOrderException.java
 │  │  │          │      RepeatKillException.java
 │  │  │          │      SeckillCloseException.java
 │  │  │          │      SeckillException.java
 │  │  │          │
-│  │  │          ├─redis 暂时不管
+│  │  │          ├─rabbitmq
+│  │  │          │      rabbitMQConfig.java
+│  │  │          │      RabbitTopic.java
+│  │  │          │
+│  │  │          ├─redis
 │  │  │          │      JedisConfig.java
 │  │  │          │      RedisTemplateConfig.java
 │  │  │          │
-│  │  │          ├─repository 操作entity的抽象接口，统一以**Repository命名文件
+│  │  │          ├─repository
 │  │  │          │      CargoRepository.java
+│  │  │          │      ReceiverMapper.java
+│  │  │          │      ReceiverRepository.java
 │  │  │          │      RecieverMapper.java
 │  │  │          │      SeckillMapper.java
 │  │  │          │      SeckillOrderMapper.java
 │  │  │          │      ShipperMapper.java
 │  │  │          │      ShipperRepository.java
+│  │  │          │      TruckRepository.java
 │  │  │          │
-│  │  │          ├─resource 向外提供API服务类，统一以**Resource命名文件
+│  │  │          ├─resource
 │  │  │          │      BaseController.java
+│  │  │          │      CargoOrderResource.java
 │  │  │          │      CargoResource.java
-│  │  │          │      pushWeb.java
 │  │  │          │      SeckillController.java
+│  │  │          │      SendMsg.java
 │  │  │          │      ShipperResource.java
 │  │  │          │
-│  │  │          ├─service 操作entity的抽象接口实现类
+│  │  │          ├─scheduledTasks
+│  │  │          │      ScheduleConfig.java
+│  │  │          │      ScheduledTasks1.java
+│  │  │          │
+│  │  │          ├─service
 │  │  │          │  │  CargoService.java
+│  │  │          │  │  ReceiverService.java
 │  │  │          │  │  SeckillService.java
 │  │  │          │  │  ShipperService.java
+│  │  │          │  │  TruckService.java
 │  │  │          │  │
-│  │  │          │  └─impl 暂时不管
+│  │  │          │  └─impl
 │  │  │          │          SeckillServiceImpl.java
 │  │  │          │
-│  │  │          └─websocket websocket配置类
+│  │  │          └─websocket
+│  │  │                  MyWebSocket.java
 │  │  │                  WebSocketConfig.java
 │  │  │                  WebSocketServer.java
+│  │  │                  WebSocketTest.java
 │  │  │
 │  │  └─resources
-│  │      │  application.yml 项目配置文件
+│  │      │  application.yml
 │  │      │
-│  │      ├─mapper 暂时不管
+│  │      ├─mapper
 │  │      │      SeckillMapper.xml
 │  │      │      SeckillOrderMapper.xml
 │  │      │
-│  │      ├─static 暂时不管
+│  │      ├─static
 │  │      │  ├─css
 │  │      │  │      public.css
 │  │      │  │      seckill.css
@@ -138,8 +166,14 @@
 │  │      │
 │  │      ├─swagger
 │  │      │      api-v0.0.1.yaml
+│  │      │      api-v0.0.2.yml
 │  │      │
 │  │      └─templates
+│  │          ├─P2P&broadcast
+│  │          │      index1.html
+│  │          │      index2.html
+│  │          │      index3.html
+│  │          │
 │  │          ├─page
 │  │          │      seckill.html
 │  │          │      seckill_detail.html
@@ -149,26 +183,8 @@
 │  │          │      header.html
 │  │          │
 │  │          └─static
-│  │                  index.html
-│  │                  index2.html
+│  │                  index1.html
 │  │
-│  └─test 暂时不管
-│      └─java
-│          └─cn
-│              └─tycoding
-│                  │  SpringbootSeckillApplicationTests.java
-│                  │
-│                  ├─LogisticsPlatform
-│                  ├─redis
-│                  │      RedisTemplateConfigTest.java
-│                  │
-│                  ├─repository
-│                  │      SeckillMapperTest.java
-│                  │      SeckillOrderMapperTest.java
-│                  │
-│                  └─service
-│                      └─impl
-│                              SeckillServiceImplTest.java
 
 
 ```

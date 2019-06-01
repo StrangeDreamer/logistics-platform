@@ -1,5 +1,7 @@
 package cn.tycoding.websocket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -19,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/websocket2/{userno}")
 @Component
 public class WebSocketTest {
+    private Logger logger= LoggerFactory.getLogger(WebSocketTest.class);
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
@@ -70,12 +73,12 @@ public class WebSocketTest {
         //当没有sendTo时，默认按照群发消息处理
         if (messageLength<2){
 
-            System.out.println("群发消息.......");
+            logger.info("群发消息.......");
             sendAll(message);
         }
         else {
             //给指定的人发消息
-            System.out.println("给指定的用户"+message.split("\\|")[1]+"发消息");
+            logger.info("给指定的用户{}发消息",message.split("\\|")[1]);
             sendToUser(message);
         }
     }
@@ -92,7 +95,7 @@ public class WebSocketTest {
             if (webSocketSet.get(sendUserno) != null) {
                 webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
             } else {
-                System.out.println("当前用户不在线");
+                logger.info("当前用户不在线");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +110,7 @@ public class WebSocketTest {
             if (webSocketSet.get(sendUserno) != null) {
                 webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
             } else {
-                System.out.println("当前用户不在线");
+                logger.info("当前用户不在线");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,13 +125,13 @@ public class WebSocketTest {
         String now = getNowTime();
         //String sendMessage = message.split("[|]")[0];
         String sendMessage = message;
-        System.out.println("遍历websocket所用用户"+webSocketSet.size());
+        logger.info("遍历websocket所用用户{}",webSocketSet.size());
         for (String key : webSocketSet.keySet()) {
             try {
                 //判断接收用户是否是当前发消息的用户
                 if (!userno.equals(key)) {
                     webSocketSet.get(key).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
-                    System.out.println("key = " + key);
+                    logger.info("key = {} " , key);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -156,7 +159,7 @@ public class WebSocketTest {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        System.out.println("发生错误");
+        logger.info("发生错误");
         error.printStackTrace();
     }
 

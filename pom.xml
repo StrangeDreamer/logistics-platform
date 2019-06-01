@@ -63,6 +63,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        </dependency>
+
 
         <!-- alibaba的druid数据库连接池 -->
         <dependency>

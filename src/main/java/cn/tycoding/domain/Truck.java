@@ -2,6 +2,7 @@ package cn.tycoding.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class Truck {
     private double availableVolume;
     private int type;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date registerTime;
+    @CreatedDate
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    private Date createdDate ;
 }
