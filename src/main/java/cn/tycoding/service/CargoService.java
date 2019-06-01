@@ -2,6 +2,8 @@ package cn.tycoding.service;
 
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.dto.CargoInfoChangeDTO;
+import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.CargoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,19 @@ public class CargoService {
         c.setStartTime(cargo.getStartTime());
         c.setEndTime(cargo.getEndTime());
         cargoRepository.save(c);
-        logger.info("成功创建一个货物");
+        logger.info("A new Cargo is created !");
         return c;
+    }
+
+    public Cargo updateCargoInfo(int id, CargoInfoChangeDTO cargoInfoChangeDTO) {
+        Cargo cargo=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
+        cargo.setReceiverId(cargoInfoChangeDTO.getReceiverId());
+        cargo.setFreightFare(cargoInfoChangeDTO.getFreightFare());
+        cargo.setStartTime(cargoInfoChangeDTO.getStartTime());
+        cargo.setEndTime(cargoInfoChangeDTO.getEndTime());
+        cargoRepository.save(cargo);
+        logger.info("Cargo information is updated !");
+        return cargo;
+
     }
 }

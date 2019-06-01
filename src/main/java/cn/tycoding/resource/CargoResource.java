@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
 import org.slf4j.Logger;
@@ -26,6 +27,10 @@ public class CargoResource {
 
     /**
      * 提交订单
+     *
+     * 使用@RequestParam时，URL是这样的：http://host:port/path?参数名=参数值
+     *
+     * 使用@PathVariable时，URL是这样的：http://host:port/path/参数值
      * @param cargo
      * @return
      */
@@ -36,14 +41,24 @@ public class CargoResource {
     }
 
 
+    /**
+     * 更新订单
+     * @param id
+     * @return
+     */
 
-    @GetMapping("/{id}")
-    public Cargo getCargo(@PathVariable("id") int id)
+    @PutMapping("/{cargoId}")
+    public Cargo getCargo(@PathVariable("cargoId") int id, @RequestBody CargoInfoChangeDTO cargoInfoChangeDTO)
     {
-        logger.info("REST 获得订单详情");
-       return cargoRepository.findById(id).get();
+        logger.info("REST 更新订单");
+        return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
     }
 
+    /**
+     * 查询发货方的所有订单
+     * @param shipperId
+     * @return
+     */
 
     @GetMapping("/shippers/{shipperId}")
     public List<Cargo> getShipperAllCargos(@PathVariable int shipperId){
@@ -51,7 +66,10 @@ public class CargoResource {
         return cargoRepository.findAllByShipperId(shipperId);
     }
 
-
+    /**
+     * 查询所有订单
+     * @return
+     */
     @GetMapping()
     public List<Cargo> getAllCargos(){
         logger.info("REST 查询所有订单");

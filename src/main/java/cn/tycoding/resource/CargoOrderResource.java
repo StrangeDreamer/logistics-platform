@@ -2,6 +2,7 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.CargoOrderLite;
+import cn.tycoding.exception.CargoException;
 import cn.tycoding.exception.CargoOrderException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.websocket.WebSocketServer;
@@ -46,7 +47,7 @@ public class CargoOrderResource {
         Cargo redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
         if (redisCargo==null){
 
-            Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).get();
+            Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).orElseThrow(()->new CargoException("this cargo is not exist!"));
             logger.info("开抢时间"+cargo.getStartTime().toString());
             redisTemplate.boundHashOps(cargoKey).put(cargoOrderLite.getCargoId(),cargo);
         }
