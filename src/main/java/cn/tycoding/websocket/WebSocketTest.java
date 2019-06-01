@@ -35,7 +35,7 @@ public class WebSocketTest {
      */
     @OnOpen
     public void onOpen(@PathParam(value = "userno") String param, Session WebSocketsession, EndpointConfig config) {
-        System.out.println(param);
+        System.out.println("*****userno:"+param);
         userno = param;//接收到发送消息的人员编号
         this.WebSocketsession = WebSocketsession;
         webSocketSet.put(param, this);//加入map中
@@ -60,20 +60,22 @@ public class WebSocketTest {
      * @OnMessage注解表示：被客户端调用 websocket.onmessage = function (event) {
      *         setMessageInnerHTML(event.data);
      *     }
-     * @param message 客户端发送过来的消息
+     * @param message 客户端发送过来的消息,格式：realMsg|sendTo
      * @param session 可选的参数
      */
-    @SuppressWarnings("unused")
 	@OnMessage
-    //以下逻辑只能实现群发呀
     public void onMessage(String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
-//        session.get
-        //群发消息
-        if (1 < 2) {
+        int messageLength  = message.split("\\|").length;
+        //当没有sendTo时，默认按照群发消息处理
+        if (messageLength<2){
+
+            System.out.println("群发消息.......");
             sendAll(message);
-        } else {
+        }
+        else {
             //给指定的人发消息
+            System.out.println("给指定的用户"+message.split("\\|")[1]+"发消息");
             sendToUser(message);
         }
     }
@@ -82,10 +84,24 @@ public class WebSocketTest {
      * 给指定的人发送消息
      * @param message
      */
-//    @OnMessage
     public void sendToUser(String message) {
         String sendUserno = message.split("[|]")[1];
         String sendMessage = message.split("[|]")[0];
+        String now = getNowTime();
+        try {
+            if (webSocketSet.get(sendUserno) != null) {
+                webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
+            } else {
+                System.out.println("当前用户不在线");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendToUser2(String toUser,String message) {
+        String sendUserno = toUser;
+        String sendMessage = message;
         String now = getNowTime();
         try {
             if (webSocketSet.get(sendUserno) != null) {
@@ -102,10 +118,11 @@ public class WebSocketTest {
      * 给所有人发消息
      * @param message
      */
-    private void sendAll(String message) {
+    public void sendAll(String message) {
         String now = getNowTime();
-        String sendMessage = message.split("[|]")[0];
-        //遍历HashMap
+        //String sendMessage = message.split("[|]")[0];
+        String sendMessage = message;
+        System.out.println("遍历websocket所用用户"+webSocketSet.size());
         for (String key : webSocketSet.keySet()) {
             try {
                 //判断接收用户是否是当前发消息的用户
