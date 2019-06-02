@@ -20,7 +20,7 @@ public class CargoOrderLite {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private int cargoId;
-    private BigDecimal costPrice;
+    private double orderPrice;
     private int truckId;
 
 }

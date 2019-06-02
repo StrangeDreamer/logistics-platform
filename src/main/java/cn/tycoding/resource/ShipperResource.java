@@ -28,9 +28,10 @@ public class ShipperResource {
 
 
     @DeleteMapping("/{id}")
-    public void deleteShipper(@PathVariable("id") int id){
+    public String deleteShipper(@PathVariable("id") int id){
         logger.info("Rest 发货方注销请求");
         shipperService.deleteShipper(id);
+        return "删除shipper"+id+"成功";
 
     }
 

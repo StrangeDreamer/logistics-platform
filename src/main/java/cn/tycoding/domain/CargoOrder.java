@@ -21,7 +21,6 @@ public class CargoOrder {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private int cargoId;
-    private BigDecimal costPrice;
     private int truckId;
     private boolean isOvertime = false;
     private boolean isAbnormal = false;
