@@ -68,13 +68,13 @@ public class CargoOrderResource {
             if (redisCargoOrder==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
                 redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
-                WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getCostPrice());
+                WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
             }
             else {
                 //redisCargo更大,则需要更新
-                if (redisCargoOrder.getCostPrice().compareTo(cargoOrderLite.getCostPrice())==1){
+                if (redisCargoOrder.getOrderPrice()>cargoOrderLite.getOrderPrice()){
                     redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
-                    WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getCostPrice());
+                    WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
                 }
             }
 
