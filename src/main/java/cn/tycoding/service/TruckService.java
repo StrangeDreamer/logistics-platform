@@ -17,14 +17,18 @@ public class TruckService {
         this.truckRepository = truckRepository;
     }
 
-    //发货方注册
+    // 承运方注册
     public Truck createTruck(Truck truck){
         Truck truck1 = new Truck();
         truck1.setName(truck.getName());
+        truck1.setAvailableWeight(truck.getAvailableWeight());
+        truck1.setAvailableVolume(truck.getAvailableVolume());
+        truck1.setType(truck.getType());
         truckRepository.save(truck1);
+        logger.info("A new truck is created !");
         return truck1;
     }
-    //发货方注销
+    // 承运方注销
     public void deleteTruck(int id){
         truckRepository.findById(id).ifPresent(truck -> {
             truckRepository.delete(truck);

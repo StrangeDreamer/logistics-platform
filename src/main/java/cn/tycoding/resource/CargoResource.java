@@ -42,6 +42,25 @@ public class CargoResource {
 
 
     /**
+    * 撤单
+    *
+    * 使用@RequestParam时，URL是这样的：http://host:port/path?参数名=参数值
+    *
+    * 使用@PathVariable时，URL是这样的：http://host:port/path/参数值
+    * @param cargo
+    * @return
+    */
+
+
+    @DeleteMapping("/{id}")
+    public String deleteCargo(@PathVariable("id") int id){
+        logger.info("Rest 发货方注销请求");
+        cargoService.deleteCargo(id);
+        return "删除shipper"+id+"成功";
+    }
+
+
+    /**
      * 更新订单
      * @param id
      * @return

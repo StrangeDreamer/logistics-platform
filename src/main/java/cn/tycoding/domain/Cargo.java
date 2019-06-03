@@ -23,6 +23,7 @@ public class Cargo implements Serializable {
     private int receiverId;
     private double weight;
     private double volume;
+    private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp startTime;

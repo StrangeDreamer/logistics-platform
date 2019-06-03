@@ -23,15 +23,16 @@ public class ReceiverService {
     // 收货方注册
     public Receiver createReceiver(Receiver receiver){
         Receiver receiver1 = new Receiver();
-
-        receiver.setName(receiver1.getName());
+        receiver1.setName(receiver.getName());
         receiverRepository.save(receiver1);
         return receiver1;
     }
+
+
     // 收货方注销
-    public void deleteShipper(int id){
-        receiverRepository.findById(id).ifPresent(shipper -> {
-            receiverRepository.delete(shipper);
+    public void deleteReceiver(int id){
+        receiverRepository.findById(id).ifPresent(receiver -> {
+            receiverRepository.delete(receiver);
             logger.info("发货发注销成功！");
         });
     }

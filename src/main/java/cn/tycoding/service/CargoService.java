@@ -40,6 +40,18 @@ public class CargoService {
         return c;
     }
 
+
+    // 撤单
+    public void deleteCargo(int id) {
+        cargoRepository.findById(id).ifPresent(shipper -> {
+            cargoRepository.delete(shipper);
+            logger.info("发货发注销成功！");
+        });
+    }
+
+
+
+
     public Cargo updateCargoInfo(int id, CargoInfoChangeDTO cargoInfoChangeDTO) {
         Cargo cargo=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
         cargo.setReceiverId(cargoInfoChangeDTO.getReceiverId());
@@ -49,6 +61,6 @@ public class CargoService {
         cargoRepository.save(cargo);
         logger.info("Cargo information is updated !");
         return cargo;
-
     }
+
 }

@@ -3,16 +3,16 @@ package cn.tycoding.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Receiver {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -22,4 +22,8 @@ public class Receiver {
     @CreatedDate
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date createdDate ;
+
+    @LastModifiedDate
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    private Date modifyTime;
 }
