@@ -47,7 +47,7 @@ public class CargoResource {
     * 使用@RequestParam时，URL是这样的：http://host:port/path?参数名=参数值
     *
     * 使用@PathVariable时，URL是这样的：http://host:port/path/参数值
-    * @param cargo
+    * @param id
     * @return
     */
 
@@ -82,7 +82,7 @@ public class CargoResource {
     @GetMapping("/shippers/{shipperId}")
     public List<Cargo> getShipperAllCargos(@PathVariable int shipperId){
         logger.info("REST 查询发货方{}所有订单"+shipperId);
-        return cargoRepository.findAllByShipperId(shipperId);
+        return cargoService.findAllByShipperId(shipperId);
     }
 
     /**
@@ -92,7 +92,7 @@ public class CargoResource {
     @GetMapping()
     public List<Cargo> getAllCargos(){
         logger.info("REST 查询所有订单");
-        return cargoRepository.findAll();
+        return cargoService.findAll();
     }
 
 

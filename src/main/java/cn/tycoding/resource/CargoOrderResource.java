@@ -24,7 +24,7 @@ public class CargoOrderResource {
     private final Logger logger=LoggerFactory.getLogger(CargoOrderResource.class);
 
     //设置秒杀redis缓存的key
-    private final String key = "CargoOrders";
+    private final String cargoOrdersKey = "CargoOrders";
 
     private final String cargoKey = "Cargo";
 
@@ -36,6 +36,9 @@ public class CargoOrderResource {
     /**抢单
      * redis维护键值对<cargoId,cargoOrderLite>
      *    <cargoId,Cargo>
+     *
+     *   TODO id=0?????     获取map键值对：3-CargoOrderLite(id=0, cargoId=3, orderPrice=89.0, truckId=2)
+     *   TODO 设置全局变量 cargoKey 和cargoOrdersKey
      * @param cargoOrderLite
      * @return
      */
@@ -64,22 +67,22 @@ public class CargoOrderResource {
             throw new CargoOrderException("还未开抢");
         }
         try {
-            CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(key).get(cargoOrderLite.getCargoId());
+            CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoOrderLite.getCargoId());
             if (redisCargoOrder==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
-                redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
+                redisTemplate.boundHashOps(cargoOrdersKey).put(cargoOrderLite.getCargoId(), cargoOrderLite);
                 WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
             }
             else {
                 //redisCargo更大,则需要更新
                 if (redisCargoOrder.getOrderPrice()>cargoOrderLite.getOrderPrice()){
-                    redisTemplate.boundHashOps(key).put(cargoOrderLite.getCargoId(), cargoOrderLite);
+                    redisTemplate.boundHashOps(cargoOrdersKey).put(cargoOrderLite.getCargoId(), cargoOrderLite);
                     WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
                 }
             }
 
-            System.out.println(redisTemplate.boundHashOps(key).entries().size());
-            redisTemplate.boundHashOps(key).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
+            System.out.println(redisTemplate.boundHashOps(cargoOrdersKey).entries().size());
+            redisTemplate.boundHashOps(cargoOrdersKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 
             result.put("operationResult", "排队成功");
         } catch (Exception e) {

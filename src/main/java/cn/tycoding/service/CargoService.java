@@ -7,8 +7,12 @@ import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.CargoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -16,6 +20,10 @@ public class CargoService {
     private final Logger logger = LoggerFactory.getLogger(CargoService.class);
 
     private final CargoRepository cargoRepository;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    private final String cargoKey = "Cargo";
 
     public CargoService(CargoRepository cargoRepository) {
         this.cargoRepository = cargoRepository;
@@ -63,4 +71,28 @@ public class CargoService {
         return cargo;
     }
 
+    public List<Cargo> findAll() {
+
+        List<Cargo> cargoList = redisTemplate.boundHashOps(cargoKey).values();
+        if (cargoList == null || cargoList.size() == 0) {
+            //说明缓存中没有秒杀列表数据
+            //查询数据库中秒杀列表数据，并将列表数据循环放入redis缓存中
+            cargoList = cargoRepository.findAll();
+            for (Cargo cargo : cargoList) {
+                //将秒杀列表数据依次放入redis缓存中，key:秒杀表的ID值；value:秒杀商品数据
+                redisTemplate.boundHashOps(cargoKey).put(cargo.getId(),cargo);
+                logger.info("findAll -> 从Mysql数据库中读取并放入Redis缓存中");
+            }
+        } else {
+            logger.info("findAll -> 从Redis缓存中读取");
+        }
+        return cargoList;
+    }
+
+    public List<Cargo> findAllByShipperId(int shipperId) {
+
+        return cargoRepository.findAllByShipperId(shipperId);
+
+
+    }
 }
