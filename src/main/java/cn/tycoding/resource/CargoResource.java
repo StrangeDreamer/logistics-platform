@@ -7,8 +7,11 @@ import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,9 @@ public class CargoResource {
 
     private final CargoService cargoService;
     private final CargoRepository cargoRepository;
+    private final String cargoKey = "Cargo";
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     public CargoResource(CargoService cargoService, CargoRepository cargoRepository) {
         this.cargoService = cargoService;
@@ -42,12 +48,30 @@ public class CargoResource {
     }
 
 
+
+
+    /** TODO 每个订单只能开启一次，在set之前需要判断之前是否已经set过或者是否为空（简单点）
+     * 平台确定某运单开抢时间和结束时间默认5分钟
+     * @return
+     */
+    @PutMapping("/startBidTime/{cargoId}")
+    public Cargo startCargo(@PathVariable int cargoId){
+        Cargo cargo=cargoService.findCargoById(cargoId);
+        Date bidStartTime = new Date();
+        Date bidEndTime = new Date(bidStartTime.getTime() + 300000);
+        //先更新DB，再删除cache
+        cargo.setBidStartTime(bidStartTime);
+        cargo.setBidEndTime(bidEndTime);
+        cargoRepository.save(cargo);
+        //删除map中的某个对象
+        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        logger.info("订单{}*****{}开始抢",cargoId,bidStartTime);
+        return cargo;
+    }
+
     /**
     * 撤单
     *
-    * 使用@RequestParam时，URL是这样的：http://host:port/path?参数名=参数值
-    *
-    * 使用@PathVariable时，URL是这样的：http://host:port/path/参数值
     * @param id
     * @return
     */
@@ -84,7 +108,7 @@ public class CargoResource {
 
     @GetMapping("/shippers/{shipperId}")
     public List<Cargo> getShipperAllCargos(@PathVariable int shipperId){
-        logger.info("REST 查询发货方{}所有订单"+shipperId);
+        logger.info("REST 查询发货方{}所有订单",shipperId);
         return cargoService.findAllByShipperId(shipperId);
     }
 
@@ -96,7 +120,7 @@ public class CargoResource {
      */
     @GetMapping("/receivers/{receiverId}")
     public List<Cargo> getReceiverAllCargos(@PathVariable("receiverId") int receiverId){
-        logger.info("REST 查询发货方{}所有订单"+receiverId);
+        logger.info("REST 查询发货方{}所有订单",receiverId);
         return cargoService.findAllByReceiverId(receiverId);
     }
 
@@ -107,7 +131,7 @@ public class CargoResource {
      */
     @GetMapping("/trucks/{truckId}")
     public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId){
-        logger.info("REST 查询发货方{}所有订单"+truckId);
+        logger.info("REST 查询发货方{}所有订单",truckId);
         return cargoService.findAllByReceiverId(truckId);
     }
 

@@ -6,6 +6,7 @@ import cn.tycoding.domain.CargoOrderLite;
 import cn.tycoding.exception.CargoException;
 import cn.tycoding.exception.CargoOrderException;
 import cn.tycoding.repository.CargoRepository;
+import cn.tycoding.service.CargoService;
 import cn.tycoding.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ public class CargoOrderResource {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
+    private CargoService cargoService;
+    @Autowired
     private CargoRepository cargoRepository;
 
     /**抢单
@@ -45,28 +48,20 @@ public class CargoOrderResource {
      * @return
      */
     @PostMapping
-    public Map<String, Object> chaseCargo(@RequestBody CargoOrderLite cargoOrderLite) {
+    public Map<String, Object> bidCargo(@RequestBody CargoOrderLite cargoOrderLite) {
         Map<String, Object> result = new HashMap<String, Object>();
         //获取系统时间
+
         Date nowTime = new Date();
-        //将要抢的订单放进redis中
-        Cargo redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
-        if (redisCargo==null){
+        Cargo cargo=cargoService.findCargoById(cargoOrderLite.getCargoId());
 
-            Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).orElseThrow(()->new CargoException("this cargo is not exist!"));
-            logger.info("开抢时间"+cargo.getBidStartTime().toString());
-            redisTemplate.boundHashOps(cargoKey).put(cargoOrderLite.getCargoId(),cargo);
-        }
-        redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
-
-
-        if (nowTime.getTime()>redisCargo.getBidEndTime().getTime()){
+        if (nowTime.getTime()>cargo.getBidEndTime().getTime()){
             logger.info("错过抢单时间");
-            throw new CargoOrderException("错过抢单时间");
+            throw new CargoOrderException("错过抢单截止时间："+cargo.getBidEndTime());
         }
-        if (nowTime.getTime()<redisCargo.getBidStartTime().getTime()){
+        if (nowTime.getTime()<cargo.getBidStartTime().getTime()){
             logger.info("还未开抢");
-            throw new CargoOrderException("还未开抢");
+            throw new CargoOrderException("还未开抢，开抢时间："+cargo.getBidStartTime());
         }
         try {
             CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoOrderLite.getCargoId());
@@ -94,6 +89,25 @@ public class CargoOrderResource {
         return result;
     }
 
+
+    @GetMapping("/stopBid/{cargoId}")
+    public Cargo stopBid (@PathVariable int cargoId){
+        CargoOrderLite cargoOrderrd= (CargoOrderLite) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoId);
+        Cargo cargo=cargoService.findCargoById(cargoId);
+        //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
+
+        Date nowTime = new Date();
+        if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
+            //将缓存中的最低价和抢单用户刷进cargo数据库中
+            cargo.setOrderPrice(cargoOrderrd.getOrderPrice());
+            cargo.setTruckId(cargoOrderrd.getTruckId());
+            cargoRepository.save(cargo);
+            redisTemplate.boundHashOps(cargoOrdersKey).delete(cargoId);
+        }
+        return cargo;
+
+
+    }
 
 
 

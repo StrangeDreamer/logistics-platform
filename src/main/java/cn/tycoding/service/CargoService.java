@@ -48,10 +48,18 @@ public class CargoService {
         c.setReceiverId(cargo.getReceiverId());
         c.setWeight(cargo.getWeight());
         c.setVolume(cargo.getVolume());
+        c.setType(cargo.getType());
+        c.setLimitedTime(cargo.getLimitedTime());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
         c.setBidStartTime(cargo.getBidStartTime());
         c.setBidEndTime(cargo.getBidEndTime());
+        c.setAbnormal(false);
+        c.setOvertime(false);
+        c.setStatus(0);
+        c.setOrderPrice(-1);
+        c.setTruckId(-1);
+
         cargoRepository.save(c);
         logger.info("A new Cargo is created !");
         return c;
@@ -94,10 +102,25 @@ public class CargoService {
                 redisTemplate.boundHashOps(cargoKey).put(cargo.getId(),cargo);
                 logger.info("findAll -> 从Mysql数据库中读取并放入Redis缓存中");
             }
+            cargosList = redisTemplate.boundHashOps(cargoKey).values();
         } else {
             logger.info("findAll -> 从Redis缓存中读取");
         }
         return cargosList;
+    }
+
+    public Cargo findCargoById(int id){
+        Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
+        //redis中没有缓存该运单
+        if (cargo==null){
+            Cargo cargoDb=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist!"));
+            redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
+            logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
+            cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
+        }
+        logger.info("*****************"+cargo.getBidStartTime()+"**************************************");
+
+        return cargo;
     }
 
 
@@ -115,13 +138,13 @@ public class CargoService {
     }
 
     // 查找承运方的所有订单
-    public List<Cargo> findAllByTruckId(int truckId) {
+  /*  public List<Cargo> findAllByTruckId(int truckId) {
         return cargoRepository.findAllByTruckId(truckId);
-    }
+    }*/
 
 
 
-//    // 查找承运方方的所有订单  TODO：承运方查找的是oder而不是cargo
+//    // 查找承运方方的所有订单  TODO：承运方查找的是order而不是cargo
 //    public List<Cargo> findAllByShipperId(int shipperId) {
 //        return cargoRepository.findAllByShipperId(shipperId);
 //    }
