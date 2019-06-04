@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.CargoOrder;
 import cn.tycoding.domain.CargoOrderLite;
 import cn.tycoding.exception.CargoException;
 import cn.tycoding.exception.CargoOrderException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -52,17 +54,17 @@ public class CargoOrderResource {
         if (redisCargo==null){
 
             Cargo cargo=cargoRepository.findById(cargoOrderLite.getCargoId()).orElseThrow(()->new CargoException("this cargo is not exist!"));
-            logger.info("开抢时间"+cargo.getStartTime().toString());
+            logger.info("开抢时间"+cargo.getBidStartTime().toString());
             redisTemplate.boundHashOps(cargoKey).put(cargoOrderLite.getCargoId(),cargo);
         }
         redisCargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(cargoOrderLite.getCargoId());
 
 
-        if (nowTime.getTime()>redisCargo.getEndTime().getTime()){
+        if (nowTime.getTime()>redisCargo.getBidEndTime().getTime()){
             logger.info("错过抢单时间");
             throw new CargoOrderException("错过抢单时间");
         }
-        if (nowTime.getTime()<redisCargo.getStartTime().getTime()){
+        if (nowTime.getTime()<redisCargo.getBidStartTime().getTime()){
             logger.info("还未开抢");
             throw new CargoOrderException("还未开抢");
         }
@@ -91,4 +93,9 @@ public class CargoOrderResource {
         }
         return result;
     }
+
+
+
+
+
 }

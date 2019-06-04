@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.Shipper;
 import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
@@ -34,7 +35,7 @@ public class CargoResource {
      * @param cargo
      * @return
      */
-    @PostMapping()
+    @PostMapping("/createCargo")
     public Cargo createCargo(@RequestBody Cargo cargo) {
 
         return cargoService.createCargo(cargo);
@@ -52,7 +53,7 @@ public class CargoResource {
     */
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteCargo/{id}")
     public String deleteCargo(@PathVariable("id") int id){
         logger.info("Rest 发货方注销请求");
         cargoService.deleteCargo(id);
@@ -73,6 +74,8 @@ public class CargoResource {
         return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
     }
 
+
+
     /**
      * 查询发货方的所有订单
      * @param shipperId
@@ -85,15 +88,47 @@ public class CargoResource {
         return cargoService.findAllByShipperId(shipperId);
     }
 
+
     /**
-     * 查询所有订单
+     * 查询收货方的所有订单
+     * @param receiverId
      * @return
      */
-    @GetMapping()
-    public List<Cargo> getAllCargos(){
-        logger.info("REST 查询所有订单");
-        return cargoService.findAll();
+    @GetMapping("/receivers/{receiverId}")
+    public List<Cargo> getReceiverAllCargos(@PathVariable("receiverId") int receiverId){
+        logger.info("REST 查询发货方{}所有订单"+receiverId);
+        return cargoService.findAllByReceiverId(receiverId);
     }
+
+    /**
+     * 查询承运方的所有订单
+     * @param truckId
+     * @return
+     */
+    @GetMapping("/trucks/{truckId}")
+    public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId){
+        logger.info("REST 查询发货方{}所有订单"+truckId);
+        return cargoService.findAllByReceiverId(truckId);
+    }
+
+
+
+
+
+
+
+
+    /**
+     * 查询所有货物
+     * @return
+     */
+    @GetMapping("/allCargos")
+    public List<Cargo> getAllCargos(){
+        logger.info("REST 查询所有货物");
+        return cargoService.findAllCargos();
+    }
+
+
 
 
 }

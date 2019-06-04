@@ -14,11 +14,11 @@ public class CargoInfoChangeDTO {
     private int receiverId;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp startTime;
+    private Timestamp bidStartTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp endTime;
+    private Timestamp bidEndTime;
 
 
 }

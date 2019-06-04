@@ -10,4 +10,9 @@ import java.util.List;
 public interface CargoRepository extends JpaRepository<Cargo,Integer> {
 
     List<Cargo> findAllByShipperId(int id);
+
+    List<Cargo> findAllByReceiverId(int id);
+
+    List<Cargo> findAllByTruckId(int id);
+
 }

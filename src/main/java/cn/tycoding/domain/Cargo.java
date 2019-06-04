@@ -26,14 +26,31 @@ public class Cargo implements Serializable {
     private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp startTime;
+    private Timestamp createTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp endTime;
+    private Timestamp limitedTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp bidStartTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp bidEndTime;
+
 
 
     // 出发地、目的地，数据类型可能要看地图的要求
     private String departure;
     private String destination;
+
+
+    // order属性
+    private int truckId = -1;
+    private boolean isOvertime = false;
+    private boolean isAbnormal = false;
+    private double orderPrice;
+    private int status = 0;
 }

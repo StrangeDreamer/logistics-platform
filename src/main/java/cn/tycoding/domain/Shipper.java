@@ -26,7 +26,6 @@ public class Shipper {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date createdDate ;
 
-
     @LastModifiedDate
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date modifyTime;
