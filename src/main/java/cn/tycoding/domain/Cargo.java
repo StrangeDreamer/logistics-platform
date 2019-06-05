@@ -45,17 +45,15 @@ public class Cargo implements Serializable {
     private Date bidEndTime;
 
 
-
     // 出发地、目的地，数据类型可能要看地图的要求
     private String departure;
     private String destination;
-
 
     // order属性
     private int truckId = -1;
     private boolean overtime = false;
     private boolean abnormal = false;
-    private double orderPrice=-1;
+    private double orderPrice = -1;
     private int status = 0;
 
 

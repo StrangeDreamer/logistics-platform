@@ -51,14 +51,14 @@ public class CargoResource {
 
 
     /** TODO 每个订单只能开启一次，在set之前需要判断之前是否已经set过或者是否为空（简单点）
-     * 平台确定某运单开抢时间和结束时间默认5分钟
+     * 平台确定某运单开抢时间和结束时间默认2分钟
      * @return
      */
     @PutMapping("/startBidTime/{cargoId}")
     public Cargo startCargo(@PathVariable int cargoId){
         Cargo cargo=cargoService.findCargoById(cargoId);
         Date bidStartTime = new Date();
-        Date bidEndTime = new Date(bidStartTime.getTime() + 300000);
+        Date bidEndTime = new Date(bidStartTime.getTime() + 60000);
         //先更新DB，再删除cache
         cargo.setBidStartTime(bidStartTime);
         cargo.setBidEndTime(bidEndTime);
@@ -132,14 +132,8 @@ public class CargoResource {
     @GetMapping("/trucks/{truckId}")
     public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId){
         logger.info("REST 查询发货方{}所有订单",truckId);
-        return cargoService.findAllByReceiverId(truckId);
+        return cargoService.findAllByTruckId(truckId);
     }
-
-
-
-
-
-
 
 
     /**
@@ -151,8 +145,6 @@ public class CargoResource {
         logger.info("REST 查询所有货物");
         return cargoService.findAllCargos();
     }
-
-
 
 
 }

@@ -15,7 +15,7 @@ spring:
       #mysql驱动
       driver-class-name: com.mysql.jdbc.Driver
       #基本属性 $mysql -h 192.168.99.100 -u root -p $1234
-      url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&?zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://192.168.99.100:3306/seckill?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&?zeroDateTimeBehavior=convertToNull
       username: root
       password: 1234
       #配置初始化大小/最小/最大

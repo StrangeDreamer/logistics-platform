@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class TruckService {
 
@@ -35,4 +37,17 @@ public class TruckService {
             logger.info("发货发注销成功！");
         });
     }
+
+
+    // 查询指定id承运方
+    public Truck findTrucksById(int truckId){
+        return truckRepository.findShippersById(truckId);
+    }
+
+    // 查询所有承运方
+    public List<Truck> findAll(){
+        return truckRepository.findAll();
+    }
+
+
 }

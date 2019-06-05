@@ -69,13 +69,11 @@ public class CargoService {
 
     // 撤单
     public void deleteCargo(int id) {
-
         cargoRepository.findById(id).ifPresent(cargo -> {
             cargoRepository.delete(cargo);
             logger.info("货物撤单成功！");
         });
     }
-
 
 
 
@@ -90,23 +88,24 @@ public class CargoService {
         return cargo;
     }
 
-    public List<Cargo> findAllCargos() {
+  public List<Cargo> findAllCargos() {
+//
+//        List<Cargo> cargosList = redisTemplate.boundHashOps(cargoKey).values();
+//        if (cargosList == null || cargosList.size() == 0) {
+//            //说明缓存中没有秒杀列表数据
+//            //查询数据库中秒杀列表数据，并将列表数据循环放入redis缓存中
+//            cargosList = cargoRepository.findAll();
+//            for (Cargo cargo : cargosList) {
+//                //将秒杀列表数据依次放入redis缓存中，key:秒杀表的ID值；value:秒杀商品数据
+//                redisTemplate.boundHashOps(cargoKey).put(cargo.getId(),cargo);
+//                logger.info("findAll -> 从Mysql数据库中读取并放入Redis缓存中");
+//            }
+//            cargosList = redisTemplate.boundHashOps(cargoKey).values();
+//        } else {
+//            logger.info("findAll -> 从Redis缓存中读取");
+//        }
 
-        List<Cargo> cargosList = redisTemplate.boundHashOps(cargoKey).values();
-        if (cargosList == null || cargosList.size() == 0) {
-            //说明缓存中没有秒杀列表数据
-            //查询数据库中秒杀列表数据，并将列表数据循环放入redis缓存中
-            cargosList = cargoRepository.findAll();
-            for (Cargo cargo : cargosList) {
-                //将秒杀列表数据依次放入redis缓存中，key:秒杀表的ID值；value:秒杀商品数据
-                redisTemplate.boundHashOps(cargoKey).put(cargo.getId(),cargo);
-                logger.info("findAll -> 从Mysql数据库中读取并放入Redis缓存中");
-            }
-            cargosList = redisTemplate.boundHashOps(cargoKey).values();
-        } else {
-            logger.info("findAll -> 从Redis缓存中读取");
-        }
-        return cargosList;
+        return cargoRepository.findAll();
     }
 
     public Cargo findCargoById(int id){
@@ -138,9 +137,9 @@ public class CargoService {
     }
 
     // 查找承运方的所有订单
-  /*  public List<Cargo> findAllByTruckId(int truckId) {
+    public List<Cargo> findAllByTruckId(int truckId) {
         return cargoRepository.findAllByTruckId(truckId);
-    }*/
+    }
 
 
 

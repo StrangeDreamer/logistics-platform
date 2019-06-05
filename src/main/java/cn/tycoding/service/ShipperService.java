@@ -36,7 +36,7 @@ public class ShipperService {
     }
 
     // 查询指定id发货方
-    public Shipper findShippersByID(int shipperId){
+    public Shipper findShippersById(int shipperId){
         return shipperRepository.findShippersById(shipperId);
     }
 

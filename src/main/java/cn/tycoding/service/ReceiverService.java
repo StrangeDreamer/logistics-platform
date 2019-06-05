@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ReceiverService {
 
@@ -36,4 +38,15 @@ public class ReceiverService {
             logger.info("发货发注销成功！");
         });
     }
+
+    // 查询指定id收货方
+    public Receiver findReceiversById(int shipperId){
+        return receiverRepository.findShippersById(shipperId);
+    }
+
+    // 查询所有发货方
+    public List<Receiver> findAll(){
+        return receiverRepository.findAll();
+    }
+
 }
