@@ -82,6 +82,7 @@ public class CargoOrderResource {
             redisTemplate.boundHashOps(cargoOrdersKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 
             result.put("operationResult", "排队成功");
+            result.put("截止时间",cargo.getBidEndTime());
         } catch (Exception e) {
             e.printStackTrace();
             result.put("operationResult", "排队失败");

@@ -124,74 +124,7 @@
 │  │  └─resources
 │  │      │  application.yml
 │  │      │
-│  │      ├─mapper
-│  │      │      SeckillMapper.xml
-│  │      │      SeckillOrderMapper.xml
-│  │      │
-│  │      ├─static
-│  │      │  ├─css
-│  │      │  │      public.css
-│  │      │  │      seckill.css
-│  │      │  │      seckill_item.css
-│  │      │  │
-│  │      │  ├─js
-│  │      │  │      seckill_detail.js
-│  │      │  │
-│  │      │  └─lib
-│  │      │      │  bootstrap.min.css
-│  │      │      │  bootstrap.min.js
-│  │      │      │  countdown.js
-│  │      │      │  jquery-3.3.1.min.js
-│  │      │      │  jquery.cookie.js
-│  │      │      │
-│  │      │      └─font
-│  │      │          ├─css
-│  │      │          │      font-awesome.min.css
-│  │      │          │
-│  │      │          ├─fonts
-│  │      │          │      fontawesome-webfont.eot
-│  │      │          │      fontawesome-webfont.svg
-│  │      │          │      fontawesome-webfont.ttf
-│  │      │          │      fontawesome-webfont.woff
-│  │      │          │      fontawesome-webfont.woff2
-│  │      │          │      FontAwesome.otf
-│  │      │          │      glyphicons-halflings-regular.eot
-│  │      │          │      glyphicons-halflings-regular.svg
-│  │      │          │      glyphicons-halflings-regular.ttf
-│  │      │          │      glyphicons-halflings-regular.woff
-│  │      │          │      glyphicons-halflings-regular.woff2
-│  │      │          │
-│  │      │          └─icon
-│  │      │                  clock.png
-│  │      │                  seckillbg.png
-│  │      │
-│  │      ├─swagger
-│  │      │      api-v0.0.1.yaml
-│  │      │      api-v0.0.2.yml
-│  │      │
-│  │      └─templates
-│  │          ├─P2P&broadcast
-│  │          │      index1.html
-│  │          │      index2.html
-│  │          │      index3.html
-│  │          │
-│  │          ├─page
-│  │          │      seckill.html
-│  │          │      seckill_detail.html
-│  │          │
-│  │          ├─public
-│  │          │      footer.html
-│  │          │      header.html
-│  │          │
-│  │          └─static
-│  │                  index1.html
-│  │
-
-
 ```
-
-swagger editor  TODO
-- "#/definitions/Bank"各类entity定义
 
 - baseUrl= localhost:8080
 
@@ -217,7 +150,7 @@ swagger editor  TODO
   - 平台将该运费支付给承运方 （有个属性paidMoney）
     - PUT /cargo/{cargoId}  更新paidMoney属性值
 
-- 订单超时？？？？？？？？？？？
+- 订单超时
 
   - 承运方trunk请求订单要送达接口，获取当前时间与订单被抢单的时间相减，差值与订单规定的运送时间对比。返回是否超时以及超时时长
 
@@ -225,3 +158,14 @@ swagger editor  TODO
   
   
   - 断线Notification：Push，Notification，Service Work
+
+- [ ] 将订单结果返回给所有请求过的用户，可能考虑使用rabbitmq
+- [ ] 将所有竞价信息缓存下来（需要将所有的请求时间保存），时间一到请求就将history刷进数据库。
+- [ ] 订单状态判断（超时--当平台发送停止抢单时，需要查看当前是否有人抢单，没有就将状态置为超时，完成--有人抢，将状态置为完成，转单--当truck更新订单就将订单的状态更新为转单）
+- [ ] Swagger 引入
+
+- [x] 各类domain定义，以及与数据库的映射
+- [x] 4方（shipper，平台方，receiver，truck）的openAPI设计
+
+- [x] 承运方竞价抢单
+- [x] 数据库记录抢单结果

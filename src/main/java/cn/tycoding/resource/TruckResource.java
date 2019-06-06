@@ -1,11 +1,11 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
-import cn.tycoding.domain.Truck;
+import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +17,11 @@ public class TruckResource {
 
     private final Logger logger=LoggerFactory.getLogger(TruckResource.class);
     private final TruckService truckService;
+    private final CargoRepository cargoRepository;
 
-    public TruckResource(TruckService truckService) {
+    public TruckResource(TruckService truckService, CargoRepository cargoRepository) {
         this.truckService = truckService;
+        this.cargoRepository = cargoRepository;
     }
 
 
@@ -34,6 +36,12 @@ public class TruckResource {
         logger.info("Rest 发货方注销请求");
         truckService.deleteTruck(id);
         return "删除Truck"+id+"成功";
+    }
+
+    @GetMapping("/getAllCargos/{truckId}")
+    public List<Cargo> findAllCargos(@PathVariable  int truckId){
+        logger.info("REST 承运方查询抢到的所有订单");
+        return cargoRepository.findAllByTruckId(truckId);
     }
 
 
