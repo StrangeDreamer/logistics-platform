@@ -38,14 +38,6 @@ public class TruckResource {
         return "删除Truck"+id+"成功";
     }
 
-    @GetMapping("/getAllCargos/{truckId}")
-    public List<Cargo> findAllCargos(@PathVariable  int truckId){
-        logger.info("REST 承运方查询抢到的所有订单");
-        return cargoRepository.findAllByTruckId(truckId);
-    }
-
-
-
     /**
      * 查询指定发货方
      * @return

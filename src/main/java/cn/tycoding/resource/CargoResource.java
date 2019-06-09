@@ -49,6 +49,17 @@ public class CargoResource {
 
 
 
+    /**
+     * 查询指定ID订单
+     * @return Cargo
+     */
+    @GetMapping("/findCargoById/{cargoId}")
+    public Cargo getCargoById(@PathVariable("cargoId") int cargoId){
+        logger.info("REST 查询所有货物");
+        return cargoService.findCargoById(cargoId);
+    }
+
+
 
     /** TODO 每个订单只能开启一次，在set之前需要判断之前是否已经set过或者是否为空（简单点）
      * 平台确定某运单开抢时间和结束时间默认2分钟
@@ -99,6 +110,17 @@ public class CargoResource {
     }
 
 
+    /**
+     * 查询承运方的所有订单
+     * @param truckId
+     * @return
+     */
+    @GetMapping("/findAllByTruckId/{truckId}")
+    public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId){
+        logger.info("REST 查询发货方{}所有订单",truckId);
+        return cargoService.findAllByTruckId(truckId);
+    }
+
 
     /**
      * 查询发货方的所有订单
@@ -106,7 +128,7 @@ public class CargoResource {
      * @return
      */
 
-    @GetMapping("/shippers/{shipperId}")
+    @GetMapping("/findAllByShipperId/{shipperId}")
     public List<Cargo> getShipperAllCargos(@PathVariable int shipperId){
         logger.info("REST 查询发货方{}所有订单",shipperId);
         return cargoService.findAllByShipperId(shipperId);
@@ -118,22 +140,13 @@ public class CargoResource {
      * @param receiverId
      * @return
      */
-    @GetMapping("/receivers/{receiverId}")
+    @GetMapping("/findAllByReceiverId/{receiverId}")
     public List<Cargo> getReceiverAllCargos(@PathVariable("receiverId") int receiverId){
         logger.info("REST 查询发货方{}所有订单",receiverId);
         return cargoService.findAllByReceiverId(receiverId);
     }
 
-    /**
-     * 查询承运方的所有订单
-     * @param truckId
-     * @return
-     */
-    @GetMapping("/trucks/{truckId}")
-    public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId){
-        logger.info("REST 查询发货方{}所有订单",truckId);
-        return cargoService.findAllByTruckId(truckId);
-    }
+
 
 
     /**
@@ -145,6 +158,8 @@ public class CargoResource {
         logger.info("REST 查询所有货物");
         return cargoService.findAllCargos();
     }
+
+
 
 
 }

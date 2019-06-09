@@ -28,9 +28,7 @@ public class CargoOrderResource {
 
     //设置秒杀redis缓存的key
     private final String cargoOrdersKey = "CargoOrders";
-
     private final String cargoKey = "Cargo";
-
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
@@ -106,11 +104,5 @@ public class CargoOrderResource {
             redisTemplate.boundHashOps(cargoOrdersKey).delete(cargoId);
         }
         return cargo;
-
-
     }
-
-
-
-
 }
