@@ -1,9 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.CargoOrder;
-import cn.tycoding.domain.CargoOrderLite;
-import cn.tycoding.exception.CargoException;
+import cn.tycoding.domain.Bid;
 import cn.tycoding.exception.CargoOrderException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
@@ -14,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,21 +33,21 @@ public class CargoOrderResource {
     private CargoRepository cargoRepository;
 
     /**抢单
-     * redis维护键值对<cargoId,cargoOrderLite>
+     * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
      *
-     *   TODO id=0?????     获取map键值对：3-CargoOrderLite(id=0, cargoId=3, orderPrice=89.0, truckId=2)
+     *   TODO id=0?????     获取map键值对：3-Bid(id=0, cargoId=3, orderPrice=89.0, truckId=2)
      *   TODO 设置全局变量 cargoKey 和cargoOrdersKey
-     * @param cargoOrderLite
+     * @param bid
      * @return
      */
     @PostMapping
-    public Map<String, Object> bidCargo(@RequestBody CargoOrderLite cargoOrderLite) {
+    public Map<String, Object> bidCargo(@RequestBody Bid bid) {
         Map<String, Object> result = new HashMap<String, Object>();
         //获取系统时间
 
         Date nowTime = new Date();
-        Cargo cargo=cargoService.findCargoById(cargoOrderLite.getCargoId());
+        Cargo cargo=cargoService.findCargoById(bid.getCargoId());
 
         if (nowTime.getTime()>cargo.getBidEndTime().getTime()){
             logger.info("错过抢单时间");
@@ -62,17 +58,17 @@ public class CargoOrderResource {
             throw new CargoOrderException("还未开抢，开抢时间："+cargo.getBidStartTime());
         }
         try {
-            CargoOrderLite redisCargoOrder = (CargoOrderLite) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoOrderLite.getCargoId());
+            Bid redisCargoOrder = (Bid) redisTemplate.boundHashOps(cargoOrdersKey).get(bid.getCargoId());
             if (redisCargoOrder==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
-                redisTemplate.boundHashOps(cargoOrdersKey).put(cargoOrderLite.getCargoId(), cargoOrderLite);
-                WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
+                redisTemplate.boundHashOps(cargoOrdersKey).put(bid.getCargoId(), bid);
+                WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
             }
             else {
                 //redisCargo更大,则需要更新
-                if (redisCargoOrder.getOrderPrice()>cargoOrderLite.getOrderPrice()){
-                    redisTemplate.boundHashOps(cargoOrdersKey).put(cargoOrderLite.getCargoId(), cargoOrderLite);
-                    WebSocketServer.sendInfo("有人出价"+cargoOrderLite.getOrderPrice());
+                if (redisCargoOrder.getOrderPrice()>bid.getOrderPrice()){
+                    redisTemplate.boundHashOps(cargoOrdersKey).put(bid.getCargoId(), bid);
+                    WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
                 }
             }
 
@@ -91,7 +87,7 @@ public class CargoOrderResource {
 
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        CargoOrderLite cargoOrderrd= (CargoOrderLite) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoId);
+        Bid cargoOrderrd= (Bid) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoId);
         Cargo cargo=cargoService.findCargoById(cargoId);
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
 

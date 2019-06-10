@@ -50,7 +50,7 @@
 │  │  │          │      Bid.java
 │  │  │          │      Cargo.java
 │  │  │          │      CargoOrder.java
-│  │  │          │      CargoOrderLite.java
+│  │  │          │      Bid.java
 │  │  │          │      GuarantorAccount.java
 │  │  │          │      Receiver.java
 │  │  │          │      Seckill.java

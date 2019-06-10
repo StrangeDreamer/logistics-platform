@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class CargoOrderLite {
+public class Bid {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
