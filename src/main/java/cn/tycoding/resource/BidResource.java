@@ -2,7 +2,7 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Bid;
-import cn.tycoding.exception.CargoOrderException;
+import cn.tycoding.exception.BidException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
 import cn.tycoding.websocket.WebSocketServer;
@@ -17,13 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/cargoOrders")
-public class CargoOrderResource {
+@RequestMapping("/bids")
+public class BidResource {
 
-    private final Logger logger=LoggerFactory.getLogger(CargoOrderResource.class);
+    private final Logger logger=LoggerFactory.getLogger(BidResource.class);
 
     //设置秒杀redis缓存的key
-    private final String cargoOrdersKey = "CargoOrders";
+    private final String bidsKey = "bids";
     private final String cargoKey = "Cargo";
     @Autowired
     private RedisTemplate redisTemplate;
@@ -37,7 +37,7 @@ public class CargoOrderResource {
      *    <cargoId,Cargo>
      *
      *   TODO id=0?????     获取map键值对：3-Bid(id=0, cargoId=3, orderPrice=89.0, truckId=2)
-     *   TODO 设置全局变量 cargoKey 和cargoOrdersKey
+     *   TODO 设置全局变量 cargoKey 和bidsKey
      * @param bid
      * @return
      */
@@ -51,29 +51,29 @@ public class CargoOrderResource {
 
         if (nowTime.getTime()>cargo.getBidEndTime().getTime()){
             logger.info("错过抢单时间");
-            throw new CargoOrderException("错过抢单截止时间："+cargo.getBidEndTime());
+            throw new BidException("错过抢单截止时间："+cargo.getBidEndTime());
         }
         if (nowTime.getTime()<cargo.getBidStartTime().getTime()){
             logger.info("还未开抢");
-            throw new CargoOrderException("还未开抢，开抢时间："+cargo.getBidStartTime());
+            throw new BidException("还未开抢，开抢时间："+cargo.getBidStartTime());
         }
         try {
-            Bid redisCargoOrder = (Bid) redisTemplate.boundHashOps(cargoOrdersKey).get(bid.getCargoId());
-            if (redisCargoOrder==null){
+            Bid redisbid = (Bid) redisTemplate.boundHashOps(bidsKey).get(bid.getCargoId());
+            if (redisbid==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
-                redisTemplate.boundHashOps(cargoOrdersKey).put(bid.getCargoId(), bid);
+                redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
                 WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
             }
             else {
                 //redisCargo更大,则需要更新
-                if (redisCargoOrder.getOrderPrice()>bid.getOrderPrice()){
-                    redisTemplate.boundHashOps(cargoOrdersKey).put(bid.getCargoId(), bid);
+                if (redisbid.getOrderPrice()>bid.getOrderPrice()){
+                    redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
                     WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
                 }
             }
 
-            System.out.println(redisTemplate.boundHashOps(cargoOrdersKey).entries().size());
-            redisTemplate.boundHashOps(cargoOrdersKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
+            System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
+            redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 
             result.put("operationResult", "排队成功");
             result.put("截止时间",cargo.getBidEndTime());
@@ -87,17 +87,17 @@ public class CargoOrderResource {
 
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        Bid cargoOrderrd= (Bid) redisTemplate.boundHashOps(cargoOrdersKey).get(cargoId);
+        Bid bidrd= (Bid) redisTemplate.boundHashOps(bidsKey).get(cargoId);
         Cargo cargo=cargoService.findCargoById(cargoId);
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
 
         Date nowTime = new Date();
         if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
-            cargo.setOrderPrice(cargoOrderrd.getOrderPrice());
-            cargo.setTruckId(cargoOrderrd.getTruckId());
+            cargo.setOrderPrice(bidrd.getOrderPrice());
+            cargo.setTruckId(bidrd.getTruckId());
             cargoRepository.save(cargo);
-            redisTemplate.boundHashOps(cargoOrdersKey).delete(cargoId);
+            redisTemplate.boundHashOps(bidsKey).delete(cargoId);
         }
         return cargo;
     }
