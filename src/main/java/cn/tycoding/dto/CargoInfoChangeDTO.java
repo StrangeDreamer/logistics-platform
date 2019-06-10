@@ -1,10 +1,16 @@
 package cn.tycoding.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Timestamp;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+
+
+
+import java.util.Date;
+
+/**
+ * TODO 转单可更改信息
+ */
 
 @Data
 public class CargoInfoChangeDTO {
@@ -12,13 +18,11 @@ public class CargoInfoChangeDTO {
 
     private double freightFare;
     private int receiverId;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp bidStartTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp bidEndTime;
+    @CreatedDate
+    private Date createTime;
+
+
 
 
 }

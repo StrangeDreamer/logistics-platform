@@ -97,7 +97,7 @@ public class CargoResource {
 
 
     /**
-     * 更新订单
+     * 转单（更新订单）
      * @param id
      * @return
      */
@@ -105,7 +105,7 @@ public class CargoResource {
     @PutMapping("/{cargoId}")
     public Cargo getCargo(@PathVariable("cargoId") int id, @RequestBody CargoInfoChangeDTO cargoInfoChangeDTO)
     {
-        logger.info("REST 更新订单");
+        logger.info("REST 转单-更新订单");
         return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
     }
 

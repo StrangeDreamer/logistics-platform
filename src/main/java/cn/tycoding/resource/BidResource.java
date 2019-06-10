@@ -3,7 +3,9 @@ package cn.tycoding.resource;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Bid;
 import cn.tycoding.exception.BidException;
+import cn.tycoding.repository.BidRepository;
 import cn.tycoding.repository.CargoRepository;
+import cn.tycoding.service.BidService;
 import cn.tycoding.service.CargoService;
 import cn.tycoding.websocket.WebSocketServer;
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ public class BidResource {
     @Autowired
     private CargoRepository cargoRepository;
 
+    @Autowired
+    private BidService bidService;
     /**抢单
      * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
@@ -71,7 +75,8 @@ public class BidResource {
                     WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
                 }
             }
-
+            //保存竞价请求
+            bidService.saveBid(bid);
             System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
             redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 

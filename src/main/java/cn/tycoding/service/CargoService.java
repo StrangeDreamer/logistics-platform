@@ -76,13 +76,20 @@ public class CargoService {
     }
 
 
-
+    /**
+     * TODO 转单业务逻辑实现
+     * @param id
+     * @param cargoInfoChangeDTO
+     * @return
+     */
     public Cargo updateCargoInfo(int id, CargoInfoChangeDTO cargoInfoChangeDTO) {
         Cargo cargo=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
         cargo.setReceiverId(cargoInfoChangeDTO.getReceiverId());
         cargo.setFreightFare(cargoInfoChangeDTO.getFreightFare());
-        cargo.setBidStartTime(cargoInfoChangeDTO.getBidStartTime());
-        cargo.setBidEndTime(cargoInfoChangeDTO.getBidEndTime());
+
+
+
+
         cargoRepository.save(cargo);
         logger.info("Cargo information is updated !");
         return cargo;
