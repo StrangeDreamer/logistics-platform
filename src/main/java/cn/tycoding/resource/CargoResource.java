@@ -104,7 +104,7 @@ public class CargoResource {
      */
 
     @PutMapping("/{cargoId}/{freightFare}")
-    public TransferredCargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare)
+    public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare)
     {
         logger.info("REST 转单");
         //return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
