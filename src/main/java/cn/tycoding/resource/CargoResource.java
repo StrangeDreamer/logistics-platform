@@ -2,6 +2,7 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
+import cn.tycoding.domain.TransferredCargo;
 import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.CargoService;
@@ -102,11 +103,12 @@ public class CargoResource {
      * @return
      */
 
-    @PutMapping("/{cargoId}")
-    public Cargo getCargo(@PathVariable("cargoId") int id, @RequestBody CargoInfoChangeDTO cargoInfoChangeDTO)
+    @PutMapping("/{cargoId}/{freightFare}")
+    public TransferredCargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare)
     {
-        logger.info("REST 转单-更新订单");
-        return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
+        logger.info("REST 转单");
+        //return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
+        return  cargoService.updateCargoInfo(id,freightFare);
     }
 
 

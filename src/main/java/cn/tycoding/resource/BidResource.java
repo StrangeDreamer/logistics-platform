@@ -40,7 +40,7 @@ public class BidResource {
      * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
      *
-     *   TODO id=0?????     获取map键值对：3-Bid(id=0, cargoId=3, orderPrice=89.0, truckId=2)
+     *   TODO id=0因为请求过来的Bid并没有设置其主键id     获取map键值对：3-Bid(id=0, cargoId=3, orderPrice=89.0, truckId=2)
      *   TODO 设置全局变量 cargoKey 和bidsKey
      * @param bid
      * @return
@@ -61,6 +61,22 @@ public class BidResource {
             logger.info("还未开抢");
             throw new BidException("还未开抢，开抢时间："+cargo.getBidStartTime());
         }
+
+   /*     try {
+
+            long hashIncLong=redisTemplate.opsForHash().increment("hashInc",bidsKey,1);
+
+            redisTemplate.boundHashOps(bidsKey).put(hashIncLong, bid);
+            System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
+            redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
+
+            result.put("operationResult", "排队成功");
+            result.put("截止时间",cargo.getBidEndTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("operationResult", "排队失败");
+        }*/
+
         try {
             Bid redisbid = (Bid) redisTemplate.boundHashOps(bidsKey).get(bid.getCargoId());
             if (redisbid==null){

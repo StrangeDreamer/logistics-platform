@@ -2,13 +2,11 @@ package cn.tycoding.service;
 
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.TransferredCargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.exception.CargoException;
-import cn.tycoding.repository.CargoRepository;
-import cn.tycoding.repository.ReceiverRepository;
-import cn.tycoding.repository.ShipperRepository;
-import cn.tycoding.repository.TruckRepository;
+import cn.tycoding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,10 @@ import java.util.List;
 @Transactional
 public class CargoService {
     private final Logger logger = LoggerFactory.getLogger(CargoService.class);
-
-    private final CargoRepository cargoRepository;
+    @Autowired
+    private  CargoRepository cargoRepository;
+    @Autowired
+    private TransferredCargoRepo transferredCargoRepo;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -33,17 +33,15 @@ public class CargoService {
     private final String shipperKey = "Shipper";
     private final String receiverKey = "Receiver";
 
-    public CargoService(CargoRepository cargoRepository) {
-        this.cargoRepository = cargoRepository;
-
-    }
 
 
-    // TODO 一些逻辑判断
+
+    // TODO 能否成功创建该订单
     public Cargo createCargo(Cargo cargo) {
         Cargo c = new Cargo();
 
         c.setShipperId(cargo.getShipperId());
+        c.setOriginFare(cargo.getFreightFare());
         c.setFreightFare(cargo.getFreightFare());
         c.setReceiverId(cargo.getReceiverId());
         c.setWeight(cargo.getWeight());
@@ -52,13 +50,13 @@ public class CargoService {
         c.setLimitedTime(cargo.getLimitedTime());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
-        c.setBidStartTime(cargo.getBidStartTime());
-        c.setBidEndTime(cargo.getBidEndTime());
-        c.setAbnormal(false);
-        c.setOvertime(false);
-        c.setStatus(0);
-        c.setOrderPrice(-1);
-        c.setTruckId(-1);
+        //c.setBidStartTime(cargo.getBidStartTime());
+        //c.setBidEndTime(cargo.getBidEndTime());
+        //c.setAbnormal(false);
+        //c.setOvertime(false);
+        //c.setStatus(0);
+        //c.setOrderPrice(-1);
+        //c.setTruckId(-1);
 
         cargoRepository.save(c);
         logger.info("A new Cargo is created !");
@@ -66,8 +64,10 @@ public class CargoService {
     }
 
 
-
-    // 撤单
+    /**
+     * 撤单
+     * @param id
+     */
     public void deleteCargo(int id) {
         cargoRepository.findById(id).ifPresent(cargo -> {
             cargoRepository.delete(cargo);
@@ -78,21 +78,25 @@ public class CargoService {
 
     /**
      * TODO 转单业务逻辑实现
-     * @param id
-     * @param cargoInfoChangeDTO
+     * @param cargoId
+     * @param freightFare
      * @return
      */
-    public Cargo updateCargoInfo(int id, CargoInfoChangeDTO cargoInfoChangeDTO) {
-        Cargo cargo=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
-        cargo.setReceiverId(cargoInfoChangeDTO.getReceiverId());
-        cargo.setFreightFare(cargoInfoChangeDTO.getFreightFare());
+    public TransferredCargo updateCargoInfo(int cargoId, double freightFare) {
+
+        Cargo cargo=cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
+        TransferredCargo transferredCargo=new TransferredCargo();
 
 
+        transferredCargo.setCargoId(cargo.getId());
+        transferredCargo.setFreightFare(freightFare);
+        //transferredCargo.setTransferredTruckId(cargo.getTruckId());
+
+        transferredCargoRepo.save(transferredCargo);
 
 
-        cargoRepository.save(cargo);
-        logger.info("Cargo information is updated !");
-        return cargo;
+        logger.info("转单创建成功！");
+        return transferredCargo;
     }
 
   public List<Cargo> findAllCargos() {

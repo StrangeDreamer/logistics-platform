@@ -44,5 +44,16 @@ public class RedisTemplateConfigTest {
         System.out.println(redisTemplate.boundHashOps("cargoOrders").get(1));
     }
 
+    @Test
+    public void testRedis3(){
+        double hashIncDouble = redisTemplate.opsForHash().increment("hashInc","map1",3);
+        System.out.println("通过increment(H key, HK hashKey, double delta)方法使变量中的键以值的大小进行自增长:" + hashIncDouble);
+
+
+
+        long hashIncLong = redisTemplate.opsForHash().increment("hashInc","map2",6);
+        System.out.println("通过increment(H key, HK hashKey, long delta)方法使变量中的键以值的大小进行自增长:" + hashIncLong);
+    }
+
 
 }

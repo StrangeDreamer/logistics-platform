@@ -1,19 +1,15 @@
 package cn.tycoding.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Bid {
 
     @Id
@@ -22,5 +18,9 @@ public class Bid {
     private int cargoId;
     private double orderPrice;
     private int truckId;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private Date createdTime ;
 
 }
