@@ -34,14 +34,13 @@ public class CargoService {
     private final String receiverKey = "Receiver";
 
 
-
-
     // TODO 能否成功创建该订单
     public Cargo createCargo(Cargo cargo) {
         Cargo c = new Cargo();
         c.setShipperId(cargo.getShipperId());
         c.setFreightFare(cargo.getFreightFare());
         c.setOriginFare(cargo.getFreightFare());
+        c.setInsurance(cargo.getInsurance());
         c.setReceiverId(cargo.getReceiverId());
         c.setWeight(cargo.getWeight());
         c.setVolume(cargo.getVolume());
@@ -49,6 +48,7 @@ public class CargoService {
         c.setLimitedTime(cargo.getLimitedTime());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
+
         cargoRepository.save(c);
         logger.info("A new Cargo is created !");
         return c;
@@ -66,28 +66,37 @@ public class CargoService {
         });
     }*/
 
-    public Cargo deleteCargo(int id) {
-        Cargo cargo=cargoService.findCargoById(id);
+    public Cargo withdrawalCargo(int id) {
+        Cargo cargo = cargoService.findCargoById(id);
         try {
             //8 发布时无人接单撤单  --撤单
-            if (cargo.getTruckId()==1){
+            if (cargo.getStatus() == 0 || cargo.getStatus() ==  1){
                 cargo.setStatus(8);
+                logger.info("由于订单未被接单，直接撤单");
             }
             //已接未运撤单  --撤单
-            else {
+            else if (cargo.getStatus() == 2){
+                // 资金流动 TODO： 发货方向平台支付赔偿，平台将赔偿付给车辆。赔偿金的计算。
+                logger.info("由于货物已接未运，发货方" + cargo.getShipperId() +
+                        " 支付给承运方" + cargo.getTruckId() + "赔偿，" +
+                        "赔偿为运费" + cargo.getFreightFare() + " 乘 撤单赔偿比例");
+                // 车辆的担保额度的恢复
+                logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
+                // TODO：更进一步的判断，撤单前判断发货方是否有足够的资金进行撤单。或者放在客户端
+            }
+            else {
+                logger.info("订单当前状态不允许撤单" );
             }
             cargoRepository.save(cargo);
             return cargo;
         }catch (Exception e){
             e.printStackTrace();
-
         }
-
         return cargo;
-
-
     }
+
+
 
 
     /**
@@ -111,6 +120,7 @@ public class CargoService {
         transferredCargo.setReceiverId(cargo.getReceiverId());
         transferredCargo.setDeparture(cargo.getDeparture());
         transferredCargo.setDestination(cargo.getDestination());
+        transferredCargo.setInsurance(cargo.getInsurance());
 
         //转单更新
         transferredCargo.setOriginFare(cargo.getFreightFare());
@@ -156,7 +166,7 @@ public class CargoService {
     public Cargo findCargoById(int id){
         Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
         //redis中没有缓存该运单
-        if (cargo==null){
+        if (cargo == null){
             Cargo cargoDb=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist!"));
             redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
             logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");

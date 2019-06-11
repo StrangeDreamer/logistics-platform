@@ -25,6 +25,10 @@ public class Cargo implements Serializable {
     private double originFare;
     //转单更新
     private int originCargoId=-1;
+
+    // 赔偿金，是订单超时要进行赔偿的依据，也是对车辆担保额的要求
+    private int insurance;
+    // 当前挂单的运费
     private double freightFare;
     private int receiverId;
     private double weight;

@@ -43,7 +43,7 @@ public class TruckService {
 
     // 查询指定id承运方
     public Truck findTrucksById(int truckId){
-        return truckRepository.findShippersById(truckId);
+        return truckRepository.findTruckById(truckId);
     }
 
     // 查询所有承运方

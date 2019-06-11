@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TruckRepository extends JpaRepository<Truck,Integer> {
 
-    Truck findShippersById(int id);
+    Truck findTruckById(int id);
     List<Truck> findAll();
 
 

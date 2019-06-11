@@ -44,7 +44,6 @@ public class CargoResource {
      */
     @PostMapping("/createCargo")
     public Cargo createCargo(@RequestBody Cargo cargo) {
-
         return cargoService.createCargo(cargo);
     }
 
@@ -88,10 +87,10 @@ public class CargoResource {
     * @param id
     * @return
     */
-    @DeleteMapping("/deleteCargo/{id}")
-    public Cargo deleteCargo(@PathVariable("id") int id){
+    @DeleteMapping("/withdrawalCargo/{id}")
+    public Cargo withdrawalCargo(@PathVariable("id") int id){
         logger.info("Rest 撤单请求{}"+id);
-        return cargoService.deleteCargo(id);
+        return cargoService.withdrawalCargo(id);
     }
 
 
