@@ -23,6 +23,8 @@ public class Cargo implements Serializable {
     private int id;
     private int shipperId;
     private double originFare;
+    //转单更新
+    private int originCargoId=-1;
     private double freightFare;
     private int receiverId;
     private double weight;

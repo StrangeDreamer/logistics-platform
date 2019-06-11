@@ -160,6 +160,11 @@ public class CargoResource {
     }
 
 
+    @GetMapping("/allTransCargos/{originCargoId}")
+    public List<Cargo> getAllTransCargos(@PathVariable int originCargoId){
+        logger.info("REST 查询订单转运历史");
+        return cargoService.findAllByOriginCargoId(originCargoId);
+    }
 
 
 }

@@ -89,7 +89,14 @@ public class CargoService {
         transferredCargo.setDeparture(cargo.getDeparture());
         transferredCargo.setDestination(cargo.getDestination());
 
+        //转单更新
         transferredCargo.setOriginFare(cargo.getFreightFare());
+
+        if (cargo.getOriginCargoId()==-1){
+            transferredCargo.setOriginCargoId(cargo.getId());
+        }else {
+            transferredCargo.setOriginCargoId(cargo.getOriginCargoId());
+        }
 
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());
@@ -153,6 +160,12 @@ public class CargoService {
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
         return cargoRepository.findAllByTruckId(truckId);
+    }
+
+
+    //查询订单流通历史
+    public List<Cargo> findAllByOriginCargoId(int originCargoId){
+        return cargoRepository.findAllByOriginCargoId(originCargoId);
     }
 
 
