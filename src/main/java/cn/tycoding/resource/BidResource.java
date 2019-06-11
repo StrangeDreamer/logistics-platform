@@ -119,6 +119,7 @@ public class BidResource {
             cargo.setTruckId(bidrd.getTruckId());
             cargoRepository.save(cargo);
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
+            redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         }
         return cargo;
     }

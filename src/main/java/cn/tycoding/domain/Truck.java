@@ -29,4 +29,17 @@ public class Truck {
     @LastModifiedDate
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date modifyTime;
+
+
+    // 承运方的资金
+    private double money = 0;
+
+    // 承运方冻结后实际可用资金
+    private double availableMoney = 0;
+
+    // 承运方的担保额
+    private double insurance = 0;
+    // 承运方去除冻结、实际可用的担保额
+    private double availableInsurance = 0;
+
 }

@@ -30,4 +30,12 @@ public class Shipper {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date modifyTime;
 
+
+    // 发货方的资金
+    private double money = 0;
+
+    // 发货方冻结后实际可用资金
+    private double availableMoney = 0;
+
+
 }

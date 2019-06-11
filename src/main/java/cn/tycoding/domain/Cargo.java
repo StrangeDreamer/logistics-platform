@@ -58,5 +58,4 @@ public class Cargo implements Serializable {
     private int status = 0;
 
 
-
 }

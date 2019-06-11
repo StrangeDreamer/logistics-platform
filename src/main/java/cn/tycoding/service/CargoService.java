@@ -102,6 +102,8 @@ public class CargoService {
         return transferredCargo;
     }
 
+
+
   public List<Cargo> findAllCargos() {
 //
 //        List<Cargo> cargosList = redisTemplate.boundHashOps(cargoKey).values();
