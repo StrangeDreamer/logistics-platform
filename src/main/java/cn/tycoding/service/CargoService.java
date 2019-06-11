@@ -39,7 +39,6 @@ public class CargoService {
     // TODO 能否成功创建该订单
     public Cargo createCargo(Cargo cargo) {
         Cargo c = new Cargo();
-
         c.setShipperId(cargo.getShipperId());
         c.setFreightFare(cargo.getFreightFare());
         c.setOriginFare(cargo.getFreightFare());
@@ -50,7 +49,6 @@ public class CargoService {
         c.setLimitedTime(cargo.getLimitedTime());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
-
         cargoRepository.save(c);
         logger.info("A new Cargo is created !");
         return c;
@@ -156,16 +154,6 @@ public class CargoService {
     public List<Cargo> findAllByTruckId(int truckId) {
         return cargoRepository.findAllByTruckId(truckId);
     }
-
-
-
-//    // 查找承运方方的所有订单  TODO：承运方查找的是order而不是cargo
-//    public List<Cargo> findAllByShipperId(int shipperId) {
-//        return cargoRepository.findAllByShipperId(shipperId);
-//    }
-
-
-
 
 
 }

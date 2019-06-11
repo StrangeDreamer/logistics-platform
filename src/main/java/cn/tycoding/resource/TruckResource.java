@@ -42,7 +42,7 @@ public class TruckResource {
      * 查询指定发货方
      * @return
      */
-    @GetMapping("/findShipperById/{id}")
+    @GetMapping("/findTruckById/{id}")
     public Truck getTrucksById(@PathVariable("id") int id){
         logger.info("REST 查询所有货物");
         return truckService.findTrucksById(id);

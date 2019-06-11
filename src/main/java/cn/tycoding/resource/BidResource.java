@@ -96,7 +96,7 @@ public class BidResource {
             System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
             redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
 
-            result.put("operationResult", "排队成功");
+            result.put("operationResult", "货车对"+bid.getTruckId()+"订单" + cargo.getId() + "的本次出价排队成功");
             result.put("截止时间",cargo.getBidEndTime());
         } catch (Exception e) {
             e.printStackTrace();

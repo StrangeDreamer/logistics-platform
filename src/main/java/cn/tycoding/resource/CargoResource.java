@@ -87,8 +87,6 @@ public class CargoResource {
     * @param id
     * @return
     */
-
-
     @DeleteMapping("/deleteCargo/{id}")
     public String deleteCargo(@PathVariable("id") int id){
         logger.info("Rest 发货方注销请求");
