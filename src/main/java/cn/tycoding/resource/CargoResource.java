@@ -74,6 +74,7 @@ public class CargoResource {
         //先更新DB，再删除cache
         cargo.setBidStartTime(bidStartTime);
         cargo.setBidEndTime(bidEndTime);
+        cargo.setStatus(1);
         cargoRepository.save(cargo);
         //删除map中的某个对象
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
@@ -88,10 +89,9 @@ public class CargoResource {
     * @return
     */
     @DeleteMapping("/deleteCargo/{id}")
-    public String deleteCargo(@PathVariable("id") int id){
-        logger.info("Rest 发货方注销请求");
-        cargoService.deleteCargo(id);
-        return "删除shipper"+id+"成功";
+    public Cargo deleteCargo(@PathVariable("id") int id){
+        logger.info("Rest 撤单请求{}"+id);
+        return cargoService.deleteCargo(id);
     }
 
 

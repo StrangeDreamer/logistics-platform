@@ -23,7 +23,7 @@ public class CargoService {
     @Autowired
     private  CargoRepository cargoRepository;
     @Autowired
-    private TransferredCargoRepo transferredCargoRepo;
+    private CargoService cargoService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -59,11 +59,34 @@ public class CargoService {
      * 撤单
      * @param id
      */
-    public void deleteCargo(int id) {
+  /*  public void deleteCargo(int id) {
         cargoRepository.findById(id).ifPresent(cargo -> {
             cargoRepository.delete(cargo);
             logger.info("货物撤单成功！");
         });
+    }*/
+
+    public Cargo deleteCargo(int id) {
+        Cargo cargo=cargoService.findCargoById(id);
+        try {
+            //8 发布时无人接单撤单  --撤单
+            if (cargo.getTruckId()==1){
+                cargo.setStatus(8);
+            }
+            //已接未运撤单  --撤单
+            else {
+                cargo.setStatus(9);
+            }
+            cargoRepository.save(cargo);
+            return cargo;
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        return cargo;
+
+
     }
 
 
@@ -101,6 +124,7 @@ public class CargoService {
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());
         transferredCargo.setWeight(cargo.getWeight());
+        transferredCargo.setStatus(5);
         cargoRepository.save(transferredCargo);
 
         logger.info("转单创建成功！");

@@ -117,6 +117,7 @@ public class BidResource {
             //将缓存中的最低价和抢单用户刷进cargo数据库中
             cargo.setOrderPrice(bidrd.getOrderPrice());
             cargo.setTruckId(bidrd.getTruckId());
+            cargo.setStatus(2);
             cargoRepository.save(cargo);
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);

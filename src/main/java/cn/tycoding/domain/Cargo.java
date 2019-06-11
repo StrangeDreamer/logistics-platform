@@ -57,6 +57,7 @@ public class Cargo implements Serializable {
     private boolean overtime = false;
     private boolean abnormal = false;
     private double orderPrice = -1;
+    //0 订单未发布
     private int status = 0;
 
 
