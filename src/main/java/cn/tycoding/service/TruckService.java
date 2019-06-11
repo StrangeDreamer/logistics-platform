@@ -26,6 +26,8 @@ public class TruckService {
         truck1.setAvailableWeight(truck.getAvailableWeight());
         truck1.setAvailableVolume(truck.getAvailableVolume());
         truck1.setType(truck.getType());
+        truck1.setBankId(truck.getBankId());
+        truck1.setInsuranceId(truck.getInsuranceId());
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
         return truck1;

@@ -21,7 +21,6 @@ public class Shipper {
     private int id;
     private String name;
 
-
     @CreatedDate
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     private Date createdDate ;
@@ -31,11 +30,13 @@ public class Shipper {
     private Date modifyTime;
 
 
-    // 发货方的资金
-    private double money = 0;
+//    // 发货方的资金
+//    private double money = 0;
+//
+//    // 发货方冻结后实际可用资金
+//    private double availableMoney = 0;
 
-    // 发货方冻结后实际可用资金
-    private double availableMoney = 0;
 
-
+    // 发货方银行账户
+    private int BankId;
 }

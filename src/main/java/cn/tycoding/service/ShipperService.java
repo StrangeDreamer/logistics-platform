@@ -22,8 +22,9 @@ public class ShipperService {
 
     //发货方注册
     public Shipper createShipper(Shipper shipper){
-        Shipper shipper1=new Shipper();
+        Shipper shipper1 = new Shipper();
         shipper1.setName(shipper.getName());
+        shipper1.setBankId(shipper.getBankId());
         shipperRepository.save(shipper1);
         return shipper1;
     }

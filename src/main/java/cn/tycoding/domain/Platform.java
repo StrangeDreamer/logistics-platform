@@ -31,7 +31,7 @@ public class Platform implements Serializable {
     @Column(updatable = false,nullable = false)
     private Date createTime;
 
-    // 平台当前的资金
-    private double lmoney = 0;
+//    // 平台当前的资金
+//    private double lmoney = 0;
 
 }

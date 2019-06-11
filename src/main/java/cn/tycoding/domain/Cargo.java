@@ -57,8 +57,32 @@ public class Cargo implements Serializable {
     private boolean overtime = false;
     private boolean abnormal = false;
     private double orderPrice = -1;
-    //0 订单未发布
-    private int status = 0;
 
+
+    /**
+     *
+     * 0 订单创建未发布 --创建订单
+     *
+     * 1 订单发布中 --平台确定开抢
+     *
+     * 2 已接未运 --平台确定最终truck抢单成功
+     *
+     * 3 已经在运
+     *
+     * 4 已运达等待收货
+     *
+     * 5 转手中（正挂在平台公告栏上）--转单成功
+     *
+     * 6 订单异常 --确定收单时
+     *
+     * 7 订单完结 --确定收单时
+     *
+     * 8 发布时无人接单撤单 --撤单
+     *
+     * 9 已接未运撤单 --撤单
+     *
+     * 10 订单超时 --确定收单时
+     */
+    private int status = 0;
 
 }
