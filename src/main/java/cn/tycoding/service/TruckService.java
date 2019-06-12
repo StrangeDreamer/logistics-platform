@@ -66,6 +66,7 @@ public class TruckService {
             throw new TruckException("当前货物状态不争取，无法开始运货");
         }
         cargo.setStatus(3);
+        cargoRepository.save(cargo);
         return cargoRepository.findCargoById(cargoId);
     }
 
@@ -80,6 +81,7 @@ public class TruckService {
             throw new TruckException("当前货物状态不正确，无法转入运达状态");
         }
         cargoRepository.findCargoById(cargoId).setStatus(4);
+        cargoRepository.save(cargo);
         return cargoRepository.findCargoById(cargoId);
     }
 }

@@ -75,6 +75,7 @@ public class InspectionResource {
 
 
         cargo.setStatus(inspection.getInspectionResult());
+        cargoRepository.save(cargo);
 
 //     * 8 正常完成
 //     * 9 订单超时
