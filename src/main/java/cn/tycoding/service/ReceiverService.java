@@ -1,6 +1,7 @@
 package cn.tycoding.service;
 
 
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 
 import cn.tycoding.repository.ReceiverRepository;
@@ -49,4 +50,6 @@ public class ReceiverService {
         return receiverRepository.findAll();
     }
 
+    public Cargo inspectCargo(int cargoId) {
+    }
 }

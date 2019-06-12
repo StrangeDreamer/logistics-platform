@@ -1,6 +1,7 @@
 package cn.tycoding.service;
 
 
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.repository.TruckRepository;
 import org.slf4j.Logger;
@@ -52,4 +53,11 @@ public class TruckService {
     }
 
 
+    public Cargo startShip(int cargoId) {
+        // TODO 开始运货请求
+    }
+
+    public Cargo endShip(int cargoId) {
+        //TODO truck已经送达货物，请求验货
+    }
 }

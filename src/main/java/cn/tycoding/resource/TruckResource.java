@@ -58,5 +58,23 @@ public class TruckResource {
         return truckService.findAll();
     }
 
+    /**
+     * truck 请求开始运货
+     * @param cargoId 货号
+     * @return
+     */
+
+    @GetMapping("/startShip/{CargoId}")
+
+    public Cargo startShip(@PathVariable int cargoId){
+        logger.info("truck开始运货，货单号{}",cargoId);
+        return truckService.startShip(cargoId);
+    }
+
+    @GetMapping("/endShip/{cargoId}")
+    public Cargo endShip(@PathVariable int cargoId){
+        logger.info("truck已经送达，请求验货");
+        return truckService.endShip(cargoId);
+    }
 
 }

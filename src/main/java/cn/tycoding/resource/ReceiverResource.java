@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.service.ReceiverService;
 import org.slf4j.Logger;
@@ -53,6 +54,14 @@ public class ReceiverResource {
     public List<Receiver> getAllReceiverr(){
         logger.info("REST 查询所有收货方");
         return receiverService.findAll();
+    }
+
+
+
+    @PostMapping("/inspection/{cargoId}")
+    public Cargo inspectCargo(@PathVariable int cargoId){
+        logger.info("REST 收货方验货请求");
+        return receiverService.inspectCargo(cargoId);
     }
 }
 
