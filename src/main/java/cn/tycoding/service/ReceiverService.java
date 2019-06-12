@@ -50,6 +50,5 @@ public class ReceiverService {
         return receiverRepository.findAll();
     }
 
-    public Cargo inspectCargo(int cargoId) {
-    }
+
 }

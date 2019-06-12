@@ -64,14 +64,13 @@ public class TruckResource {
      * @return
      */
 
-    @GetMapping("/startShip/{CargoId}")
-
+    @PutMapping("/startShip/{cargoId}")
     public Cargo startShip(@PathVariable int cargoId){
         logger.info("truck开始运货，货单号{}",cargoId);
         return truckService.startShip(cargoId);
     }
 
-    @GetMapping("/endShip/{cargoId}")
+    @PutMapping("/endShip/{cargoId}")
     public Cargo endShip(@PathVariable int cargoId){
         logger.info("truck已经送达，请求验货");
         return truckService.endShip(cargoId);

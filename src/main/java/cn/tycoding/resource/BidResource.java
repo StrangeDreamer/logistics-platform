@@ -79,10 +79,6 @@ public class BidResource {
             e.printStackTrace();
             result.put("operationResult", "排队失败");
         }*/
-
-
-
-
         // TODO：担保额判断
         logger.info("向第三方查询货车当前可用担保额是否超过" + cargo.getInsurance() + "，额度充足方可出价" );
 
@@ -90,25 +86,21 @@ public class BidResource {
         // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求
         if (!cargo.getType().equals(truckRepository.findTruckById(bid.getTruckId()).getType())){
             //运输类型需要符合要求
-            result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
-            result.put("截止时间",cargo.getBidEndTime());
-            return result;
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
+            throw new BidException( "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
         } else if (cargo.getVolume() > truckRepository.findTruckById(bid.getTruckId()).getAvailableVolume()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
-            result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
-            result.put("截止时间",cargo.getBidEndTime());
-            return result;
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
         } else if (cargo.getWeight() > truckRepository.findTruckById(bid.getTruckId()).getAvailableWeight()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
-            result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
-            result.put("截止时间",cargo.getBidEndTime());
-            return result;
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
         } else if ((bid.getOrderPrice() > cargo.getFreightFare())
                 || (bid.getOrderPrice() < cargo.getFreightFare() * 0.40)){
             // 出价区间合理  TODO: 出价下限默认为40%，如何设置这个参数
-            result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
-            result.put("截止时间",cargo.getBidEndTime());
-            return result;
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
         }
 
 
@@ -131,7 +123,6 @@ public class BidResource {
             bidService.saveBid(bid);
             System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
             redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
-
             result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "的本次出价排队成功" +
                         "并扣除担保额度" + cargo.getInsurance());
             result.put("截止时间",cargo.getBidEndTime());

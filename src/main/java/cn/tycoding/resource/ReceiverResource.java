@@ -58,11 +58,7 @@ public class ReceiverResource {
 
 
 
-    @PostMapping("/inspection/{cargoId}")
-    public Cargo inspectCargo(@PathVariable int cargoId){
-        logger.info("REST 收货方验货请求");
-        return receiverService.inspectCargo(cargoId);
-    }
+
 }
 
 

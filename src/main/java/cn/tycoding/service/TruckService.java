@@ -3,6 +3,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
+import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,11 @@ public class TruckService {
 
     private final Logger logger = LoggerFactory.getLogger(TruckService.class);
     private final TruckRepository truckRepository;
+    private final CargoRepository cargoRepository;
 
-    public TruckService(TruckRepository truckRepository) {
+    public TruckService(TruckRepository truckRepository,CargoRepository cargoRepository) {
         this.truckRepository = truckRepository;
+        this.cargoRepository = cargoRepository;
     }
 
     // 承运方注册
@@ -54,10 +57,14 @@ public class TruckService {
 
 
     public Cargo startShip(int cargoId) {
-        // TODO 开始运货请求
+        // 开始运货请求
+        cargoRepository.findCargoById(cargoId).setStatus(3);
+        return cargoRepository.findCargoById(cargoId);
     }
 
     public Cargo endShip(int cargoId) {
-        //TODO truck已经送达货物，请求验货
+        //truck已经送达货物，请求验货
+        cargoRepository.findCargoById(cargoId).setStatus(4);
+        return cargoRepository.findCargoById(cargoId);
     }
 }
