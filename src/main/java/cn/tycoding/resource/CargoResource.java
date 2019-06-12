@@ -147,7 +147,6 @@ public class CargoResource {
 
 
 
-
     /**
      * 查询所有货物
      * @return
@@ -157,6 +156,42 @@ public class CargoResource {
         logger.info("REST 查询所有货物");
         return cargoService.findAllCargos();
     }
+
+
+
+
+    /**
+     * 查询所有正常完成货物
+     * @return
+     */
+    @GetMapping("/allNormalCargos")
+    public List<Cargo> getAllNormalCargos(){
+        logger.info("REST 查询所有货物");
+        return cargoService.findAllNormalCargos();
+    }
+
+
+    /**
+     * 查询所有超时完成的货物
+     * @return
+     */
+    @GetMapping("/allTimeOutCargos")
+    public List<Cargo> getAllTimeOutCargos(){
+        logger.info("REST 查询所有超时完成的货物");
+        return cargoService.findAllTimeOutCargos();
+    }
+
+
+    /**
+     * 查询所有订单异常的货物
+     * @return
+     */
+    @GetMapping("/allAbnormalCargos")
+    public List<Cargo> getAllAbnormalCargos(){
+        logger.info("REST 查询所有订单异常的货物");
+        return cargoService.findAbnormalCargos();
+    }
+
 
 
     @GetMapping("/allTransCargos/{originCargoId}")

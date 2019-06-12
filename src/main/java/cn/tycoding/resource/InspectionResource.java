@@ -64,26 +64,38 @@ public class InspectionResource {
 
 
 
-//     * 6 订单异常 --确定收单时
-//     * 7 订单完结 --确定收单时
-//     * 10 订单超时 --确定收单时
+
+
         Cargo cargo = cargoRepository.findCargoById(inspection.getCargoId());
-        if (inspection.getInspectionResult() == 6) {
+
+        if (cargo.getStatus() != 4) {
+            logger.info("货物当前状态不允许验货！");
+            throw new InspectionException("货物当前状态不允许验货！");
+        }
+
+
+        cargo.setStatus(inspection.getInspectionResult());
+
+//     * 8 正常完成
+//     * 9 订单超时
+//     * 10 订单异常
+        if (inspection.getInspectionResult() == 8) {
             result = "验货通过，订单正常完结！\n" +
                     "发货方向平台支付运费" + cargo.getFreightFare() +
                     "平台向承运方支付酬劳" + cargo.getOrderPrice() +
                     "平台向发货方和承运方支付分享利润 x，y\n" +
                     "承运方" + cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance();
-        } else if (inspection.getInspectionResult() == 10) {
+        } else if (inspection.getInspectionResult() == 9) {
             result = "验货正常但出现超时！\n" +
                     "超时时长为：" + inspection.getTimeoutPeriod() + "承运方需要支付赔偿金： N" +
                     "发货方向平台支付运费" + cargo.getFreightFare() +
                     "平台向承运方支付酬劳" + cargo.getOrderPrice() +
                     "平台向发货方和承运方支付分享利润 x，y\n" +
                     "承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！" ;
-        } else if (inspection.getInspectionResult() == 7) {
+        } else if (inspection.getInspectionResult() == 10) {
             result = "货物出现异常，交给第三方处理";
         } else {
+            logger.info("验货结果设置错误！");
             throw new InspectionException("验货结果设置错误！");
         }
 

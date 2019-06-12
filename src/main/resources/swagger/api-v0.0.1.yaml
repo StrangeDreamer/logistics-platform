@@ -149,14 +149,14 @@ paths:
     get:
       tags:
       - "pet"
-      summary: "Finds Pets by status"
-      description: "Multiple status values can be provided with comma separated strings"
+      summary: "Finds Pets by "
+      description: "Multiple  values can be provided with comma separated strings"
       operationId: "findPetsByStatus"
       produces:
       - "application/xml"
       - "application/json"
       parameters:
-      - name: "status"
+      - name: ""
         in: "query"
         description: "Status values that need to be considered for filter"
         required: true
@@ -177,7 +177,7 @@ paths:
             items:
               $ref: "#/definitions/Pet"
         400:
-          description: "Invalid status value"
+          description: "Invalid  value"
       security:
       - petstore_auth:
         - "write:pets"
@@ -266,9 +266,9 @@ paths:
         description: "Updated name of the pet"
         required: false
         type: "string"
-      - name: "status"
+      - name: ""
         in: "formData"
-        description: "Updated status of the pet"
+        description: "Updated  of the pet"
         required: false
         type: "string"
       responses:
@@ -348,8 +348,8 @@ paths:
     get:
       tags:
       - "store"
-      summary: "Returns pet inventories by status"
-      description: "Returns a map of status codes to quantities"
+      summary: "Returns pet inventories by "
+      description: "Returns a map of  codes to quantities"
       operationId: "getInventory"
       produces:
       - "application/json"
@@ -653,7 +653,7 @@ definitions:
       shipDate:
         type: "string"
         format: "date-time"
-      status:
+      :
         type: "string"
         description: "Order Status"
         enum:
@@ -680,7 +680,7 @@ definitions:
       shipDate:
         type: "string"
         format: "date-time"
-      status:
+      :
         type: "string"
         description: "Order Status"
         enum:
@@ -764,9 +764,9 @@ definitions:
           wrapped: true
         items:
           $ref: "#/definitions/Tag"
-      status:
+      :
         type: "string"
-        description: "pet status in the store"
+        description: "pet  in the store"
         enum:
         - "available"
         - "pending"

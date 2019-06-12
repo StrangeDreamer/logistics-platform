@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -201,6 +202,23 @@ public class CargoService {
     public List<Cargo> findAllByOriginCargoId(int originCargoId){
         return cargoRepository.findAllByOriginCargoId(originCargoId);
     }
+
+
+
+    public List<Cargo> findAllNormalCargos(){
+        return cargoRepository.findAllByStatus(8);
+    }
+
+
+    public List<Cargo> findAllTimeOutCargos(){
+        return cargoRepository.findAllByStatus(9);
+    }
+
+
+    public List<Cargo> findAbnormalCargos(){
+        return cargoRepository.findAllByStatus(10);
+    }
+
 
 
 }

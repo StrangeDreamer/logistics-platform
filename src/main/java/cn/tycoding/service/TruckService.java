@@ -3,6 +3,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
+import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
 import org.slf4j.Logger;
@@ -58,12 +59,26 @@ public class TruckService {
 
     public Cargo startShip(int cargoId) {
         // 开始运货请求
-        cargoRepository.findCargoById(cargoId).setStatus(3);
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
+
+        // 前提条件的检查
+        if (cargo.getStatus() != 2){
+            throw new TruckException("当前货物状态不争取，无法开始运货");
+        }
+        cargo.setStatus(3);
         return cargoRepository.findCargoById(cargoId);
     }
 
     public Cargo endShip(int cargoId) {
         //truck已经送达货物，请求验货
+
+        // 开始运货请求
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
+
+        // 前提条件的检查
+        if (cargo.getStatus() != 3){
+            throw new TruckException("当前货物状态不正确，无法转入运达状态");
+        }
         cargoRepository.findCargoById(cargoId).setStatus(4);
         return cargoRepository.findCargoById(cargoId);
     }

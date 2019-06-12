@@ -66,6 +66,8 @@ public class TruckResource {
 
     @PutMapping("/startShip/{cargoId}")
     public Cargo startShip(@PathVariable int cargoId){
+
+
         logger.info("truck开始运货，货单号{}",cargoId);
         return truckService.startShip(cargoId);
     }

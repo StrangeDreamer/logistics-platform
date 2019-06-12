@@ -42,7 +42,7 @@ create table cargo_order
   is_overtime   BIT(1)         not null,
   order_price   DOUBLE(22)     not null,
   register_time DATETIME(19)   null,
-  status        INT(10)        not null,
+          INT(10)        not null,
   truck_id      INT(10)        not null
 );
 
