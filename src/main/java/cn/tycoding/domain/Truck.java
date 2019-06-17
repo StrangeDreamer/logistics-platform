@@ -23,11 +23,11 @@ public class Truck {
     private String type;
 
     @CreatedDate
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    @Column(updatable = false, nullable = false)
     private Date createdDate ;
 
     @LastModifiedDate
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
+    @Column(updatable = false, nullable = false)
     private Date modifyTime;
 
 
