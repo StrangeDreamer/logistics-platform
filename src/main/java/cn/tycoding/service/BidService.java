@@ -22,7 +22,7 @@ public class BidService {
         Bid bid1=new Bid();
         bid1.setCargoId(bid.getCargoId());
         bid1.setTruckId(bid.getTruckId());
-        bid1.setOrderPrice(bid.getOrderPrice());
+        bid1.setBidPrice(bid.getBidPrice());
         logger.info("保存竞价请求");
         bidRepository.save(bid1);
         return "保存竞价请求成功";

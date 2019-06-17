@@ -51,6 +51,22 @@ public class TruckService {
         return truckRepository.findTruckById(truckId);
     }
 
+    // 查询指定id承运方的订单数量
+    public String findTrucksCargoNum(int truckId){
+        // TODO 具体实现
+
+        // 所有该货车具有的订单
+
+        List<Cargo> n1=cargoRepository.findAllByTruckId(truckId);
+        List<Cargo> n2 = cargoRepository.findAllByTruckIdAndStatus(truckId,2);
+        List<Cargo> n3= cargoRepository.findAllByTruckIdAndStatus(truckId,3);
+
+
+        return "货车"+ truckRepository.findTruckById(truckId).getName()
+                + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2.size()+ "个;正在运输订单有" + n3.size()+ "个";
+    }
+
+
     // 查询所有承运方
     public List<Truck> findAll(){
         return truckRepository.findAll();

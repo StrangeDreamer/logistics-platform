@@ -7,6 +7,7 @@ import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
 import cn.tycoding.service.InspectionService;
 import cn.tycoding.service.CargoService;
+import cn.tycoding.service.PlatformService;
 import cn.tycoding.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,6 @@ public class InspectionResource {
 
     private final Logger logger= LoggerFactory.getLogger(InspectionResource.class);
 
-    //设置秒杀redis缓存的key
     private final String inspectionsKey = "inspections";
     private final String cargoKey = "Cargo";
     @Autowired
@@ -38,9 +38,12 @@ public class InspectionResource {
     private CargoRepository cargoRepository;
     @Autowired
     private TruckRepository truckRepository;
-
     @Autowired
     private InspectionService inspectionService;
+    @Autowired
+    private PlatformService platformService;
+
+
     /**验货
      * @param inspection
      * @return
@@ -83,14 +86,14 @@ public class InspectionResource {
         if (inspection.getInspectionResult() == 8) {
             result = "验货通过，订单正常完结！\n" +
                     "发货方向平台支付运费" + cargo.getFreightFare() +
-                    "平台向承运方支付酬劳" + cargo.getOrderPrice() +
+                    "平台向承运方支付酬劳" + cargo.getBidPrice() +
                     "平台向发货方和承运方支付分享利润 x，y\n" +
                     "承运方" + cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance();
         } else if (inspection.getInspectionResult() == 9) {
             result = "验货正常但出现超时！\n" +
                     "超时时长为：" + inspection.getTimeoutPeriod() + "承运方需要支付赔偿金： N" +
                     "发货方向平台支付运费" + cargo.getFreightFare() +
-                    "平台向承运方支付酬劳" + cargo.getOrderPrice() +
+                    "平台向承运方支付酬劳" + cargo.getBidPrice() +
                     "平台向发货方和承运方支付分享利润 x，y\n" +
                     "承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！" ;
         } else if (inspection.getInspectionResult() == 10) {
@@ -103,8 +106,6 @@ public class InspectionResource {
         logger.info(result);
         return result;
     }
-
-
 
 
 }

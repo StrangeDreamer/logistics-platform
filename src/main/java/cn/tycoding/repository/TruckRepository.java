@@ -12,4 +12,6 @@ public interface TruckRepository extends JpaRepository<Truck,Integer> {
     List<Truck> findAll();
 
 
+
+
 }

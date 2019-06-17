@@ -16,7 +16,7 @@ public class Bid {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private int cargoId;
-    private double orderPrice;
+    private double bidPrice;
     private int truckId;
 
     @CreatedDate

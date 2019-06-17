@@ -2,6 +2,7 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Bid;
+import cn.tycoding.domain.Platform;
 import cn.tycoding.exception.BidException;
 import cn.tycoding.repository.BidRepository;
 import cn.tycoding.repository.CargoRepository;
@@ -43,7 +44,7 @@ public class BidResource {
      * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
      *
-     *   TODO id=0因为请求过来的Bid并没有设置其主键id     获取map键值对：3-Bid(id=0, cargoId=3, orderPrice=89.0, truckId=2)
+     *   TODO id=0因为请求过来的Bid并没有设置其主键id     获取map键值对：3-Bid(id=0, cargoId=3, bidPrice=89.0, truckId=2)
      *   TODO 设置全局变量 cargoKey 和bidsKey
      * @param bid
      * @return
@@ -96,11 +97,12 @@ public class BidResource {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
-        } else if ((bid.getOrderPrice() > cargo.getFreightFare())
-                || (bid.getOrderPrice() < cargo.getFreightFare() * 0.40)){
-            // 出价区间合理  TODO: 出价下限默认为40%，如何设置这个参数
+        } else if ((bid.getBidPrice() > cargo.getFreightFare())
+                || (bid.getBidPrice() < cargo.getFreightFare() * 0.4)){
+            // 出价区间合理
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
-            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
+            + cargo.getFreightFare() * 0.4 + "~" + cargo.getFreightFare());
         }
 
 
@@ -110,13 +112,13 @@ public class BidResource {
             if (redisbid==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
                 redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
-                WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
+                WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
             }
             else {
                 //redisCargo更大,则需要更新
-                if (redisbid.getOrderPrice()>bid.getOrderPrice()){
+                if (redisbid.getBidPrice()>bid.getBidPrice()){
                     redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
-                    WebSocketServer.sendInfo("有人出价"+bid.getOrderPrice());
+                    WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
                 }
             }
             //保存竞价请求
@@ -143,7 +145,7 @@ public class BidResource {
         Date nowTime = new Date();
         if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
-            cargo.setOrderPrice(bidrd.getOrderPrice());
+            cargo.setBidPrice(bidrd.getBidPrice());
             cargo.setTruckId(bidrd.getTruckId());
             cargo.setStatus(2);
             cargoRepository.save(cargo);

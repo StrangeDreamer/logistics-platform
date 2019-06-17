@@ -23,13 +23,20 @@ public class Platform implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
-    private double shipperIncome;
-    private double truckIncome;
-    private double ownIncome;
-
     @CreatedDate
     @Column(updatable = false,nullable = false)
     private Date createTime;
+
+    private double lowestBidPriceRatio = 0.4;
+    private double shipperProfitRatio = 0.2;
+    private double platformProfitRatio = 0.3;
+    private double truckProfitRatio = 0.5;
+    private double withdrawFeeRatio = 0.2;
+    private double overTimeFeeRatio = 0.05;
+
+    private int exibitionFee = 10;
+
+
 
 //    // 平台当前的资金
 //    private double lmoney = 0;

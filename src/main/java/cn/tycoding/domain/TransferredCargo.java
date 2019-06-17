@@ -38,7 +38,7 @@ public class TransferredCargo {
     private int truckId = -1;
     private boolean overtime = false;
     private boolean abnormal = false;
-    private double orderPrice = -1;
+    private double bidPrice = -1;
     private int status = 0;
 
 
