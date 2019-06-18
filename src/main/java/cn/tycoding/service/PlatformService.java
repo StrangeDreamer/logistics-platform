@@ -51,7 +51,7 @@ public class PlatformService {
         platform1.setTruckProfitRatio(platform.getTruckProfitRatio());
         platform1.setWithdrawFeeRatio(platform.getWithdrawFeeRatio());
         platform1.setOverTimeFeeRatio(platform.getOverTimeFeeRatio());
-        platform1.setExibitionFee(platform.getExibitionFee());
+        platform1.setExhibitionFee(platform.getExhibitionFee());
 
         logger.info("保存平台参数设定");
         platformRepository.save(platform1);

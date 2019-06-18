@@ -70,12 +70,12 @@ public class CargoService {
     public Cargo withdrawalCargo(int id) {
         Cargo cargo = cargoService.findCargoById(id);
         try {
-            //8 发布时无人接单撤单  --撤单
+            // 发布时无人接单撤单  --撤单
             if (cargo.getStatus() == 0 || cargo.getStatus() ==  1){
                 cargo.setStatus(8);
                 logger.info("由于订单未被接单，直接撤单");
             }
-            //已接未运撤单  --撤单
+            // 已接未运撤单  --撤单
             else if (cargo.getStatus() == 2){
                 // 资金流动 TODO： 发货方向平台支付赔偿，平台将赔偿付给车辆。赔偿金的计算。
                 logger.info("由于货物已接未运，发货方" + cargo.getShipperId() +
@@ -85,6 +85,27 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
                 // TODO：更进一步的判断，撤单前判断发货方是否有足够的资金进行撤单。或者放在客户端
+            }
+            // 已经运输的撤单，实际操作是为承运方新增一个订单，该订单与原订单除了出发地和目的地之外一切相同
+            // TODO：这是一种很不合理的做法，首先，没有征求承运方的同意,没有考虑承运方是否有足够资格运输新订单；其次在原有的流程里，运到目的地是要验货的，这里都已经撤单了。
+            // 只有基于一些少见的情况下，这种做法才是或许可行的
+            else if (cargo.getStatus() == 3) {
+                //
+                logger.info("由于货物已经运输，发货方" + cargo.getShipperId() +
+                        " 支付平台" + cargo.getTruckId() + "双倍运费" +
+                        (cargo.getFreightFare() * 2));
+                // 车辆的担保额度的恢复
+                logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
+
+                // 为该车辆新创建返程订单
+                Cargo cargoBack =  createCargo(cargo);
+                cargoBack.setStatus(2);
+                cargoBack.setDeparture(cargo.getDestination());
+                cargoBack.setDestination(cargo.getDeparture());
+                cargoBack.setBidPrice(cargo.getBidPrice());
+                cargoBack.setTruckId(cargo.getTruckId());
+                cargoBack.setBidEndTime(cargo.getBidEndTime());
+                cargoBack.setBidStartTime(cargo.getBidStartTime());
             }
             else {
                 logger.info("订单当前状态不允许撤单" );

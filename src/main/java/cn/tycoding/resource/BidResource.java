@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,8 @@ public class BidResource {
     private CargoRepository cargoRepository;
     @Autowired
     private TruckRepository truckRepository;
+    @Autowired
+    private BidRepository bidRepository;
 
     @Autowired
     private BidService bidService;
@@ -128,6 +131,8 @@ public class BidResource {
             result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "的本次出价排队成功" +
                         "并扣除担保额度" + cargo.getInsurance());
             result.put("截止时间",cargo.getBidEndTime());
+            logger.info("货车"+bid.getTruckId()+"由于对订单" + cargo.getId() + "的出价，" +
+                    "扣除担保额度" + cargo.getInsurance());
         } catch (Exception e) {
             e.printStackTrace();
             result.put("operationResult", "排队失败");
@@ -138,10 +143,9 @@ public class BidResource {
 
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        Bid bidrd= (Bid) redisTemplate.boundHashOps(bidsKey).get(cargoId);
-        Cargo cargo=cargoService.findCargoById(cargoId);
+        Bid bidrd = (Bid) redisTemplate.boundHashOps(bidsKey).get(cargoId);
+        Cargo cargo = cargoService.findCargoById(cargoId);
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
-
         Date nowTime = new Date();
         if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
@@ -152,6 +156,17 @@ public class BidResource {
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         }
+
+        // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
+        List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
+        for(int i = 0; i < bidlist.size(); i++) {
+            Bid temp = bidlist.get(i);
+            if (temp != bidrd) {
+                // TODO:担保额度恢复
+                logger.info("由于车辆" + temp.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+            }
+        }
+
         return cargo;
     }
 }

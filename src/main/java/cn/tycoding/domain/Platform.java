@@ -34,7 +34,7 @@ public class Platform implements Serializable {
     private double withdrawFeeRatio = 0.2;
     private double overTimeFeeRatio = 0.05;
 
-    private int exibitionFee = 10;
+    private int exhibitionFee = 10;
 
 
 

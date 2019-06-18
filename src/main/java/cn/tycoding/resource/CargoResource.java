@@ -1,10 +1,12 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.Platform;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.TransferredCargo;
 import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
+import cn.tycoding.repository.PlatformRepository;
 import cn.tycoding.service.CargoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +25,15 @@ public class CargoResource {
 
     private final CargoService cargoService;
     private final CargoRepository cargoRepository;
+    private final PlatformRepository platformRepository;
     private final String cargoKey = "Cargo";
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public CargoResource(CargoService cargoService, CargoRepository cargoRepository) {
+    public CargoResource(CargoService cargoService, CargoRepository cargoRepository,PlatformRepository platformRepository) {
         this.cargoService = cargoService;
         this.cargoRepository = cargoRepository;
+        this.platformRepository = platformRepository;
     }
 
 
@@ -44,6 +48,14 @@ public class CargoResource {
      */
     @PostMapping("/createCargo")
     public Cargo createCargo(@RequestBody Cargo cargo) {
+        // TODO：发货方资金检查，资金充足才可以发货
+        logger.info("发货方资金检查，资金充足才可以发货");
+
+        Platform platform = platformRepository.findRecentPltf();
+
+        logger.info("发货方冻结资金" + cargo.getFreightFare());
+        double exhibitionFee = platform.getExhibitionFee();
+        logger.info("发货方支付展位费" + exhibitionFee);
         return cargoService.createCargo(cargo);
     }
 
