@@ -2,6 +2,7 @@ package cn.tycoding.service;
 
 
 import cn.tycoding.domain.Platform;
+import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.TransferredCargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.dto.CargoInfoChangeDTO;
@@ -30,6 +31,18 @@ public class PlatformService {
     @Autowired
     private PlatformRepository platformRepository;
 
+    @Autowired
+    private  CargoRepository cargoRepository;
+
+    @Autowired
+    private  ShipperRepository shipperRepository;
+
+    @Autowired
+    private  TruckRepository truckRepository;
+
+    @Autowired
+    private  ReceiverRepository receiverRepository;
+
     public Platform savePlatform(Platform platform){
         Platform platform1 = new Platform();
         platform1.setLowestBidPriceRatio(platform.getLowestBidPriceRatio());
@@ -43,6 +56,27 @@ public class PlatformService {
         logger.info("保存平台参数设定");
         platformRepository.save(platform1);
         return platform1;
+    }
+
+
+    public Platform showPlatformPara(){
+        return platformRepository.findRecentPltf();
+    }
+
+    public String showPlatformList(){
+//        List<Receiver> receiverList = receiverRepository.findAll();
+        int shipperNum = shipperRepository.countCargosByIdIsNotNull();
+
+        int truckNum = truckRepository.countCargosByIdIsNotNull();
+        int receiverNum = receiverRepository.countCargosByIdIsNotNull();
+        int cargoPublishingNum = cargoRepository.countAllByStatus(1);
+        int cargoNum1 = cargoRepository.countAllByStatus(2);
+        int cargoNum2 = cargoRepository.countAllByStatus(3);
+        int cargoNum3 = cargoRepository.countAllByStatus(8);
+
+        return "当前平台共有发货方" + shipperNum + "个，承运方" + truckNum +
+                " 个，收货方" + receiverNum + "个,当前正在发布订单" + cargoPublishingNum +
+                "个，当前正在执行的订单" + (cargoNum1 + cargoNum2) + "个，已完成订单" + cargoNum3 +"个" ;
     }
 
 }

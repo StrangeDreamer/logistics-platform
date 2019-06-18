@@ -12,5 +12,7 @@ public interface ShipperRepository extends JpaRepository<Shipper,Integer> {
     Shipper findShippersById(int shipperId);
     List<Shipper> findAll();
 
+    int countCargosByIdIsNotNull();
+
 
 }

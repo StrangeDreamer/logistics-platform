@@ -11,6 +11,8 @@ public interface TruckRepository extends JpaRepository<Truck,Integer> {
     Truck findTruckById(int id);
     List<Truck> findAll();
 
+    int countCargosByIdIsNotNull();
+
 
 
 

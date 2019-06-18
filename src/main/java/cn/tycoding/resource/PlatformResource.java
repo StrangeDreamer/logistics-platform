@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sun.plugin.services.PlatformService;
 
 /**
@@ -52,16 +49,42 @@ public class PlatformResource {
      * @param platform
      * @return
      */
-    @PostMapping
+    @PostMapping("/setPlatformPara")
     public Platform setPlatformElem(@RequestBody Platform platform) {
         String result = "参数设置";
-
-
         platformService.savePlatform(platform);
         logger.info(result);
         return platformService.savePlatform(platform);
-
     }
+
+
+
+    /**平台属性展示
+     * @param
+     * @return
+     */
+    @GetMapping("/showPlatformPara")
+    public Platform showPlatformPara() {
+        String result = "平台属性展示";
+
+        logger.info(result);
+        return platformService.showPlatformPara();
+    }
+
+
+    /**平台信息一览
+     * @param
+     * @return
+     */
+    @GetMapping("/showPlatformList")
+    public String showPlatformList() {
+        String result = "平台信息一览";
+        logger.info(result);
+        return platformService.showPlatformList();
+    }
+
+
+
 
 
 

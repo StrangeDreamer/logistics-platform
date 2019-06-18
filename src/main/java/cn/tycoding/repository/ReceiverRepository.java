@@ -12,6 +12,8 @@ public interface ReceiverRepository extends JpaRepository<Receiver,Integer> {
     Receiver findShippersById(int id);
     List<Receiver> findAll();
 
+    int countCargosByIdIsNotNull();
+
 
 }
 
