@@ -10,6 +10,7 @@ import cn.tycoding.repository.TruckRepository;
 import cn.tycoding.service.BidService;
 import cn.tycoding.service.CargoService;
 import cn.tycoding.websocket.WebSocketServer;
+import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class BidResource {
 
     @Autowired
     private BidService bidService;
+    @Autowired
+    private WebSocketTest webSocketTest;
     /**抢单
      * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
@@ -155,6 +158,8 @@ public class BidResource {
             cargoRepository.save(cargo);
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+            webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜抢单成功");
+
         }
 
         // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
