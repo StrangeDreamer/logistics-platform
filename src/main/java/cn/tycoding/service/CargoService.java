@@ -78,7 +78,7 @@ public class CargoService {
         try {
             // 发布时无人接单撤单  --撤单
             if (cargo.getStatus() == 0 || cargo.getStatus() ==  1){
-                cargo.setStatus(8);
+                cargo.setStatus(6);
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
             // 已接未运撤单  --撤单

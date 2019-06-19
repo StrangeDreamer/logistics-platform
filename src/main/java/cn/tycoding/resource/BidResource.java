@@ -4,6 +4,7 @@ import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.exception.BidException;
+import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.BidRepository;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.PlatformRepository;
@@ -233,6 +234,7 @@ public class BidResource {
             }
         } else {
             logger.info("抢单时间还未截止！");
+            throw new CargoException("抢单时间还未截止！");
         }
 
         cargoRepository.save(cargo);
