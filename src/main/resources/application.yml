@@ -95,6 +95,10 @@ spring:
   websocket:
     msg:
       queue: websocket_msg_queue
+  data:
+    redis:
+      repositories:
+        enabled: false
 
 
 message:
