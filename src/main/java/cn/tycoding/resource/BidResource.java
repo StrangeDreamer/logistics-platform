@@ -86,7 +86,7 @@ public class BidResource {
             e.printStackTrace();
             result.put("operationResult", "排队失败");
         }*/
-        // TODO：担保额判断
+        // TODO：担保额判断,太多！建议创建一个service，将下面的代码放进service里面
         logger.info("向第三方查询货车当前可用担保额是否超过" + cargo.getInsurance() + "，额度充足方可出价" );
 
 
@@ -158,20 +158,22 @@ public class BidResource {
             cargoRepository.save(cargo);
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
-            webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜抢单成功");
-
         }
+
 
         // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
         List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
-        for(int i = 0; i < bidlist.size(); i++) {
-            Bid temp = bidlist.get(i);
-            if (temp != bidrd) {
-                // TODO:担保额度恢复
-                logger.info("由于车辆" + temp.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+        for (Bid bid: bidlist) {
+            if (bid.getId()!=bidrd.getId()){
+                logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"忧伤，没抢到！");
+            }
+            else
+            {
+                //通知该在线用户抢单成功消息
+                webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜，抢到了！");
             }
         }
-
         return cargo;
     }
 }
