@@ -2,6 +2,7 @@ package cn.tycoding.service;
 
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.Platform;
 import cn.tycoding.domain.TransferredCargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.dto.CargoInfoChangeDTO;
@@ -43,7 +44,7 @@ public class CargoService {
         Cargo c = new Cargo();
         c.setShipperId(cargo.getShipperId());
         c.setFreightFare(cargo.getFreightFare());
-        c.setOriginFare(cargo.getFreightFare());
+        c.setPreFare(cargo.getFreightFare());
         c.setInsurance(cargo.getInsurance());
         c.setReceiverId(cargo.getReceiverId());
         c.setWeight(cargo.getWeight());
@@ -142,6 +143,8 @@ public class CargoService {
 
         Cargo cargo = cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
 
+        Platform platform = platformRepository.findRecentPltf();
+        double exhibitionFee = platform.getExhibitionFee();
 //        TransferredCargo transferredCargo=new TransferredCargo();
 //        transferredCargo.setCargoId(cargo.getId());
 //        transferredCargo.setFreightFare(freightFare);
@@ -156,18 +159,24 @@ public class CargoService {
         transferredCargo.setInsurance(cargo.getInsurance());
 
         //转单更新
-        transferredCargo.setOriginFare(cargo.getFreightFare());
+        transferredCargo.setPreFare(cargo.getFreightFare());
 
         //首次转单以及多次转单
         transferredCargo.setPreCargoId(cargo.getId());
 
-
-
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());
         transferredCargo.setWeight(cargo.getWeight());
+
         //更新新单状态
-        transferredCargo.setStatus(5);
+        cargo.setStatus(5);
+        transferredCargo.setStatus(0);
+        cargoRepository.save(cargo);
+        cargoRepository.save(transferredCargo);
+        // TODO： 转手承运方向平台支付展位费
+        logger.info("由于订单转手，承运方" + cargo.getTruckId() + "向平台支付展位费" + exhibitionFee);
+
+//        transferredCargo.setStatus(5);
         cargoRepository.save(transferredCargo);
 
         logger.info("转单创建成功！");

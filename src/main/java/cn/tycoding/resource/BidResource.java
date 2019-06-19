@@ -6,6 +6,7 @@ import cn.tycoding.domain.Platform;
 import cn.tycoding.exception.BidException;
 import cn.tycoding.repository.BidRepository;
 import cn.tycoding.repository.CargoRepository;
+import cn.tycoding.repository.PlatformRepository;
 import cn.tycoding.repository.TruckRepository;
 import cn.tycoding.service.BidService;
 import cn.tycoding.service.CargoService;
@@ -38,6 +39,8 @@ public class BidResource {
     @Autowired
     private CargoRepository cargoRepository;
     @Autowired
+    private PlatformRepository platformRepository;
+    @Autowired
     private TruckRepository truckRepository;
     @Autowired
     private BidRepository bidRepository;
@@ -62,6 +65,8 @@ public class BidResource {
 
         Date nowTime = new Date();
         Cargo cargo=cargoService.findCargoById(bid.getCargoId());
+        Platform platform = platformRepository.findRecentPltf();
+        double  lowestBidPriceRatio = platform.getLowestBidPriceRatio();
 
         if (nowTime.getTime()>cargo.getBidEndTime().getTime()){
             logger.info("错过抢单时间");
@@ -104,11 +109,11 @@ public class BidResource {
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
         } else if ((bid.getBidPrice() > cargo.getFreightFare())
-                || (bid.getBidPrice() < cargo.getFreightFare() * 0.4)){
+                || (bid.getBidPrice() < cargo.getFreightFare() * lowestBidPriceRatio)){
             // 出价区间合理
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
-            + cargo.getFreightFare() * 0.4 + "~" + cargo.getFreightFare());
+            + cargo.getFreightFare() * lowestBidPriceRatio  + "~" + cargo.getFreightFare());
         }
 
 
@@ -143,59 +148,94 @@ public class BidResource {
     }
 
 
-
-
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        Cargo cargo = cargoRepository.findCargoById(cargoId);
-        Bid bidrd = bidService.checkRedis(cargoId);
 
-        //TODO 订单没有人抢
-        if (bidrd == null){
-            logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退换");
-            cargo.setStatus(6);
-            return cargoRepository.findCargoById(cargoId);
-        }
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
 
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
         if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
-            //将缓存中的最低价和抢单用户刷进cargo数据库中
-            cargo.setBidPrice(bidrd.getBidPrice());
-            cargo.setTruckId(bidrd.getTruckId());
-            cargo.setStatus(2);
-            cargoRepository.save(cargo);
-
-            //通知转单成功
-            Cargo preCargo=cargoService.findCargoById(cargo.getPreCargoId());
-            webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
-            logger.info("承运方{}转单成功",preCargo.getTruckId());
-            //转单成功没有状态码吗？？？？
-            preCargo.setStatus();
-
-            redisTemplate.boundHashOps(bidsKey).delete(cargoId);
-            redisTemplate.boundHashOps(cargoKey).delete(cargoId);
-
-            // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
-            List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
-            for (Bid bid: bidlist) {
-                if (bid.getId()!=bidrd.getId()){
-                    // TODO：担保额恢复
-                    logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
-                    webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
-                }
-                else
-                {
-                    //通知该在线用户抢单成功消息
-                    webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
-                    logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
+            Platform platform = platformRepository.findRecentPltf();
+            double exhibitionFee = platform.getExhibitionFee();
+            Bid bidrd = bidService.checkRedis(cargoId);
+            // 订单没有人抢/时间段内不存在有效出价：对于转单订单，转手订单原订单继续执行；对于最原始的订单，直接撤单
+            if (bidrd == null){
+                // 当precargo 为null，表示最原始的订单，直接撤单
+                if (cargo.getPreCargoId() != null) {
+                    logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
+                    // TODO: 冻结资金恢复
+                    logger.info("由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复" + cargo.getFreightFare());
+                    cargo.setStatus(6);
+                    cargoRepository.save(cargo);
+                    return cargoRepository.findCargoById(cargoId);
 
                 }
+                // 当不为null，表示是转手后新创建当订单，需要恢复原来当订单，并将当前订单设为未抢订单直接撤单
+                else {
+                    Cargo preCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
+                    // 原订单重新设置为已接未运
+                    preCargo.setStatus(2);
+                    // 创建的转单设置为无人接单撤单
+                    cargo.setStatus(6);
+                    // TODO: 冻结资金恢复
+                    logger.info("车辆" + cargo.getTruckId() + "的订单" + cargo.getPreCargoId() + "转手失败,展位费不予退回！");
+                    logger.info("由于无人接单自动撤单，转手承运方" + cargo.getTruckId() + "冻结的资金恢复" + cargo.getFreightFare());
+                    cargoRepository.save(cargo);
+                    cargoRepository.save(preCargo);
+                }
+            }
+            // 订单存在有效出价/有人抢单
+            else {
+                //将缓存中的最低价和抢单用户刷进cargo数据库中
+                cargo.setBidPrice(bidrd.getBidPrice());
+                cargo.setTruckId(bidrd.getTruckId());
+                cargo.setStatus(2);
 
+                // 判断是否是转单,如果是转手订单,需要额外进行资金结算，退换发货方展位费;原来的订单状态设置为正常完成
+                if (cargo.getPreCargoId() != null) {
+                    //通知转单成功
+                    Cargo preCargo = cargoService.findCargoById(cargo.getPreCargoId());
+                    preCargo.setStatus(11);
+                    cargoRepository.save(preCargo);
+                    logger.info("承运方{}转单成功",preCargo.getTruckId());
+                    // TODO:展位费退换 担保额恢复
+                    logger.info("订单被成功接单，平台返还转手承运方" + cargo.getTruckId() +"展位费" + exhibitionFee);
+                    webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
+                    // 转手成功后，原来的车辆担保额恢复
+                    logger.info("由于转手成功，转手承运方"+ cargo.getTruckId() + "恢复担保额度" + cargo.getInsurance());
+                    // 转单成功的资金结算 归到最终结算
+                }
+                // 如果不是转手订单，只需要退换承运方展位费
+                else {
+                    // TODO:展位费退换
+                    logger.info("订单被成功接单，平台返还发货方" + cargo.getShipperId() +"展位费" + exhibitionFee );
+                }
+
+                redisTemplate.boundHashOps(bidsKey).delete(cargoId);
+                redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+
+                // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
+                List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
+                for (Bid bid: bidlist) {
+                    if (bid.getId()!=bidrd.getId()){
+                        // TODO：担保额恢复
+                        logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
+                    }
+                    else
+                    {
+                        //通知该在线用户抢单成功消息
+                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
+                        logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
+                    }
+                }
             }
         } else {
             logger.info("抢单时间还未截止！");
         }
+
+        cargoRepository.save(cargo);
         return cargo;
     }
 }

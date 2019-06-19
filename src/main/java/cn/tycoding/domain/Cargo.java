@@ -23,9 +23,9 @@ public class Cargo implements Serializable {
     private int id;
 
     private int shipperId;
-    private double originFare;
+    private double preFare;
     //转单更新
-    private int preCargoId;
+    private Integer preCargoId;
 
     // 赔偿金，是订单超时要进行赔偿的依据，也是对车辆担保额的要求
     private int insurance;
@@ -76,7 +76,7 @@ public class Cargo implements Serializable {
      *
      * 4 已运达等待收货
      *
-     * 5 转手中（正挂在平台公告栏上）--转单成功
+     * 5 转手中（原订单的属性，表示其产生的新订单正挂在平台公告栏上）
      *
      * 6 发布时无人接单撤单 --撤单
      *
@@ -87,6 +87,9 @@ public class Cargo implements Serializable {
      * 9 订单超时 --确定收单时
      *
      * 10 订单异常 --确定收单时
+     *
+     * 11 被正常转单，本订单已经失效
+     *
      */
     private int status = 0;
 
