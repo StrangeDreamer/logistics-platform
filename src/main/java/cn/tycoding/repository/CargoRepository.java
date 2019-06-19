@@ -17,7 +17,7 @@ public interface CargoRepository extends JpaRepository<Cargo,Integer> {
 
     List<Cargo> findAllByStatus(int status);
 
-    List<Cargo> findAllByOriginCargoId(int originCargoId);
+    List<Cargo> findAllByPreCargoId(int preCargoId);
 
     Cargo findCargoById(int id);
     List<Cargo> findAllByTruckIdAndStatus(int truckId,int status);

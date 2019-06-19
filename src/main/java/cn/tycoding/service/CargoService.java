@@ -158,10 +158,10 @@ public class CargoService {
         //转单更新
         transferredCargo.setOriginFare(cargo.getFreightFare());
 
-        if (cargo.getOriginCargoId()==-1){
-            transferredCargo.setOriginCargoId(cargo.getId());
+        if (cargo.getPreCargoId() == -1){
+            transferredCargo.setPreCargoId(cargo.getId());
         }else {
-            transferredCargo.setOriginCargoId(cargo.getOriginCargoId());
+            transferredCargo.setPreCargoId(cargo.getPreCargoId());
         }
 
 
@@ -233,8 +233,8 @@ public class CargoService {
 
 
     //查询订单流通历史
-    public List<Cargo> findAllByOriginCargoId(int originCargoId){
-        return cargoRepository.findAllByOriginCargoId(originCargoId);
+    public List<Cargo> findAllByPreCargoId(int preCargoId){
+        return cargoRepository.findAllByPreCargoId(preCargoId);
     }
 
 

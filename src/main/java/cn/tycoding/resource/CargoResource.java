@@ -53,8 +53,8 @@ public class CargoResource {
 
         Platform platform = platformRepository.findRecentPltf();
 
-        logger.info("发货方冻结资金" + cargo.getFreightFare());
         double exhibitionFee = platform.getExhibitionFee();
+        logger.info("发货方冻结资金" + cargo.getFreightFare());
         logger.info("发货方支付展位费" + exhibitionFee);
         return cargoService.createCargo(cargo);
     }
@@ -206,10 +206,10 @@ public class CargoResource {
 
 
 
-    @GetMapping("/allTransCargos/{originCargoId}")
-    public List<Cargo> getAllTransCargos(@PathVariable int originCargoId){
+    @GetMapping("/allTransCargos/{preCargoId}")
+    public List<Cargo> getAllTransCargos(@PathVariable int preCargoId){
         logger.info("REST 查询订单转运历史");
-        return cargoService.findAllByOriginCargoId(originCargoId);
+        return cargoService.findAllByPreCargoId(preCargoId);
     }
 
 

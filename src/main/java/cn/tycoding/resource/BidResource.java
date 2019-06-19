@@ -86,7 +86,7 @@ public class BidResource {
             e.printStackTrace();
             result.put("operationResult", "排队失败");
         }*/
-        // TODO：担保额判断
+        // TODO：担保额判断,太多！建议创建一个service，将下面的代码放进service里面
         logger.info("向第三方查询货车当前可用担保额是否超过" + cargo.getInsurance() + "，额度充足方可出价" );
 
 
@@ -113,12 +113,11 @@ public class BidResource {
 
 
         try {
-            Bid redisbid = (Bid) redisTemplate.boundHashOps(bidsKey).get(bid.getCargoId());
-
+            Bid redisbid=bidService.checkRedis(bid.getCargoId());
             if (redisbid==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
                 redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
-                WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
+                //WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
             }
             else {
                 //redisCargo更大,则需要更新
@@ -144,13 +143,23 @@ public class BidResource {
     }
 
 
+
+
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        Bid bidrd = (Bid) redisTemplate.boundHashOps(bidsKey).get(cargoId);
-        Cargo cargo = cargoService.findCargoById(cargoId);
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
+        Bid bidrd = bidService.checkRedis(cargoId);
+
+        //TODO 订单没有人抢
+        if (bidrd == null){
+            logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退换");
+            cargo.setStatus(6);
+            return cargoRepository.findCargoById(cargoId);
+        }
+
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
-        if(nowTime.getTime() >= cargo.getBidEndTime().getTime()){
+        if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
             cargo.setBidPrice(bidrd.getBidPrice());
             cargo.setTruckId(bidrd.getTruckId());
@@ -158,19 +167,24 @@ public class BidResource {
             cargoRepository.save(cargo);
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
-            webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜抢单成功");
-        }
 
-        // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
-        List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
-        for(int i = 0; i < bidlist.size(); i++) {
-            Bid temp = bidlist.get(i);
-            if (temp != bidrd) {
-                // TODO:担保额度恢复
-                logger.info("由于车辆" + temp.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+            // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
+            List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
+            for (Bid bid: bidlist) {
+                if (bid.getId()!=bidrd.getId()){
+                    // TODO：担保额恢复
+                    logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+                    webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
+                }
+                else
+                {
+                    //通知该在线用户抢单成功消息
+                    webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜您抢到了订单" + cargoId);
+                }
             }
+        } else {
+            logger.info("抢单时间还未截止！");
         }
-
         return cargo;
     }
 }
