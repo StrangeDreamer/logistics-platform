@@ -158,17 +158,15 @@ public class CargoService {
         //转单更新
         transferredCargo.setOriginFare(cargo.getFreightFare());
 
-        if (cargo.getPreCargoId() == -1){
-            transferredCargo.setPreCargoId(cargo.getId());
-        }else {
-            transferredCargo.setPreCargoId(cargo.getPreCargoId());
-        }
+        //首次转单以及多次转单
+        transferredCargo.setPreCargoId(cargo.getId());
 
 
 
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());
         transferredCargo.setWeight(cargo.getWeight());
+        //更新新单状态
         transferredCargo.setStatus(5);
         cargoRepository.save(transferredCargo);
 
@@ -207,7 +205,6 @@ public class CargoService {
             logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
             cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
         }
-        logger.info("*****************"+cargo.getBidStartTime()+"**************************************");
 
         return cargo;
     }

@@ -165,6 +165,14 @@ public class BidResource {
             cargo.setTruckId(bidrd.getTruckId());
             cargo.setStatus(2);
             cargoRepository.save(cargo);
+
+            //通知转单成功
+            Cargo preCargo=cargoService.findCargoById(cargo.getPreCargoId());
+            webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
+            logger.info("承运方{}转单成功",preCargo.getTruckId());
+            //转单成功没有状态码吗？？？？
+            preCargo.setStatus();
+
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
 
@@ -179,8 +187,11 @@ public class BidResource {
                 else
                 {
                     //通知该在线用户抢单成功消息
-                    webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜您抢到了订单" + cargoId);
+                    webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
+                    logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
+
                 }
+
             }
         } else {
             logger.info("抢单时间还未截止！");

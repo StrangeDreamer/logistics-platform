@@ -21,6 +21,7 @@ public class Cargo implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+
     private int shipperId;
     private double originFare;
     //转单更新
