@@ -27,6 +27,9 @@ public class CargoService {
     private CargoService cargoService;
 
     @Autowired
+    private PlatformRepository platformRepository;
+
+    @Autowired
     private RedisTemplate redisTemplate;
 
     private final String cargoKey = "Cargo";
@@ -68,29 +71,38 @@ public class CargoService {
     }*/
 
     public Cargo withdrawalCargo(int id) {
+        // 获取撤单赔偿比例
+        double  withdrawFeeRatio = platformRepository.findRecentPltf().getWithdrawFeeRatio();
         Cargo cargo = cargoService.findCargoById(id);
         try {
             // 发布时无人接单撤单  --撤单
             if (cargo.getStatus() == 0 || cargo.getStatus() ==  1){
                 cargo.setStatus(8);
-                logger.info("由于订单未被接单，直接撤单");
+                logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
             // 已接未运撤单  --撤单
             else if (cargo.getStatus() == 2){
                 // 资金流动 TODO： 发货方向平台支付赔偿，平台将赔偿付给车辆。赔偿金的计算。
+                double wMoney = (cargo.getFreightFare() * withdrawFeeRatio);
+                logger.info("询问发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + wMoney +
+                "资金充足才允许撤单");
+
                 logger.info("由于货物已接未运，发货方" + cargo.getShipperId() +
                         " 支付给承运方" + cargo.getTruckId() + "赔偿，" +
-                        "赔偿为运费" + cargo.getFreightFare() + " 乘 撤单赔偿比例");
+                        "赔偿为运费" + cargo.getFreightFare() + " 乘 撤单赔偿比例" + withdrawFeeRatio +
+                        " = " + wMoney);
                 // 车辆的担保额度的恢复
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
-                // TODO：更进一步的判断，撤单前判断发货方是否有足够的资金进行撤单。或者放在客户端
             }
             // 已经运输的撤单，实际操作是为承运方新增一个订单，该订单与原订单除了出发地和目的地之外一切相同
             // TODO：这是一种很不合理的做法，首先，没有征求承运方的同意,没有考虑承运方是否有足够资格运输新订单；其次在原有的流程里，运到目的地是要验货的，这里都已经撤单了。
             // 只有基于一些少见的情况下，这种做法才是或许可行的
             else if (cargo.getStatus() == 3) {
-                //
+
+                logger.info("询问发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + cargo.getFreightFare() +
+                        "资金充足才允许撤单");
+
                 logger.info("由于货物已经运输，发货方" + cargo.getShipperId() +
                         " 支付平台" + cargo.getTruckId() + "双倍运费" +
                         (cargo.getFreightFare() * 2));
@@ -120,7 +132,6 @@ public class CargoService {
 
 
 
-
     /**
      * TODO 转单业务逻辑实现
      * @param cargoId
@@ -129,7 +140,7 @@ public class CargoService {
      */
     public Cargo updateCargoInfo(int cargoId, double freightFare) {
 
-        Cargo cargo=cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
+        Cargo cargo = cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
 
 //        TransferredCargo transferredCargo=new TransferredCargo();
 //        transferredCargo.setCargoId(cargo.getId());
@@ -152,6 +163,8 @@ public class CargoService {
         }else {
             transferredCargo.setOriginCargoId(cargo.getOriginCargoId());
         }
+
+
 
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());

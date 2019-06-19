@@ -150,7 +150,7 @@ public class BidResource {
         Cargo cargo = cargoService.findCargoById(cargoId);
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
-        if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
+        if(nowTime.getTime() >= cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
             cargo.setBidPrice(bidrd.getBidPrice());
             cargo.setTruckId(bidrd.getTruckId());
@@ -159,7 +159,6 @@ public class BidResource {
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
             webSocketTest.sendToUser2(String.valueOf(bidrd.getTruckId()),"恭喜抢单成功");
-
         }
 
         // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
