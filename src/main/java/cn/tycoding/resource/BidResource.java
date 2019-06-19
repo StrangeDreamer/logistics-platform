@@ -113,12 +113,11 @@ public class BidResource {
 
 
         try {
-            Bid redisbid = (Bid) redisTemplate.boundHashOps(bidsKey).get(bid.getCargoId());
-
+            Bid redisbid=bidService.checkRedis(bid.getCargoId());
             if (redisbid==null){
                 //存入redis缓存中(1个)。 key:秒杀表的ID值； value:秒杀表数据
                 redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
-                WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
+                //WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
             }
             else {
                 //redisCargo更大,则需要更新
@@ -144,12 +143,24 @@ public class BidResource {
     }
 
 
+
+
     @GetMapping("/stopBid/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
-        Bid bidrd = (Bid) redisTemplate.boundHashOps(bidsKey).get(cargoId);
+        Bid bidrd = bidService.checkRedis(cargoId);
+
+        //TODO 订单没有人抢
+        if (bidrd==null){
+            return
+        }
         Cargo cargo = cargoService.findCargoById(cargoId);
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
+
+
+
+
+
         if(nowTime.getTime()>=cargo.getBidEndTime().getTime()){
             //将缓存中的最低价和抢单用户刷进cargo数据库中
             cargo.setBidPrice(bidrd.getBidPrice());
@@ -159,7 +170,6 @@ public class BidResource {
             redisTemplate.boundHashOps(bidsKey).delete(cargoId);
             redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         }
-
 
         // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
         List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
