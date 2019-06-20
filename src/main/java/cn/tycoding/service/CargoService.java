@@ -1,12 +1,12 @@
 package cn.tycoding.service;
 
 
-import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.Platform;
-import cn.tycoding.domain.TransferredCargo;
-import cn.tycoding.domain.Truck;
+import cn.tycoding.domain.*;
 import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.exception.CargoException;
+import cn.tycoding.exception.ReceiverException;
+import cn.tycoding.exception.ShipperException;
+import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +24,12 @@ public class CargoService {
     private final Logger logger = LoggerFactory.getLogger(CargoService.class);
     @Autowired
     private  CargoRepository cargoRepository;
+    @Autowired
+    private  TruckRepository truckRepository;
+    @Autowired
+    private  ShipperRepository shipperRepository;
+    @Autowired
+    private  ReceiverRepository receiverRepository;
     @Autowired
     private CargoService cargoService;
 
@@ -142,6 +148,9 @@ public class CargoService {
     public Cargo updateCargoInfo(int cargoId, double freightFare) {
 
         Cargo cargo = cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
+        if( cargo.getStatus()!=2) {
+            throw new CargoException("当前订单状态无法转单");
+        }
 
         Platform platform = platformRepository.findRecentPltf();
         double exhibitionFee = platform.getExhibitionFee();
@@ -209,7 +218,7 @@ public class CargoService {
         Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
         //redis中没有缓存该运单
         if (cargo == null){
-            Cargo cargoDb=cargoRepository.findById(id).orElseThrow(()->new CargoException("this cargo is not exist!"));
+            Cargo cargoDb = cargoRepository.findById(id).orElseThrow(()->new CargoException("该订单不存在！"));
             redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
             logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
             cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
@@ -223,17 +232,20 @@ public class CargoService {
 
     // 查找发货方的所有订单
     public List<Cargo> findAllByShipperId(int shipperId) {
+        Shipper shipper = shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在！"));
         return cargoRepository.findAllByShipperId(shipperId);
     }
 
 
     // 查找收货方的所有订单
     public List<Cargo> findAllByReceiverId(int receiverId) {
+        Receiver receiver = receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
         return cargoRepository.findAllByReceiverId(receiverId);
     }
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
+        Truck truckDb=truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
     }
 

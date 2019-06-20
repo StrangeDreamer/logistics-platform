@@ -79,7 +79,6 @@ public class InspectionService {
                     compensation + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
         }
 
-
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动
         while (cargo.getPreCargoId() != null) {
 

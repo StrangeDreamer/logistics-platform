@@ -3,7 +3,9 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
+import cn.tycoding.domain.Truck;
 import cn.tycoding.exception.ShipperException;
+import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ShipperRepository;
 import org.slf4j.Logger;
@@ -56,6 +58,7 @@ public class ShipperService {
 
     // 查询指定id发货方
     public Shipper findShippersById(int shipperId){
+        Shipper shipper = shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在"));
         return shipperRepository.findShippersById(shipperId);
     }
 

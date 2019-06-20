@@ -4,6 +4,9 @@ package cn.tycoding.service;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 
+import cn.tycoding.domain.Shipper;
+import cn.tycoding.exception.ReceiverException;
+import cn.tycoding.exception.ShipperException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ReceiverRepository;
 
@@ -59,8 +62,9 @@ public class ReceiverService {
     }
 
     // 查询指定id收货方
-    public Receiver findReceiversById(int shipperId){
-        return receiverRepository.findShippersById(shipperId);
+    public Receiver findReceiversById(int receiverId){
+        Receiver receiver = receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
+        return receiverRepository.findReceiverById(receiverId);
     }
 
     // 查询所有发货方

@@ -86,6 +86,7 @@ public class TruckService {
 
     // 查询指定id承运方的订单数量
     public String findTrucksCargoNum(int truckId){
+        Truck truckDb=truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         // 所有该货车具有的订单
         List<Cargo> n1=cargoService.findAllByTruckId(truckId);
         int n2=0,n3=0;
@@ -122,7 +123,7 @@ public class TruckService {
 
         // 前提条件的检查
         if (cargo.getStatus() != 2){
-            throw new TruckException("当前货物状态不争取，无法开始运货");
+            throw new TruckException("当前货物状态不正确，无法开始运货");
         }
         cargo.setStatus(3);
         cargoRepository.save(cargo);
