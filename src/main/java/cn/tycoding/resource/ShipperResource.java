@@ -23,13 +23,13 @@ public class ShipperResource {
     }
 
 
-    @PostMapping("/createShipper")
+    @PostMapping
     public Shipper createShipper(@RequestBody Shipper shipper){
         return shipperService.createShipper(shipper);
 
     }
 
-    @DeleteMapping("/deleteShipper/{id}")
+    @DeleteMapping("/{id}")
     public String deleteShipper(@PathVariable("id") int id){
         logger.info("Rest 发货方注销请求");
         shipperService.deleteShipper(id);
@@ -40,7 +40,7 @@ public class ShipperResource {
      * 查询指定发货方
      * @return
      */
-    @GetMapping("/findShipperById/{id}")
+    @GetMapping("/{id}")
     public Shipper getShippersById(@PathVariable("id") int id){
         logger.info("REST 查询所有货物");
         return shipperService.findShippersById(id);
@@ -50,7 +50,7 @@ public class ShipperResource {
      * 查询所有发货方
      * @return
      */
-    @GetMapping("/allShippers")
+    @GetMapping
     public List<Shipper> getAllShipper(){
         logger.info("REST 查询所有货物");
         return shipperService.findAll();

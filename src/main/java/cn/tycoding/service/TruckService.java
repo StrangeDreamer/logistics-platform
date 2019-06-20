@@ -73,6 +73,12 @@ public class TruckService {
     }
 
 
+
+
+
+
+
+
     public Cargo startShip(int cargoId) {
         // 开始运货请求
         Cargo cargo = cargoRepository.findCargoById(cargoId);

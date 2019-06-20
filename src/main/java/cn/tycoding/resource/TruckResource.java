@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.service.TruckService;
@@ -25,13 +26,13 @@ public class TruckResource {
     }
 
 
-    @PostMapping("/createTruck")
+    @PostMapping
     public Truck createTruck(@RequestBody Truck truck){
         return truckService.createTruck(truck);
 
     }
 
-    @DeleteMapping("/deleteTruck/{id}")
+    @DeleteMapping("/{id}")
     public String deleteTruck(@PathVariable("id") int id){
         logger.info("Rest 承运方注销请求");
         truckService.deleteTruck(id);
@@ -39,43 +40,42 @@ public class TruckResource {
     }
 
     /**
-     * 查询指定承运方
-     * @return
-     */
-    @GetMapping("/findTruckById/{id}")
-    public Truck getTrucksById(@PathVariable("id") int id){
-        logger.info("REST 查询所有货物");
-        return truckService.findTrucksById(id);
-    }
-
-
-    /**
-     * 查询指定承运方
-     * @return
-     */
-    @GetMapping("/findTrucksCargoNum/{id}")
-    public String findTrucksCargoNum(@PathVariable("id") int id){
-        logger.info("REST 查询所有货物");
-        return truckService.findTrucksCargoNum(id);
-    }
-
-
-    /**
      * 查询所有承运方
      * @return
      */
-    @GetMapping("/allTrucks")
+    @GetMapping
     public List<Truck> getAllTruck(){
         logger.info("REST 查询所有货物");
         return truckService.findAll();
     }
 
     /**
+     * 查询指定承运方
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Truck getTrucksById(@PathVariable("id") int id){
+        logger.info("REST 查询所有货物");
+        return truckService.findTrucksById(id);
+    }
+
+
+
+    @GetMapping("/cargoinfo/{id}")
+    public String findTrucksCargoNum(@PathVariable("id") int id){
+        logger.info("REST 查询所有货物");
+        return truckService.findTrucksCargoNum(id);
+    }
+
+
+
+
+    /**
      * truck 请求开始运货
      * @param cargoId 货号
      * @return
      */
-    @PutMapping("/startShip/{cargoId}")
+    @PutMapping("/departure/{cargoId}")
     public Cargo startShip(@PathVariable int cargoId){
 
 
@@ -83,10 +83,18 @@ public class TruckResource {
         return truckService.startShip(cargoId);
     }
 
-    @PutMapping("/endShip/{cargoId}")
+    /**
+     * truck 结束运货,请求验货
+     * @param cargoId
+     * @return
+     */
+    @PutMapping("/destination/{cargoId}")
     public Cargo endShip(@PathVariable int cargoId){
         logger.info("truck已经送达，请求验货");
         return truckService.endShip(cargoId);
     }
+
+
+
 
 }

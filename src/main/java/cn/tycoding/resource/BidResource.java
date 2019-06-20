@@ -149,7 +149,12 @@ public class BidResource {
     }
 
 
-    @GetMapping("/stopBid/{cargoId}")
+    /**
+     * 平台发送停止抢单请求
+     * @param cargoId
+     * @return 抢单结果
+     */
+    @GetMapping("/{cargoId}")
     public Cargo stopBid (@PathVariable int cargoId){
 
         Cargo cargo = cargoRepository.findCargoById(cargoId);

@@ -13,18 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 2 * @Author: qlXie
- * 3 * @Date: 2019-06-17 20:41
- * 4
- */
+
 
 @RestController
 @RequestMapping("/platform")
 public class PlatformResource {
 
-
-    private final Logger logger= LoggerFactory.getLogger(InspectionResource.class);
+    private final Logger logger= LoggerFactory.getLogger(PlatformResource.class);
 
     private final String inspectionsKey = "inspections";
     private final String cargoKey = "Cargo";
@@ -48,7 +43,7 @@ public class PlatformResource {
      * @param platform
      * @return
      */
-    @PostMapping("/setPlatformPara")
+    @PostMapping
     public Platform setPlatformElem(@RequestBody Platform platform) {
         String result = "参数设置";
         platformService.savePlatform(platform);
@@ -58,27 +53,24 @@ public class PlatformResource {
 
 
 
-    /**平台属性展示
+    /**查询平台属性
      * @param
      * @return
      */
-    @GetMapping("/showPlatformPara")
+    @GetMapping("/params")
     public Platform showPlatformPara() {
-        String result = "平台属性展示";
-
-        logger.info(result);
+        logger.info("平台属性展示");
         return platformService.showPlatformPara();
     }
 
 
-    /**平台信息一览
+    /**查看当前车辆、货物等统计数据
      * @param
      * @return
      */
-    @GetMapping("/showPlatformList")
+    @GetMapping("data")
     public String showPlatformList() {
-        String result = "平台信息一览";
-        logger.info(result);
+        logger.info("平台信息一览");
         return platformService.showPlatformList();
     }
 
