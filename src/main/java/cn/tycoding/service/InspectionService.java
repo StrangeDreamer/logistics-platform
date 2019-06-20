@@ -66,7 +66,7 @@ public class InspectionService {
         // 验货异常/不通过直接抛出
         if (inspection.getInspectionResult() == 10) {
             result = "货物出现异常，交给第三方处理";
-        } else if(inspection.getInspectionResult() != 8 || inspection.getInspectionResult() != 9) {
+        } else if(inspection.getInspectionResult() != 8 && inspection.getInspectionResult() != 9) {
             logger.info("验货结果设置错误！");
             throw new InspectionException("验货结果设置错误！");
         }
@@ -75,8 +75,8 @@ public class InspectionService {
         if (inspection.getInspectionResult() == 9) {
             double compensation = cargo.getInsurance() * (overTimeFeeRatio + inspection.getTimeoutPeriod() * 0.01);
             result = "验货正常但出现超时！\n" +
-                    "超时时长为：" + inspection.getTimeoutPeriod() + "承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
-                    compensation + ";承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！" ;
+                    "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
+                    compensation + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
         }
 
 
@@ -103,9 +103,9 @@ public class InspectionService {
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
             cargo = preCargo;
             result = result +  "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
-                    "平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
-                    "平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit +
-                    "平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
+                    "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
+                    "\n平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit +
+                    "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
             ;
         }
 
@@ -129,9 +129,9 @@ public class InspectionService {
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
         result = result +  "承运方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
-                "平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
-                "平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + truck1Profit +
-                "平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
+                "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
+                "\n平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + truck1Profit +
+                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
         ;
 
 
