@@ -3,6 +3,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
+import cn.tycoding.exception.ShipperException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ShipperRepository;
 import org.slf4j.Logger;
@@ -39,10 +40,10 @@ public class ShipperService {
         // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
         for (Cargo cargo:list) {
             if (cargo.getStatus() < 6) {
-                return "注销失败！当前发货方还有订单未完成订单！";
+                throw new ShipperException("注销失败！当前发货方还有订单未完成订单！");
             }
             if (cargo.getStatus() == 10) {
-                return "注销失败！当前发货方存在异常订单！";
+                throw new ShipperException("注销失败！当前发货方存在异常订单！");
             }
         }
         shipperRepository.findById(id).ifPresent(shipper -> {

@@ -11,6 +11,7 @@ import cn.tycoding.repository.PlatformRepository;
 import cn.tycoding.repository.TruckRepository;
 import cn.tycoding.service.BidService;
 import cn.tycoding.service.CargoService;
+import cn.tycoding.service.TruckService;
 import cn.tycoding.websocket.WebSocketServer;
 import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class BidResource {
     @Autowired
     private PlatformRepository platformRepository;
     @Autowired
-    private TruckRepository truckRepository;
+    //private TruckRepository truckRepository;
+    private TruckService truckService;
     @Autowired
     private BidRepository bidRepository;
 
@@ -97,15 +99,15 @@ public class BidResource {
 
 
         // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求
-        if (!cargo.getType().equals(truckRepository.findTruckById(bid.getTruckId()).getType())){
+        if (!cargo.getType().equals(truckService.findTruckById(bid.getTruckId()).getType())){
             //运输类型需要符合要求
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
             throw new BidException( "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
-        } else if (cargo.getVolume() > truckRepository.findTruckById(bid.getTruckId()).getAvailableVolume()) {
+        } else if (cargo.getVolume() > truckService.findTruckById(bid.getTruckId()).getAvailableVolume()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
-        } else if (cargo.getWeight() > truckRepository.findTruckById(bid.getTruckId()).getAvailableWeight()) {
+        } else if (cargo.getWeight() > truckService.findTruckById(bid.getTruckId()).getAvailableWeight()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");

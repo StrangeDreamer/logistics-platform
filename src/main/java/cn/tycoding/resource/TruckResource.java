@@ -26,12 +26,22 @@ public class TruckResource {
     }
 
 
+    /**
+     * 注册
+     * @param truck
+     * @return
+     */
     @PostMapping
     public Truck createTruck(@RequestBody Truck truck){
         return truckService.createTruck(truck);
 
     }
 
+    /**
+     * 注销
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
     // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
@@ -58,9 +68,9 @@ public class TruckResource {
      * @return
      */
     @GetMapping("/{id}")
-    public Truck getTrucksById(@PathVariable("id") int id){
+    public Truck findTruckById(@PathVariable("id") int id){
         logger.info("REST 查询所有货物");
-        return truckService.findTrucksById(id);
+        return truckService.findTruckById(id);
     }
 
 
@@ -81,7 +91,6 @@ public class TruckResource {
      */
     @PutMapping("/departure/{cargoId}")
     public Cargo startShip(@PathVariable int cargoId){
-
 
         logger.info("truck开始运货，货单号{}",cargoId);
         return truckService.startShip(cargoId);

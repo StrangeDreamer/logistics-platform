@@ -8,6 +8,8 @@ import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,13 +18,18 @@ import java.util.List;
 public class TruckService {
 
     private final Logger logger = LoggerFactory.getLogger(TruckService.class);
-    private final TruckRepository truckRepository;
-    private final CargoRepository cargoRepository;
+    @Autowired
+    private TruckRepository truckRepository;
+    @Autowired
+    private CargoService cargoService;
+    @Autowired
+    private CargoRepository cargoRepository;
 
-    public TruckService(TruckRepository truckRepository,CargoRepository cargoRepository) {
-        this.truckRepository = truckRepository;
-        this.cargoRepository = cargoRepository;
-    }
+    private final String truckKey = "Truck";
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
 
     // 承运方注册
     public Truck createTruck(Truck truck){
@@ -58,24 +65,42 @@ public class TruckService {
     }
 
 
-    // 查询指定id承运方
-    public Truck findTrucksById(int truckId){
-        return truckRepository.findTruckById(truckId);
+    /**
+     * 查询指定承运方，并存入缓存
+     * @param id
+     * @return
+     */
+    public Truck findTruckById(int id){
+        Truck truck= (Truck) redisTemplate.boundHashOps(truckKey).get(id);
+        //redis中没有缓存该运单
+        if (truck == null){
+            Truck truckDb=truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
+            redisTemplate.boundHashOps(truckKey).put(id, truckDb);
+            logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
+            truck= (Truck) redisTemplate.boundHashOps(truckKey).get(id);
+        }
+
+        return truck;
     }
+
 
     // 查询指定id承运方的订单数量
     public String findTrucksCargoNum(int truckId){
-        // TODO 具体实现
-
         // 所有该货车具有的订单
+        List<Cargo> n1=cargoService.findAllByTruckId(truckId);
+        int n2=0,n3=0;
+        for (Cargo ca :n1) {
+            if (ca.getStatus()==2){
+                n2++;
+            }
+            if (ca.getStatus()==3){
+                n3++;
+            }
+        }
 
-        List<Cargo> n1=cargoRepository.findAllByTruckId(truckId);
-        List<Cargo> n2 = cargoRepository.findAllByTruckIdAndStatus(truckId,2);
-        List<Cargo> n3= cargoRepository.findAllByTruckIdAndStatus(truckId,3);
 
-
-        return "货车"+ truckRepository.findTruckById(truckId).getName()
-                + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2.size()+ "个;正在运输订单有" + n3.size()+ "个";
+        return "货车id"+ truckId
+                + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2+ "个;正在运输订单有" + n3+ "个";
     }
 
 
@@ -93,7 +118,7 @@ public class TruckService {
 
     public Cargo startShip(int cargoId) {
         // 开始运货请求
-        Cargo cargo = cargoRepository.findCargoById(cargoId);
+        Cargo cargo = cargoService.findCargoById(cargoId);
 
         // 前提条件的检查
         if (cargo.getStatus() != 2){
@@ -101,21 +126,22 @@ public class TruckService {
         }
         cargo.setStatus(3);
         cargoRepository.save(cargo);
-        return cargoRepository.findCargoById(cargoId);
+        return cargo;
     }
 
     public Cargo endShip(int cargoId) {
         //truck已经送达货物，请求验货
 
         // 开始运货请求
-        Cargo cargo = cargoRepository.findCargoById(cargoId);
+        Cargo cargo = cargoService.findCargoById(cargoId);
 
         // 前提条件的检查
         if (cargo.getStatus() != 3){
             throw new TruckException("当前货物状态不正确，无法转入运达状态");
         }
-        cargoRepository.findCargoById(cargoId).setStatus(4);
+
+        cargo.setStatus(4);
         cargoRepository.save(cargo);
-        return cargoRepository.findCargoById(cargoId);
+        return cargo;
     }
 }
