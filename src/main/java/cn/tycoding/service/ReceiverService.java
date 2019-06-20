@@ -46,13 +46,12 @@ public class ReceiverService {
         List<Cargo> list = cargoRepository.findAllByReceiverId(id);
         // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
         for (Cargo cargo:list) {
-            if (cargo.getStatus() < 6 ) {
-                return "注销失败！当前收货方还有订单未完成的订单！";
+            if (cargo.getStatus() < 6) {
+                throw new ReceiverException("注销失败！当前收货方还有订单未完成的订单！");
             }
-            if ( cargo.getStatus() == 10) {
-                return "注销失败！当前收货方存在异常订单！";
+            if (cargo.getStatus() == 10) {
+                throw new ReceiverException("注销失败！当前收货方存在异常订单！");
             }
-
         }
         receiverRepository.findById(id).ifPresent(receiver -> {
             receiverRepository.delete(receiver);

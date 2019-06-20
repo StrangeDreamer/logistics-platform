@@ -3,6 +3,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
+import cn.tycoding.exception.ShipperException;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
@@ -50,12 +51,14 @@ public class TruckService {
         // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
         // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
         for (Cargo cargo:list) {
+
             if (cargo.getStatus() == 2 || cargo.getStatus() == 3) {
-                return "注销失败！当前货车还有尚未完成的订单！";
+                throw new TruckException("注销失败！当前货车还有尚未完成的订单！");
             }
             if (cargo.getStatus() == 10) {
-                return "注销失败！当前货车存在异常订单！";
+                throw new TruckException("注销失败！当前货车存在异常订单！！");
             }
+
         }
         truckRepository.findById(id).ifPresent(truck -> {
             truckRepository.delete(truck);
@@ -98,22 +101,13 @@ public class TruckService {
                 n3++;
             }
         }
-
-
         return "货车id"+ truckId
                 + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2+ "个;正在运输订单有" + n3+ "个";
     }
-
-
     // 查询所有承运方
     public List<Truck> findAll(){
         return truckRepository.findAll();
     }
-
-
-
-
-
 
 
 
