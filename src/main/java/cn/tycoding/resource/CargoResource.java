@@ -185,8 +185,8 @@ public class CargoResource {
      * @return
      */
 
-    @GetMapping("/{status}")
-    public List<Cargo> getAllNormalCargos(@RequestParam("status") int status) {
+    @GetMapping("/cargoStatus/{status}")
+    public List<Cargo> getAllNormalCargos(@PathVariable int status) {
         if (status == 9) {
 
             logger.info("REST 查询所有超时完成的货物");

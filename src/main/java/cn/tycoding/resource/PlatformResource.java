@@ -68,7 +68,7 @@ public class PlatformResource {
      * @param
      * @return
      */
-    @GetMapping("data")
+    @GetMapping("/data")
     public String showPlatformList() {
         logger.info("平台信息一览");
         return platformService.showPlatformList();
