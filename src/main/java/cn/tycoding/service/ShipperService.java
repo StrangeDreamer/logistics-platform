@@ -1,7 +1,9 @@
 package cn.tycoding.service;
 
 
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
+import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ShipperRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +16,11 @@ public class ShipperService {
 
     private final Logger logger=LoggerFactory.getLogger(ShipperService.class);
     private final ShipperRepository shipperRepository;
+    private final CargoRepository cargoRepository;
 
-    public ShipperService(ShipperRepository shipperRepository) {
+    public ShipperService(ShipperRepository shipperRepository,CargoRepository cargoRepository) {
         this.shipperRepository = shipperRepository;
+        this.cargoRepository = cargoRepository;
     }
 
 
@@ -28,12 +32,25 @@ public class ShipperService {
         shipperRepository.save(shipper1);
         return shipper1;
     }
+
     //发货方注销
-    public void deleteShipper(int id){
+    public String deleteShipper(int id){
+        List<Cargo> list = cargoRepository.findAllByShipperId(id);
+        // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
+        for (Cargo cargo:list) {
+            if (cargo.getStatus() < 6) {
+                return "注销失败！当前发货方还有订单未完成订单！";
+            }
+            if (cargo.getStatus() == 10) {
+                return "注销失败！当前发货方存在异常订单！";
+            }
+        }
         shipperRepository.findById(id).ifPresent(shipper -> {
             shipperRepository.delete(shipper);
             logger.info("发货发注销成功！");
+
         });
+        return  "发货方" + id + "注销成功！";
     }
 
     // 查询指定id发货方

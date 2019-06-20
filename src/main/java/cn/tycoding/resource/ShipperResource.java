@@ -30,10 +30,10 @@ public class ShipperResource {
     }
 
     @DeleteMapping("/{id}")
+    // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
     public String deleteShipper(@PathVariable("id") int id){
         logger.info("Rest 发货方注销请求");
-        shipperService.deleteShipper(id);
-        return "删除shipper"+id+"成功";
+        return shipperService.deleteShipper(id);
     }
 
     /**

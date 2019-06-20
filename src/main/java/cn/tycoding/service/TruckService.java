@@ -38,11 +38,23 @@ public class TruckService {
         return truck1;
     }
     // 承运方注销
-    public void deleteTruck(int id){
+    public String deleteTruck(int id){
+        List<Cargo> list = cargoRepository.findAllByTruckId(id);
+        // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
+        // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
+        for (Cargo cargo:list) {
+            if (cargo.getStatus() == 2 || cargo.getStatus() == 3) {
+                return "注销失败！当前货车还有尚未完成的订单！";
+            }
+            if (cargo.getStatus() == 10) {
+                return "注销失败！当前货车存在异常订单！";
+            }
+        }
         truckRepository.findById(id).ifPresent(truck -> {
             truckRepository.delete(truck);
             logger.info("发货发注销成功！");
         });
+        return "删除Truck"+id+"成功";
     }
 
 
