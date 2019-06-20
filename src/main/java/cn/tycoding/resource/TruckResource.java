@@ -31,11 +31,14 @@ public class TruckResource {
 
     }
 
+    // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
+    // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
     @DeleteMapping("/deleteTruck/{id}")
     public String deleteTruck(@PathVariable("id") int id){
+
         logger.info("Rest 承运方注销请求");
-        truckService.deleteTruck(id);
-        return "删除Truck"+id+"成功";
+        return truckService.deleteTruck(id);
+
     }
 
     /**

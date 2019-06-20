@@ -32,8 +32,7 @@ public class ReceiverResource {
     @DeleteMapping("/deleteReceiver/{id}")
     public String deleteReceiver(@PathVariable("id") int id){
         logger.info("Rest 收货方注销请求");
-        receiverService.deleteReceiver(id);
-        return "删除receiver"+id+"成功";
+        return receiverService.deleteReceiver(id);
     }
 
     /**

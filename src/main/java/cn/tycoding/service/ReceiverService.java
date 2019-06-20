@@ -4,6 +4,7 @@ package cn.tycoding.service;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 
+import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ReceiverRepository;
 
 import org.slf4j.Logger;
@@ -17,9 +18,13 @@ public class ReceiverService {
 
     private final Logger logger = LoggerFactory.getLogger(ReceiverService.class);
     private final ReceiverRepository receiverRepository;
+    private final CargoRepository cargoRepository;
 
-    public ReceiverService(ReceiverRepository receiverRepository) {
+
+    public ReceiverService(ReceiverRepository receiverRepository, CargoRepository cargoRepository) {
         this.receiverRepository = receiverRepository;
+        this.cargoRepository = cargoRepository;
+
     }
 
 
@@ -33,11 +38,24 @@ public class ReceiverService {
 
 
     // 收货方注销
-    public void deleteReceiver(int id){
+    public String  deleteReceiver(int id){
+
+        List<Cargo> list = cargoRepository.findAllByReceiverId(id);
+        // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
+        for (Cargo cargo:list) {
+            if (cargo.getStatus() < 6 ) {
+                return "注销失败！当前收货方还有订单未完成的订单！";
+            }
+            if ( cargo.getStatus() == 10) {
+                return "注销失败！当前收货方存在异常订单！";
+            }
+
+        }
         receiverRepository.findById(id).ifPresent(receiver -> {
             receiverRepository.delete(receiver);
-            logger.info("发货发注销成功！");
+            logger.info("收货发注销成功！");
         });
+        return "删除receiver"+id+"成功";
     }
 
     // 查询指定id收货方
