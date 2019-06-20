@@ -61,7 +61,7 @@ public class ReceiverService {
     }
 
     // 查询指定id收货方
-    public Receiver findReceiversById(int receiverId){
+    public Receiver findReceiverById(int receiverId){
         Receiver receiver = receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
         return receiver;
     }

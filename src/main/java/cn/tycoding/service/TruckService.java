@@ -89,7 +89,6 @@ public class TruckService {
 
     // 查询指定id承运方的订单数量
     public String findTrucksCargoNum(int truckId){
-        Truck truckDb=truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         // 所有该货车具有的订单
         List<Cargo> n1=cargoService.findAllByTruckId(truckId);
         int n2=0,n3=0;

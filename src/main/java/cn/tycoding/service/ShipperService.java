@@ -57,7 +57,7 @@ public class ShipperService {
     }
 
     // 查询指定id发货方
-    public Shipper findShippersById(int shipperId){
+    public Shipper findShipperById(int shipperId){
         Shipper shipper = shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在"));
         return shipper;
     }

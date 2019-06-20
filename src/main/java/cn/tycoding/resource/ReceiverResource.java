@@ -46,7 +46,7 @@ public class ReceiverResource {
     @GetMapping("/{id}")
     public Receiver getReceiversById(@PathVariable("id") int id){
         logger.info("REST 查询所指定收货方");
-        return receiverService.findReceiversById(id);
+        return receiverService.findReceiverById(id);
     }
 
     /**

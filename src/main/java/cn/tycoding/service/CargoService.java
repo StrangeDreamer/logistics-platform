@@ -25,12 +25,6 @@ public class CargoService {
     @Autowired
     private  CargoRepository cargoRepository;
     @Autowired
-    private  TruckRepository truckRepository;
-    @Autowired
-    private  ShipperRepository shipperRepository;
-    @Autowired
-    private  ReceiverRepository receiverRepository;
-    @Autowired
     private CargoService cargoService;
 
     @Autowired
@@ -70,12 +64,6 @@ public class CargoService {
      * 撤单
      * @param id
      */
-  /*  public void deleteCargo(int id) {
-        cargoRepository.findById(id).ifPresent(cargo -> {
-            cargoRepository.delete(cargo);
-            logger.info("货物撤单成功！");
-        });
-    }*/
 
     public Cargo withdrawalCargo(int id) {
         // 获取撤单赔偿比例
@@ -147,7 +135,7 @@ public class CargoService {
      */
     public Cargo updateCargoInfo(int cargoId, double freightFare) {
 
-        Cargo cargo = cargoRepository.findById(cargoId).orElseThrow(()->new CargoException("this cargo is not exist !!!"));
+        Cargo cargo = findCargoById(cargoId);
         if( cargo.getStatus()!=2) {
             throw new CargoException("当前订单状态无法转单");
         }
@@ -232,20 +220,17 @@ public class CargoService {
 
     // 查找发货方的所有订单
     public List<Cargo> findAllByShipperId(int shipperId) {
-        Shipper shipper = shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在！"));
         return cargoRepository.findAllByShipperId(shipperId);
     }
 
 
     // 查找收货方的所有订单
     public List<Cargo> findAllByReceiverId(int receiverId) {
-        Receiver receiver = receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
         return cargoRepository.findAllByReceiverId(receiverId);
     }
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
-        Truck truckDb = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
     }
 

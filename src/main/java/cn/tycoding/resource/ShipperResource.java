@@ -41,9 +41,9 @@ public class ShipperResource {
      * @return
      */
     @GetMapping("/{id}")
-    public Shipper getShippersById(@PathVariable("id") int id){
+    public Shipper getShipperById(@PathVariable("id") int id){
         logger.info("REST 查询所有货物");
-        return shipperService.findShippersById(id);
+        return shipperService.findShipperById(id);
     }
 
     /**
