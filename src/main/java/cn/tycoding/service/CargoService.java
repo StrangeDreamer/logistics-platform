@@ -245,7 +245,7 @@ public class CargoService {
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
-        Truck truckDb=truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
+        Truck truckDb = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
     }
 

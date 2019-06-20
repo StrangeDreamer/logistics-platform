@@ -177,7 +177,6 @@ public class BidResource {
                     cargo.setStatus(6);
                     cargoRepository.save(cargo);
                     return cargoRepository.findCargoById(cargoId);
-
                 }
                 // 当不为null，表示是转手后新创建当订单，需要恢复原来当订单，并将当前订单设为未抢订单直接撤单
                 else {
@@ -243,7 +242,6 @@ public class BidResource {
             logger.info("抢单时间还未截止！");
             throw new CargoException("抢单时间还未截止！");
         }
-
         cargoRepository.save(cargo);
         return cargo;
     }
