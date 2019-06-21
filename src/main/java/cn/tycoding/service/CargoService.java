@@ -31,6 +31,15 @@ public class CargoService {
     private PlatformRepository platformRepository;
 
     @Autowired
+    private  TruckRepository truckRepository;
+
+    @Autowired
+    private  ShipperRepository shipperRepository;
+
+    @Autowired
+    private  ReceiverRepository receiverRepository;
+
+    @Autowired
     private RedisTemplate redisTemplate;
 
     private final String cargoKey = "Cargo";
@@ -41,6 +50,12 @@ public class CargoService {
 
     // TODO 能否成功创建该订单
     public Cargo createCargo(Cargo cargo) {
+
+        // 检查发货方是否存在，检查收货方是否存在
+        shipperRepository.findById(cargo.getShipperId()).orElseThrow(()->new ShipperException("创建订单失败！该发货方不存在！"));
+        receiverRepository.findById(cargo.getReceiverId()).orElseThrow(()->new ReceiverException("创建订单失败！该收货方不存在"));
+
+
         Cargo c = new Cargo();
         c.setShipperId(cargo.getShipperId());
         c.setFreightFare(cargo.getFreightFare());
@@ -55,7 +70,7 @@ public class CargoService {
         c.setDestination(cargo.getDestination());
 
         cargoRepository.save(c);
-        logger.info("A new Cargo is created !");
+        logger.info("新订单创建成功!");
         return c;
     }
 
@@ -113,6 +128,7 @@ public class CargoService {
                 cargoBack.setTruckId(cargo.getTruckId());
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
+                return cargoBack;
             }
             else {
                 logger.info("订单当前状态不允许撤单" );
@@ -220,17 +236,20 @@ public class CargoService {
 
     // 查找发货方的所有订单
     public List<Cargo> findAllByShipperId(int shipperId) {
+        shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在"));
         return cargoRepository.findAllByShipperId(shipperId);
     }
 
 
     // 查找收货方的所有订单
     public List<Cargo> findAllByReceiverId(int receiverId) {
+        receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
         return cargoRepository.findAllByReceiverId(receiverId);
     }
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
+        truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
     }
 

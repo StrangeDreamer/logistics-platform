@@ -38,5 +38,5 @@ public class Shipper {
 
 
     // 发货方银行账户
-    private int BankId;
+    private long BankId;
 }

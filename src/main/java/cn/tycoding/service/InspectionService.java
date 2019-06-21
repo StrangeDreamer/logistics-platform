@@ -78,6 +78,10 @@ public class InspectionService {
                     "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
                     compensation + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
         }
+        // 没有超时则恢复担保额
+        else {
+            result = "验货正常没有出现超时！\n" + "担保额恢复" + cargo.getInsurance() + "\n";
+        }
 
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动
         while (cargo.getPreCargoId() != null) {
@@ -101,10 +105,10 @@ public class InspectionService {
             logger.info("平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit);
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
             cargo = preCargo;
-            result = result +  "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
+            result = result + "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
                     "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
                     "\n平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit +
-                    "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
+                    "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "\n"
             ;
         }
 
@@ -127,10 +131,10 @@ public class InspectionService {
         logger.info("平台向发货方" + cargo.getShipperId() + "支付利润分配" + truck1Profit);
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
-        result = result +  "承运方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
+        result = result + "承运方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
                 "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
                 "\n平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + truck1Profit +
-                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "   \n  "
+                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "\n"
         ;
 
 

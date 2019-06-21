@@ -22,6 +22,7 @@ import java.util.List;
 public class CargoResource {
 
     private final Logger logger = LoggerFactory.getLogger(CargoResource.class);
+
     private final CargoService cargoService;
     private final CargoRepository cargoRepository;
     private final PlatformRepository platformRepository;

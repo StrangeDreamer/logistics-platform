@@ -42,7 +42,7 @@ public class ReceiverService {
 
     // 收货方注销
     public String  deleteReceiver(int id){
-
+        receiverRepository.findById(id).orElseThrow(()->new ReceiverException("该收货方不存在"));
         List<Cargo> list = cargoRepository.findAllByReceiverId(id);
         // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
         for (Cargo cargo:list) {

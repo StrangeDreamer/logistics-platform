@@ -44,7 +44,7 @@ public class Truck {
 
 
     // 承运方的银行id
-    private int bankId;
+    private long bankId;
     // 承运方的保险账户
-    private int insuranceId;
+    private long insuranceId;
 }

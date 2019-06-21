@@ -38,6 +38,8 @@ public class ShipperService {
 
     //发货方注销
     public String deleteShipper(int id){
+        shipperRepository.findById(id).orElseThrow(()->new ShipperException("该发货方不存在"));
+
         List<Cargo> list = cargoRepository.findAllByShipperId(id);
         // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
         for (Cargo cargo:list) {

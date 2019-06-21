@@ -27,6 +27,7 @@ public class TruckService {
     private CargoRepository cargoRepository;
 
     private final String truckKey = "Truck";
+    private final String cargoKey="Cargo";
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -47,6 +48,7 @@ public class TruckService {
     }
     // 承运方注销
     public String deleteTruck(int id){
+        truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
         List<Cargo> list = cargoRepository.findAllByTruckId(id);
         // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
         // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
@@ -118,9 +120,12 @@ public class TruckService {
         if (cargo.getStatus() != 2){
             throw new TruckException("当前货物状态不正确，无法开始运货");
         }
+
         cargo.setStatus(3);
+
         cargoRepository.save(cargo);
-        return cargo;
+        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        return cargoService.findCargoById(cargoId);
     }
 
     public Cargo endShip(int cargoId) {
@@ -136,6 +141,7 @@ public class TruckService {
 
         cargo.setStatus(4);
         cargoRepository.save(cargo);
-        return cargo;
+        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        return cargoService.findCargoById(cargoId);
     }
 }
