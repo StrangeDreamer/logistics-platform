@@ -144,4 +144,10 @@ public class TruckService {
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         return cargoService.findCargoById(cargoId);
     }
+
+    public Truck setTruckRank(int id, double rank) {
+        Truck truck = truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
+        truck.setRank(rank);
+        return truck;
+    }
 }

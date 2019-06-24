@@ -107,6 +107,19 @@ public class TruckResource {
         return truckService.endShip(cargoId);
     }
 
+    /**
+     * 设置承运方评级
+     *
+     * @return
+     */
+
+    @PutMapping("/setTruckRank/{truckId}/{rank}")
+    public Truck setTruckRank(@PathVariable("truckId") int truckId, @PathVariable("rank") double rank) {
+        logger.info("REST 转单");
+        //return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
+        return truckService.setTruckRank(truckId, rank);
+    }
+
 
 
 
