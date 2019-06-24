@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
+
 /**
  * @auther qlXie
  * @date 2019-06-12 11:00
@@ -40,6 +42,7 @@ public class InspectionService {
     }
 
     public String inspectionCargo(Inspection inspection){
+
 
         Platform platform = platformRepository.findRecentPltf();
 
@@ -76,7 +79,7 @@ public class InspectionService {
             double compensation = cargo.getInsurance() * (overTimeFeeRatio + inspection.getTimeoutPeriod() * 0.01);
             result = "验货正常但出现超时！\n" +
                     "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
-                    compensation + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
+                    String.format("%.2f",compensation) + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
         }
         // 没有超时则恢复担保额
         else {
@@ -106,9 +109,9 @@ public class InspectionService {
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
             cargo = preCargo;
             result = result + "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
-                    "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
-                    "\n平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit +
-                    "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "\n"
+                    "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
+                    "\n平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + String.format("%.2f",truck1Profit) +
+                    "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + String.format("%.2f",truck2Profit) + "\n"
             ;
         }
 
@@ -132,9 +135,9 @@ public class InspectionService {
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
         result = result + "承运方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
-                "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice +
-                "\n平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + truck1Profit +
-                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit + "\n"
+                "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
+                "\n平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + String.format("%.2f",truck1Profit) +
+                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + String.format("%.2f",truck2Profit) + "\n"
         ;
 
 
