@@ -70,4 +70,10 @@ public class ShipperService {
     }
 
 
+    public Shipper setShipperRank(int id, double rank) {
+        Shipper shipper = shipperRepository.findById(id).orElseThrow(()->new TruckException("该发货方不存在"));
+        shipper.setRank(rank);
+        return shipper;
+    }
+
 }

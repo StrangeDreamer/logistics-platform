@@ -225,16 +225,17 @@ public class BidResource {
                 // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
                 List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
                 for (Bid bid: bidlist) {
-                    if (bid.getId()!=bidrd.getId()){
+                    if (bid.getId()!= bidrd.getId()){
                         // TODO：担保额恢复
                         logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
                         webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
                     }
                     else
                     {
+                        logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
                         //通知该在线用户抢单成功消息
                         webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
-                        logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
+
                     }
                 }
             }

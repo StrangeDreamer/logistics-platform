@@ -41,6 +41,4 @@ public class TransferredCargo {
     private double bidPrice = -1;
     private int status = 0;
 
-
-
 }

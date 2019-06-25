@@ -56,4 +56,18 @@ public class ShipperResource {
         return shipperService.findAll();
     }
 
+    /**
+     * 设置承运方评级
+     *
+     * @return
+     */
+
+    @PutMapping("/setShipperRank/{shipperId}/{rank}")
+    public Shipper setShipperRank(@PathVariable("shipperId") int shipperId, @PathVariable("rank") double rank) {
+        logger.info("设置承运方评级");
+        return shipperService.setShipperRank(shipperId, rank);
+    }
+
+
+
 }

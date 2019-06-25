@@ -5,10 +5,7 @@ import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.exception.InspectionException;
-import cn.tycoding.repository.CargoRepository;
-import cn.tycoding.repository.InspectionRepository;
-import cn.tycoding.repository.PlatformRepository;
-import cn.tycoding.repository.TruckRepository;
+import cn.tycoding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class InspectionService {
     private PlatformRepository platformRepository;
     @Autowired
     private TruckRepository truckRepository;
+    @Autowired
+    private ShipperRepository shipperRepository;
 
 
     public String saveInspection(Inspection inspection){
@@ -107,6 +106,7 @@ public class InspectionService {
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动
         while (cargo.getPreCargoId() != null) {
 
+            result = result + "\n进入转单结算\n";
             double preFare = cargo.getPreFare();
             double freightFare = cargo.getFreightFare();
             double bidPrice = cargo.getBidPrice();
@@ -128,8 +128,8 @@ public class InspectionService {
             int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRank();
             int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
 
-            double trueTruck1Profit = truck1Profit * rank1;
-            double trueTruck2Profit = truck2Profit * rank2;
+            double trueTruck1Profit = truck1Profit * rank1 * 0.1;
+            double trueTruck2Profit = truck2Profit * rank2 * 0.1;
 
             logger.info("平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit);
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
@@ -138,12 +138,14 @@ public class InspectionService {
                     "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
                     "\n平台向原转单承运方" + preCargo.getTruckId() +
                     "支付利润分配" + String.format("%.2f",truck1Profit) + "*" + rank1 +
-                    "=" + String.format("%.2f",trueTruck1Profit) +
+                    "/10=" + String.format("%.2f",trueTruck1Profit) +
                     "\n平台向接单承运方" + cargo.getTruckId() +
                     "支付利润分配" + String.format("%.2f",truck2Profit) + "*" + rank2 +
-                    "=" + String.format("%.2f",trueTruck2Profit) +
+                    "/10=" + String.format("%.2f",trueTruck2Profit) +
+                    "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                     "\n";
         }
+        result = result + "\n进入原始订单结算\n";
 
         // 此处为第一单承运方（没有转单则为唯一承运方）与发货方的结算；
         // TODO 酬劳结算
@@ -161,16 +163,26 @@ public class InspectionService {
         double paltformProfit = platformProfitRatio * profitSpace;
         double truck1Profit = shipperProfitRatio * profitSpace;
         double truck2Profit = truckProfitRatio * profitSpace;
+        // 5 计算各方评级 以及真正的利润
+        int rank1 = (int)shipperRepository.findShippersById(cargo.getShipperId()).getRank();
+        int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
+
+        double trueTruck1Profit = truck1Profit * rank1 * 0.1;
+        double trueTruck2Profit = truck2Profit * rank2 * 0.1;
+
         logger.info("平台向发货方" + cargo.getShipperId() + "支付利润分配" + truck1Profit);
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
-        result = result + "承运方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
+        result = result + "发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
                 "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
-                "\n平台向原转单承运方" + cargo.getShipperId() + "支付利润分配" + String.format("%.2f",truck1Profit) +
-                "\n平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + String.format("%.2f",truck2Profit) + "\n"
-        ;
-
-
+                "\n平台向发货方" + cargo.getShipperId() +
+                "支付利润分配" + String.format("%.2f",truck1Profit) + "*" + rank1 +
+                "/10=" + String.format("%.2f",trueTruck1Profit) +
+                "\n平台向接单承运方" + cargo.getTruckId() +
+                "支付利润分配" + String.format("%.2f",truck2Profit) + "*" + rank2 +
+                "/10=" + String.format("%.2f",trueTruck2Profit) +
+                "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
+                "\n";
 
         cargoRepository.save(cargo);
         return result;

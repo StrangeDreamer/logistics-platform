@@ -25,6 +25,9 @@ public class Shipper {
     @Column(updatable = false, nullable = false)
     private Date createdDate ;
 
+    // 发货方评级
+    private double rank;
+
     @LastModifiedDate
     @Column(updatable = false, nullable = false)
     private Date modifyTime;
