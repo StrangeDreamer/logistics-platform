@@ -99,16 +99,19 @@ spring:
     redis:
       repositories:
         enabled: false
+  http:
+    multipart:
+      #单文件限制大小
+      max-file-size: 1MB
+      #一次请求限制大小
+      max-request-size: 10MB
+#  resources:
+#    static-locations: classpath:/static/,file:/E/image/
 
 
 message:
   queue:
     type: rabbitmq
-
-
-
-
-
 
 
 
