@@ -132,7 +132,7 @@ public class TruckResource {
         //windows格式
         file.transferTo(new File("e:\\image\\"+file.getOriginalFilename()));
         //Linux格式
-        file.transferTo(new File("~/uploadFiles"+file.getOriginalFilename()));
+        //file.transferTo(new File("/home/wangjin/uploadFiles"+file.getOriginalFilename()));
         return "上传完毕";
     }
 
