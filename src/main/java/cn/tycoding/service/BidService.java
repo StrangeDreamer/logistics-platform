@@ -25,16 +25,16 @@ public class BidService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public String saveBid(Bid bid){
-        Bid bid1=new Bid();
-        bid1.setCargoId(bid.getCargoId());
-        bid1.setTruckId(bid.getTruckId());
-        bid1.setBidPrice(bid.getBidPrice());
-        logger.info("保存竞价请求");
-        bidRepository.save(bid1);
-        return "保存竞价请求成功";
-    }
-
+//    public String saveBid(Bid bid){
+//        Bid bid1=new Bid();
+//        bid1.setCargoId(bid.getCargoId());
+//        bid1.setTruckId(bid.getTruckId());
+//        bid1.setBidPrice(bid.getBidPrice());
+//        logger.info("保存竞价请求");
+//        bidRepository.save(bid1);
+//        return "保存竞价请求成功";
+//    }
+//
 
     /**
      * 判断缓存里面是否为空，以确定该订单是否有人抢

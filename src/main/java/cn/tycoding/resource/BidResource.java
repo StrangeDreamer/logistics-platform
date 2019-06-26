@@ -65,6 +65,8 @@ public class BidResource {
     public Map<String, Object> bidCargo(@RequestBody Bid bid) {
         Map<String, Object> result = new HashMap<String, Object>();
         //获取系统时间
+        //保存竞价请求
+        bidRepository.save(bid);
 
         Date nowTime = new Date();
         Cargo cargo=cargoService.findCargoById(bid.getCargoId());
@@ -134,8 +136,7 @@ public class BidResource {
                     WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
                 }
             }
-            //保存竞价请求
-            bidService.saveBid(bid);
+
             System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
             redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
             result.put("operationResult", "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "的本次出价排队成功" +
