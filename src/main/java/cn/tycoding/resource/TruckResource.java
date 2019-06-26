@@ -130,9 +130,9 @@ public class TruckResource {
     public String test(MultipartFile file) throws IllegalStateException, IOException {
         //transferTo是保存文件，参数就是要保存到的目录和名字
         //windows格式
-        file.transferTo(new File("e:\\image\\"+file.getOriginalFilename()));
+        //file.transferTo(new File("e:\\image\\"+file.getOriginalFilename()));
         //Linux格式
-        //file.transferTo(new File("/home/wangjin/uploadFiles"+file.getOriginalFilename()));
+        file.transferTo(new File("/home/wangjin/uploadFiles/"+file.getOriginalFilename()));
         return "上传完毕";
     }
 
