@@ -96,9 +96,11 @@ public class CargoResource {
      */
     @PutMapping("/{cargoId}")
     public Cargo startCargo(@PathVariable int cargoId) {
+        Platform platform = platformRepository.findRecentPltf();
+        int time = platform.getBidingDuration();
         Cargo cargo = cargoService.findCargoById(cargoId);
         Date bidStartTime = new Date();
-        Date bidEndTime = new Date(bidStartTime.getTime() + 180000);
+        Date bidEndTime = new Date(bidStartTime.getTime() + time * 1000);
         //先更新DB，再删除cache
         cargo.setBidStartTime(bidStartTime);
         cargo.setBidEndTime(bidEndTime);

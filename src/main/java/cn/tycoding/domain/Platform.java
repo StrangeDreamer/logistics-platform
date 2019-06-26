@@ -36,6 +36,8 @@ public class Platform implements Serializable {
 
     private int exhibitionFee = 10;
 
+    private int bidingDuration = 180;
+
 
 
 //    // 平台当前的资金
