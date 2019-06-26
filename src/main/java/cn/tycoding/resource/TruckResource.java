@@ -8,7 +8,10 @@ import cn.tycoding.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -118,6 +121,21 @@ public class TruckResource {
         logger.info("设置承运方评级");
         return truckService.setTruckRank(truckId, rank);
     }
+
+
+
+
+    @PostMapping("/upload")
+    //上传的文件会转换成MultipartFile对象，file名字对应html中上传控件的name
+    public String test(MultipartFile file) throws IllegalStateException, IOException {
+        //transferTo是保存文件，参数就是要保存到的目录和名字
+        //windows格式
+        file.transferTo(new File("e:\\image\\"+file.getOriginalFilename()));
+        //Linux格式
+        file.transferTo(new File("~/uploadFiles"+file.getOriginalFilename()));
+        return "上传完毕";
+    }
+
 
 
 
