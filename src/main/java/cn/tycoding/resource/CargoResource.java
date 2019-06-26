@@ -98,7 +98,7 @@ public class CargoResource {
     public Cargo startCargo(@PathVariable int cargoId) {
         Cargo cargo = cargoService.findCargoById(cargoId);
         Date bidStartTime = new Date();
-        Date bidEndTime = new Date(bidStartTime.getTime() + 60000);
+        Date bidEndTime = new Date(bidStartTime.getTime() + 180000);
         //先更新DB，再删除cache
         cargo.setBidStartTime(bidStartTime);
         cargo.setBidEndTime(bidEndTime);
