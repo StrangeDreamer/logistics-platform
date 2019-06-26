@@ -43,9 +43,17 @@ public class Truck {
 //    // 承运方去除冻结、实际可用的担保额
 //    private double availableInsurance = 0;
 
-
     // 承运方的银行id
     private long bankId;
     // 承运方的保险账户
     private long insuranceId;
+
+
+    // 以下字段仅用于保存，不会被使用
+    private int power = 0;
+    private long id_gerenshenfenzheng = 0;
+    private long id_gongsitongyidaima = 0;
+    private long id_xingshizheng = 0;
+    private long id_jiashizheng = 0;
+    private String telNumber = "";
 }

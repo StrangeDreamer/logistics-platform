@@ -35,6 +35,12 @@ public class ReceiverService {
     public Receiver createReceiver(Receiver receiver){
         Receiver receiver1 = new Receiver();
         receiver1.setName(receiver.getName());
+
+        receiver1.setId_gerenshenfenzheng(receiver.getId_gerenshenfenzheng());
+        receiver1.setId_gongsitongyidaima(receiver.getId_gongsitongyidaima());
+        receiver1.setOccupation(receiver.getOccupation());
+        receiver1.setTelNumber(receiver.getTelNumber());
+        
         receiverRepository.save(receiver1);
         return receiver1;
     }

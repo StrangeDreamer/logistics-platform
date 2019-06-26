@@ -32,7 +32,6 @@ public class TruckService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-
     // 承运方注册
     public Truck createTruck(Truck truck){
         Truck truck1 = new Truck();
@@ -42,6 +41,12 @@ public class TruckService {
         truck1.setType(truck.getType());
         truck1.setBankId(truck.getBankId());
         truck1.setInsuranceId(truck.getInsuranceId());
+        truck1.setPower(truck.getPower());
+        truck1.setId_gerenshenfenzheng(truck.getId_gerenshenfenzheng());
+        truck1.setId_gongsitongyidaima(truck.getId_gongsitongyidaima());
+        truck1.setId_xingshizheng(truck.getId_xingshizheng());
+        truck1.setId_jiashizheng(truck.getId_jiashizheng());
+        truck1.setTelNumber(truck.getTelNumber());
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
         return truck1;

@@ -32,7 +32,13 @@ public class ShipperService {
         Shipper shipper1 = new Shipper();
         shipper1.setName(shipper.getName());
         shipper1.setBankId(shipper.getBankId());
+
+        shipper1.setId_gerenshenfenzheng(shipper.getId_gerenshenfenzheng());
+        shipper1.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
+        shipper1.setOccupation(shipper.getOccupation());
+        shipper1.setTelNumber(shipper.getTelNumber());
         shipperRepository.save(shipper1);
+        
         return shipper1;
     }
 

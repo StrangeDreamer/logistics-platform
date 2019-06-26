@@ -42,4 +42,12 @@ public class Shipper {
 
     // 发货方银行账户
     private long BankId;
+
+
+    // 以下字段仅用于保存，不会被使用
+    private long id_gerenshenfenzheng = 0;
+    private long id_gongsitongyidaima = 0;
+    private String occupation = " ";
+    private String telNumber = "";
+
 }

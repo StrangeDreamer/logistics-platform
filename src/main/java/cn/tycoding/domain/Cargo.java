@@ -93,4 +93,6 @@ public class Cargo implements Serializable {
      */
     private int status = 0;
 
+    private String remarks = "";
+
 }

@@ -68,6 +68,7 @@ public class CargoService {
         c.setLimitedTime(cargo.getLimitedTime());
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
+        c.setRemarks(cargo.getRemarks());
 
         cargoRepository.save(c);
         logger.info("新订单创建成功!");
