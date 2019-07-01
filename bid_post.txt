@@ -1,0 +1,6 @@
+{
+	"cargoId":1,
+	"truckId":5,
+	"bidPrice":300
+	
+}

@@ -144,7 +144,7 @@ public class BidResource {
                 //redisCargo更大,则需要更新
                 if (redisbid.getBidPrice()>bid.getBidPrice()){
                     redisTemplate.boundHashOps(bidsKey).put(bid.getCargoId(), bid);
-                    WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
+                    //WebSocketServer.sendInfo("有人出价"+bid.getBidPrice());
                 }
             }
 
