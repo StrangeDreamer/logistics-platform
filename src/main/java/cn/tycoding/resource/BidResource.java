@@ -67,9 +67,7 @@ public class BidResource {
     @PostMapping
     public Map<String, Object> bidCargo(@RequestBody Bid bid) {
         Map<String, Object> result = new HashMap<String, Object>();
-        //获取系统时间
-        //保存竞价请求
-        bidRepository.save(bid);
+
 
         Date nowTime = new Date();
         Cargo cargo=cargoService.findCargoById(bid.getCargoId());
@@ -129,6 +127,10 @@ public class BidResource {
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
         }
+
+        //获取系统时间
+        //保存竞价请求
+        bidRepository.save(bid);
 
 
         try {
