@@ -182,7 +182,7 @@ public class BidResource {
             // 订单没有人抢/时间段内不存在有效出价：对于转单订单，转手订单原订单继续执行；对于最原始的订单，直接撤单
             if (bidrd == null){
                 // 当precargo 为null，表示最原始的订单，直接撤单
-                if (cargo.getPreCargoId() != null) {
+                if (cargo.getPreCargoId() == null) {
                     logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
                     // TODO: 冻结资金恢复
                     logger.info("由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复" + cargo.getFreightFare());

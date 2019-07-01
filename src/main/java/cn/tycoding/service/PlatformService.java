@@ -52,7 +52,9 @@ public class PlatformService {
         platform1.setWithdrawFeeRatio(platform.getWithdrawFeeRatio());
         platform1.setOverTimeFeeRatio(platform.getOverTimeFeeRatio());
         platform1.setExhibitionFee(platform.getExhibitionFee());
+        platform1.setBidingDuration(platform.getBidingDuration());
 
+        platform1.setBonusMaxRatioInFare(platform.getBonusMaxRatioInFare());
         logger.info("保存平台参数设定");
         platformRepository.save(platform1);
         return platform1;
