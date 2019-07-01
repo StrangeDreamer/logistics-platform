@@ -155,4 +155,13 @@ public class TruckService {
         truck.setRank(rank);
         return truck;
     }
+
+    public Truck active(int id) {
+        Truck truck = truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
+        truck.setActivated(true);
+        truckRepository.save(truck);
+        logger.info("激活成功！");
+        return truck;
+    }
+
 }

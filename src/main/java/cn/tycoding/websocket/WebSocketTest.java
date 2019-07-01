@@ -117,6 +117,21 @@ public class WebSocketTest {
         }
     }
 
+    public void sendToUser3(String toUser,int code) {
+        String sendUserno = toUser;
+        int sendCode = code;
+        String now = getNowTime();
+        try {
+            if (webSocketSet.get(sendUserno) != null) {
+                webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendCode);
+            } else {
+                logger.info("当前用户不在线");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 给所有人发消息
      * @param message
@@ -139,6 +154,27 @@ public class WebSocketTest {
         }
     }
 
+    /**
+     * 给所有人发消息
+     * @param code
+     */
+    public void sendAllCode(int code) {
+        String now = getNowTime();
+        //String sendMessage = message.split("[|]")[0];
+        int sendCode = code;
+        logger.info("遍历websocket所用用户{}",webSocketSet.size());
+        for (String key : webSocketSet.keySet()) {
+            try {
+                //判断接收用户是否是当前发消息的用户
+                if (!userno.equals(key)) {
+                    webSocketSet.get(key).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendCode);
+                    logger.info("key = {} " , key);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 获取当前时间

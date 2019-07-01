@@ -48,6 +48,8 @@ public class Truck {
     // 承运方的保险账户
     private long insuranceId;
 
+    private boolean activated = false;
+
 
     // 以下字段仅用于保存，不会被使用
     private int power = 0;

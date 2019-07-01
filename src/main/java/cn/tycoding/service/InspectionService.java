@@ -128,8 +128,15 @@ public class InspectionService {
             int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRank();
             int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
 
-            double trueTruck1Profit = truck1Profit * rank1 * 0.1;
-            double trueTruck2Profit = truck2Profit * rank2 * 0.1;
+
+            double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
+            double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
+
+            double  bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
+            double maxbonux = bonusMaxRatioInFare * cargo.getFreightFare();
+            // 6 获取利润分配资金与利润分配上限的最低值作为真正的利润分配
+            double trueTruck1Profit = trueTruck1ProfitTemp < maxbonux ? trueTruck1ProfitTemp : maxbonux;
+            double trueTruck2Profit = trueTruck2ProfitTemp < maxbonux ? trueTruck2ProfitTemp : maxbonux;
 
             logger.info("平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit);
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
@@ -167,8 +174,15 @@ public class InspectionService {
         int rank1 = (int)shipperRepository.findShippersById(cargo.getShipperId()).getRank();
         int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
 
-        double trueTruck1Profit = truck1Profit * rank1 * 0.1;
-        double trueTruck2Profit = truck2Profit * rank2 * 0.1;
+        double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
+        double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
+
+        double  bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
+        double maxbonux = bonusMaxRatioInFare * cargo.getFreightFare();
+
+        // 6 获取利润分配资金与利润分配上限的最低值作为真正利润分配
+        double trueTruck1Profit = trueTruck1ProfitTemp < maxbonux ? trueTruck1ProfitTemp : maxbonux;
+        double trueTruck2Profit = trueTruck2ProfitTemp < maxbonux ? trueTruck2ProfitTemp : maxbonux;
 
         logger.info("平台向发货方" + cargo.getShipperId() + "支付利润分配" + truck1Profit);
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);

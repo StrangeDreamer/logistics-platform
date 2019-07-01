@@ -122,6 +122,12 @@ public class TruckResource {
         return truckService.setTruckRank(truckId, rank);
     }
 
+    @PutMapping("/active/{id}")
+    public Truck active(@PathVariable("id") int id) {
+        logger.info("激活用户");
+        return truckService.active(id);
+    }
+
 
 
 

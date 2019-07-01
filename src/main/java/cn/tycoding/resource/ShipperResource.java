@@ -2,6 +2,7 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
+import cn.tycoding.domain.Truck;
 import cn.tycoding.service.ShipperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,11 @@ public class ShipperResource {
         return shipperService.setShipperRank(shipperId, rank);
     }
 
+    @PutMapping("/active/{id}")
+    public Shipper active(@PathVariable("id") int id) {
+        logger.info("激活用户");
+        return shipperService.active(id);
+    }
 
 
 }

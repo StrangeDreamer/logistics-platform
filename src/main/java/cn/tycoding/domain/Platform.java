@@ -31,8 +31,15 @@ public class Platform implements Serializable {
     private double shipperProfitRatio = 0.2;
     private double platformProfitRatio = 0.3;
     private double truckProfitRatio = 0.5;
+
+    // 已接未运的
     private double withdrawFeeRatio = 0.2;
+
+    // 超时起步惩罚占实际运费的比例
     private double overTimeFeeRatio = 0.05;
+
+    // 红包上限，如果实际红包高于该比例与运费的乘积，则以乘积为最终红包
+    private double bonusMaxRatioInFare = 0.05;
 
     private int exhibitionFee = 10;
 

@@ -3,6 +3,7 @@ package cn.tycoding.resource;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Platform;
+import cn.tycoding.domain.Truck;
 import cn.tycoding.exception.BidException;
 import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.BidRepository;
@@ -47,6 +48,8 @@ public class BidResource {
     private TruckService truckService;
     @Autowired
     private BidRepository bidRepository;
+    @Autowired
+    private TruckRepository truckRepository;
 
     @Autowired
     private BidService bidService;
@@ -100,16 +103,18 @@ public class BidResource {
         logger.info("向第三方查询货车当前可用担保额是否超过" + cargo.getInsurance() + "，额度充足方可出价" );
 
 
-        // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求
-        if (!cargo.getType().equals(truckService.findTruckById(bid.getTruckId()).getType())){
+
+        Truck truck = truckRepository.findTruckById(bid.getTruckId());
+        // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求；承运方需要激活
+        if (!cargo.getType().equals(truck.getType())){
             //运输类型需要符合要求
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
             throw new BidException( "货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
-        } else if (cargo.getVolume() > truckService.findTruckById(bid.getTruckId()).getAvailableVolume()) {
+        } else if (cargo.getVolume() > truck.getAvailableVolume()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！体积超载");
-        } else if (cargo.getWeight() > truckService.findTruckById(bid.getTruckId()).getAvailableWeight()) {
+        } else if (cargo.getWeight() > truck.getAvailableWeight()) {
             //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！重量超载");
@@ -119,6 +124,10 @@ public class BidResource {
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
             + cargo.getFreightFare() * lowestBidPriceRatio  + "~" + cargo.getFreightFare());
+        } else if (! truck.isActivated()) {
+            //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
         }
 
 
@@ -229,13 +238,17 @@ public class BidResource {
                     if (bid.getId()!= bidrd.getId()){
                         // TODO：担保额恢复
                         logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
-                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
+//                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
+                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()),2);
+
                     }
                     else
                     {
                         logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
                         //通知该在线用户抢单成功消息
-                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
+//                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
+
+                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()),1);
 
                     }
                 }

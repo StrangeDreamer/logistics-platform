@@ -82,4 +82,12 @@ public class ShipperService {
         return shipper;
     }
 
+    public Shipper active(int id) {
+        Shipper shipper = shipperRepository.findById(id).orElseThrow(()->new ShipperException("该发货方不存在"));
+        shipper.setActivated(true);
+        shipperRepository.save(shipper);
+        logger.info("激活成功！");
+        return shipper;
+    }
+
 }

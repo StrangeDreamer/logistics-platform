@@ -51,10 +51,23 @@ public class CargoService {
     // TODO 能否成功创建该订单
     public Cargo createCargo(Cargo cargo) {
 
+        // TODO：发货方资金检查，资金充足才可以发货
+        logger.info("发货方资金检查，资金充足才可以发货");
+
+        Platform platform = platformRepository.findRecentPltf();
+
+        double exhibitionFee = platform.getExhibitionFee();
+        logger.info("发货方冻结资金" + cargo.getFreightFare());
+        logger.info("发货方支付展位费" + exhibitionFee);
+
+
         // 检查发货方是否存在，检查收货方是否存在
-        shipperRepository.findById(cargo.getShipperId()).orElseThrow(()->new ShipperException("创建订单失败！该发货方不存在！"));
+        Shipper shipper = shipperRepository.findById(cargo.getShipperId()).orElseThrow(()->new ShipperException("创建订单失败！该发货方不存在！"));
         receiverRepository.findById(cargo.getReceiverId()).orElseThrow(()->new ReceiverException("创建订单失败！该收货方不存在"));
 
+        if (!shipper.isActivated()) {
+            throw new ShipperException("发货方尚未激活，无法发布订单！");
+        }
 
         Cargo c = new Cargo();
         c.setShipperId(cargo.getShipperId());

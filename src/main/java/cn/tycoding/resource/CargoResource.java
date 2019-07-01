@@ -8,6 +8,7 @@ import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.PlatformRepository;
 import cn.tycoding.service.CargoService;
+import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class CargoResource {
     private final String cargoKey = "Cargo";
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private WebSocketTest webSocketTest;
 
     public CargoResource(CargoService cargoService, CargoRepository cargoRepository, PlatformRepository platformRepository) {
         this.cargoService = cargoService;
@@ -74,14 +77,7 @@ public class CargoResource {
      */
     @PostMapping
     public Cargo createCargo(@RequestBody Cargo cargo) {
-        // TODO：发货方资金检查，资金充足才可以发货
-        logger.info("发货方资金检查，资金充足才可以发货");
 
-        Platform platform = platformRepository.findRecentPltf();
-
-        double exhibitionFee = platform.getExhibitionFee();
-        logger.info("发货方冻结资金" + cargo.getFreightFare());
-        logger.info("发货方支付展位费" + exhibitionFee);
         return cargoService.createCargo(cargo);
     }
 
@@ -89,8 +85,8 @@ public class CargoResource {
 
 
     /**
-     * TODO 每个订单只能开启一次，在set之前需要判断之前是否已经set过或者是否为空（简单点）
-     * 平台确定某运单开抢时间和结束时间默认2分钟
+     *
+     * 平台确定某运单
      *
      * @return
      */
@@ -109,6 +105,7 @@ public class CargoResource {
         //删除map中的某个对象
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         logger.info("订单{}*****{}开始抢", cargoId, bidStartTime);
+        webSocketTest.sendAllCode(3);
         return cargo;
     }
 

@@ -43,6 +43,8 @@ public class Shipper {
     // 发货方银行账户
     private long BankId;
 
+    private boolean activated = false;
+
 
     // 以下字段仅用于保存，不会被使用
     private long id_gerenshenfenzheng = 0;
