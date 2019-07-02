@@ -123,7 +123,9 @@ public class WebSocketTest {
         String now = getNowTime();
         try {
             if (webSocketSet.get(sendUserno) != null) {
-                webSocketSet.get(sendUserno).sendMessage(now + "平台" + userno + "发来消息：" + " <br/> " + sendCode);
+                //webSocketSet.get(sendUserno).sendMessage(now + "平台" + userno + "发来消息：" + " <br/> " + sendCode);
+                //logger.info("平台向{}通知{}",userno,sendCode);
+                webSocketSet.get(sendUserno).sendMessage(String.valueOf(sendCode));
             } else {
                 logger.info("当前用户不在线");
             }
@@ -167,7 +169,8 @@ public class WebSocketTest {
             try {
                 //判断接收用户是否是当前发消息的用户
                 if (!userno.equals(key)) {
-                    webSocketSet.get(key).sendMessage(now + "平台" + userno + "发来消息：" + " <br/> " + sendCode);
+                    //webSocketSet.get(key).sendMessage(now + "平台" + userno + "发来消息：" + " <br/> " + sendCode);
+                    webSocketSet.get(key).sendMessage(String.valueOf(sendCode));
                     logger.info("key = {} " , key);
                 }
             } catch (IOException e) {
@@ -209,6 +212,9 @@ public class WebSocketTest {
         this.WebSocketsession.getBasicRemote().sendText(message);
         //this.session.getAsyncRemote().sendText(message);
     }
+
+
+
 
     public static synchronized int getOnlineCount() {
         return onlineCount;

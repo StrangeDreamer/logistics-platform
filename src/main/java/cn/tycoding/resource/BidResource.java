@@ -220,7 +220,8 @@ public class BidResource {
                     logger.info("承运方{}转单成功",preCargo.getTruckId());
                     // TODO:展位费退换 担保额恢复
                     logger.info("订单被成功接单，平台返还转手承运方" + cargo.getTruckId() +"展位费" + exhibitionFee);
-                    webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
+                    //webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
+                    webSocketTest.sendToUser3(String.valueOf(preCargo.getTruckId()),4);
                     // 转手成功后，原来的车辆担保额恢复
                     logger.info("由于转手成功，转手承运方"+ cargo.getTruckId() + "恢复担保额度" + cargo.getInsurance());
                     // 转单成功的资金结算 归到最终结算
