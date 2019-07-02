@@ -1,18 +1,10 @@
 package cn.tycoding.resource;
 
-import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.Bid;
-import cn.tycoding.domain.Platform;
-import cn.tycoding.domain.Truck;
+import cn.tycoding.domain.*;
 import cn.tycoding.exception.BidException;
 import cn.tycoding.exception.CargoException;
-import cn.tycoding.repository.BidRepository;
-import cn.tycoding.repository.CargoRepository;
-import cn.tycoding.repository.PlatformRepository;
-import cn.tycoding.repository.TruckRepository;
-import cn.tycoding.service.BidService;
-import cn.tycoding.service.CargoService;
-import cn.tycoding.service.TruckService;
+import cn.tycoding.repository.*;
+import cn.tycoding.service.*;
 import cn.tycoding.websocket.WebSocketServer;
 import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
@@ -50,11 +42,23 @@ public class BidResource {
     private BidRepository bidRepository;
     @Autowired
     private TruckRepository truckRepository;
-
     @Autowired
     private BidService bidService;
     @Autowired
     private WebSocketTest webSocketTest;
+
+
+    @Autowired
+    private BankAccountService bankAccountService;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private InsuranceAccountRepository insuranceAccountRepository;
+    @Autowired
+    private InsuranceAccountService insuranceAccountService;
+
+
+
     /**抢单
      * redis维护键值对<cargoId,bid>
      *    <cargoId,Cargo>
@@ -68,6 +72,8 @@ public class BidResource {
     public Map<String, Object> bidCargo(@RequestBody Bid bid) {
         Map<String, Object> result = new HashMap<String, Object>();
 
+        // 获得承运方的担保账户
+        InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(),"truck");
 
         Date nowTime = new Date();
         Cargo cargo=cargoService.findCargoById(bid.getCargoId());
@@ -83,27 +89,8 @@ public class BidResource {
             throw new BidException("还未开抢，开抢时间："+cargo.getBidStartTime());
         }
 
-   /*     try {
-
-            long hashIncLong=redisTemplate.opsForHash().increment("hashInc",bidsKey,1);
-
-            redisTemplate.boundHashOps(bidsKey).put(hashIncLong, bid);
-            System.out.println(redisTemplate.boundHashOps(bidsKey).entries().size());
-            redisTemplate.boundHashOps(bidsKey).entries().forEach((m,n)-> System.out.println("获取map键值对："+m+"-"+n));
-
-            result.put("operationResult", "排队成功");
-            result.put("截止时间",cargo.getBidEndTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-            result.put("operationResult", "排队失败");
-        }*/
-        // TODO：担保额判断,太多！建议创建一个service，将下面的代码放进service里面
-        logger.info("向第三方查询货车当前可用担保额是否超过" + cargo.getInsurance() + "，额度充足方可出价" );
-
-
-
         Truck truck = truckRepository.findTruckById(bid.getTruckId());
-        // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求；承运方需要激活
+        // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求；承运方需要激活;担保额度是否充足
         if (!cargo.getType().equals(truck.getType())){
             //运输类型需要符合要求
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
@@ -123,16 +110,23 @@ public class BidResource {
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
             + cargo.getFreightFare() * lowestBidPriceRatio  + "~" + cargo.getFreightFare());
         } else if (! truck.isActivated()) {
-            //车辆剩余足够的体积和重量，这样可以保证车辆当前是装得下该货物的
+            // 车辆激活才可以接单
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
+        }
+        else if (insuranceAccountService.getAvailableMoney(truck.getId(),"truck") < cargo.getInsurance()) {
+            // 车辆剩余担保额充足才可以接单
+            logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方的担保额度不足！\n " +
+                    "当前该货车担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
+                    "货物要求担保额为" + cargo.getInsurance());
+            throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方的担保额度不足！\n " +
+                    "当前该货车担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
+                    "货物要求担保额为" + cargo.getInsurance());
         }
 
         //获取系统时间
         //保存竞价请求
         bidRepository.save(bid);
-
-
         try {
             Bid redisbid=bidService.checkRedis(bid.getCargoId());
             if (redisbid==null){
@@ -155,13 +149,18 @@ public class BidResource {
             result.put("截止时间",cargo.getBidEndTime());
             logger.info("货车"+bid.getTruckId()+"由于对订单" + cargo.getId() + "的出价，" +
                     "扣除担保额度" + cargo.getInsurance());
+
+            insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
+                            "\n货车"+bid.getTruckId()+"由于对订单" + cargo.getId() + "的出价");
+
+            insuranceAccountService.changeAvailableMoney(truck.getId(),"truck",(0 - cargo.getInsurance()));
+
         } catch (Exception e) {
             e.printStackTrace();
             result.put("operationResult", "排队失败");
         }
         return result;
     }
-
 
     /**
      * 平台发送停止抢单请求
@@ -172,6 +171,12 @@ public class BidResource {
     public Cargo stopBid (@PathVariable int cargoId){
 
         Cargo cargo = cargoRepository.findCargoById(cargoId);
+
+        // 获取发货方的银行账户
+        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(),"shipper");
+
+        // 获取平台银行账户
+        BankAccount bankAccountPlatform = bankAccountService.check(1,"platform");
 
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
@@ -184,8 +189,11 @@ public class BidResource {
                 // 当precargo 为null，表示最原始的订单，直接撤单
                 if (cargo.getPreCargoId() == null) {
                     logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
-                    // TODO: 冻结资金恢复
-                    logger.info("由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复" + cargo.getFreightFare());
+                    // 冻结资金恢复
+
+                    bankAccountService.addMoneyLog(bankAccountShipper,"由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复");
+                    bankAccountService.changeAvailableMoney(bankAccountShipper,cargo.getFreightFare());
+                    logger.info("由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复");
                     cargo.setStatus(6);
                     cargoRepository.save(cargo);
                     return cargoRepository.findCargoById(cargoId);
@@ -197,7 +205,11 @@ public class BidResource {
                     preCargo.setStatus(2);
                     // 创建的转单设置为无人接单撤单
                     cargo.setStatus(6);
-                    // TODO: 冻结资金恢复
+                    // 冻结资金恢复
+                    BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(),"truck");
+                    bankAccountService.addMoneyLog(bankAccountShipper,"由于无人接单自动撤单，发货承运方" +  cargo.getTruckId() + "冻结的资金恢复");
+                    bankAccountService.changeAvailableMoney(bankAccountTruck,cargo.getFreightFare());
+
                     logger.info("车辆" + cargo.getTruckId() + "的订单" + cargo.getPreCargoId() + "转手失败,展位费不予退回！");
                     logger.info("由于无人接单自动撤单，转手承运方" + cargo.getTruckId() + "冻结的资金恢复" + cargo.getFreightFare());
                     cargoRepository.save(cargo);
@@ -211,14 +223,28 @@ public class BidResource {
                 cargo.setTruckId(bidrd.getTruckId());
                 cargo.setStatus(2);
 
-                // 判断是否是转单,如果是转手订单,需要额外进行资金结算，退换发货方展位费;原来的订单状态设置为正常完成
+                // 判断是否是转单,如果是转手订单,需要:退换发货承运方展位费;原来的订单状态设置为正常完成
                 if (cargo.getPreCargoId() != null) {
                     //通知转单成功
                     Cargo preCargo = cargoService.findCargoById(cargo.getPreCargoId());
                     preCargo.setStatus(11);
                     cargoRepository.save(preCargo);
                     logger.info("承运方{}转单成功",preCargo.getTruckId());
-                    // TODO:展位费退换 担保额恢复
+
+                    BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(),"truck");
+                    InsuranceAccount insuranceAccount = insuranceAccountService.check(preCargo.getTruckId(),"truck");
+
+                    // 展位费退还给承运方
+                    bankAccountService.addMoneyLog(bankAccountPlatform,
+                            "订单被成功接单，平台返还转手承运方" + cargo.getTruckId() +"展位费");
+                    bankAccountService.addMoneyLog(bankAccountTruck,
+                            "订单被成功接单，平台返还转手承运方" + cargo.getTruckId() +"展位费");
+                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, exhibitionFee);
+
+                    // 承运方上一单的担保额恢复
+                    insuranceAccountService.addMoneyLog(insuranceAccount, "由于转手成功，转手承运方"+ cargo.getTruckId() + "恢复担保额度");
+                    insuranceAccountService.changeAvailableMoney(insuranceAccount, preCargo.getInsurance());
+
                     logger.info("订单被成功接单，平台返还转手承运方" + cargo.getTruckId() +"展位费" + exhibitionFee);
                     //webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
                     webSocketTest.sendToUser3(String.valueOf(preCargo.getTruckId()),4);
@@ -228,7 +254,12 @@ public class BidResource {
                 }
                 // 如果不是转手订单，只需要退换承运方展位费
                 else {
-                    // TODO:展位费退换
+                    // 展位费退还给发货方
+                    bankAccountService.addMoneyLog(bankAccountPlatform,
+                            "订单被成功接单，平台返还发货方" + cargo.getTruckId() +"展位费");
+                    bankAccountService.addMoneyLog(bankAccountShipper,
+                            "订单被成功接单，平台返还发货方" + cargo.getTruckId() +"展位费");
+                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, exhibitionFee);
                     logger.info("订单被成功接单，平台返还发货方" + cargo.getShipperId() +"展位费" + exhibitionFee );
                 }
 
@@ -240,19 +271,20 @@ public class BidResource {
                 for (Bid bid: bidlist) {
                     if (bid.getId()!= bidrd.getId()){
                         // TODO：担保额恢复
+                        InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(),"truck");
+                        insuranceAccountService.addMoneyLog(insuranceAccount, "由于车辆" + bid.getTruckId() + "出价失败，担保额恢复");
+                        insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
+
                         logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
                         webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()),2);
-
                     }
                     else
                     {
                         logger.info("该承运方{}抢到订单{}",bid.getTruckId(),cargoId);
                         //通知该在线用户抢单成功消息
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
-
                         webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()),1);
-
                     }
                 }
             }

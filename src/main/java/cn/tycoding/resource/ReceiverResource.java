@@ -32,7 +32,6 @@ public class ReceiverResource {
         return receiverService.createReceiver(receiver);
     }
 
-
     @DeleteMapping("/{id}")
     public String deleteReceiver(@PathVariable("id") int id){
         logger.info("Rest 收货方注销请求");
@@ -59,7 +58,6 @@ public class ReceiverResource {
         return receiverService.findAll();
     }
 
-
     /**
      * 验货
      * @param inspection
@@ -69,7 +67,6 @@ public class ReceiverResource {
     public String inspectionCargo(@RequestBody Inspection inspection) {
         return  inspectionService.inspectionCargo(inspection);
     }
-
 
 }
 

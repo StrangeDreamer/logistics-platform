@@ -9,19 +9,24 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+/**
+ * 2 * @Author: qlXie
+ * 3 * @Date: 2019-07-02 10:53
+ * 4
+ */
 
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Truck {
+public class BankAccount {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int count;
+    // 真正的Id是id和type的组合
     private int id;
-    private String name;
-    private double availableWeight;
-    private double availableVolume;
+    // type取值为：truck shipper platform
+    //（platform认为只有一个，其id固定为1）
     private String type;
-    private double rank = 6;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
@@ -31,18 +36,12 @@ public class Truck {
     @Column(updatable = false, nullable = false)
     private Date modifyTime;
 
-    // 承运方的银行id
-    private long bankId;
-    // 承运方的保险账户
-    private long insuranceId;
+    // 参与方的资金
+    private double money = 100000;
 
-    private boolean activated = false;
+    // 除去冻结实际可用资金
+    private double availableMoney = 100000;
 
-    // 以下字段仅用于保存，不会被使用
-    private int power = 0;
-    private long id_gerenshenfenzheng = 0;
-    private long id_gongsitongyidaima = 0;
-    private long id_xingshizheng = 0;
-    private long id_jiashizheng = 0;
-    private String telNumber = "";
+    // 账户自己的资金流水；这里不允许平台保存其他用户的资金流通（因为资金流通都会经过平台，所以间接保存了所有资金流通）
+    private String BankAccountLog = "银行账户资金流水：";
 }

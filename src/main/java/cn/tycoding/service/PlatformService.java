@@ -60,7 +60,6 @@ public class PlatformService {
         return platform1;
     }
 
-
     public Platform showPlatformPara(){
         return platformRepository.findRecentPltf();
     }

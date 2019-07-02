@@ -34,7 +34,6 @@ public class InspectionService {
     @Autowired
     private ShipperRepository shipperRepository;
 
-
     public String saveInspection(Inspection inspection){
         Inspection inspection1=new Inspection();
         inspection1.setCargoId(inspection.getCargoId());
@@ -45,7 +44,6 @@ public class InspectionService {
     }
 
     public String inspectionCargo(Inspection inspection){
-
 
         Platform platform = platformRepository.findRecentPltf();
 
@@ -128,7 +126,6 @@ public class InspectionService {
             int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRank();
             int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
 
-
             double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
             double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
 
@@ -197,9 +194,7 @@ public class InspectionService {
                 "/10=" + String.format("%.2f",trueTruck2Profit) +
                 "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                 "\n";
-
         cargoRepository.save(cargo);
         return result;
     }
-
 }

@@ -26,5 +26,4 @@ public interface CargoRepository extends JpaRepository<Cargo,Integer> {
 
     int countAllByStatus(int status);
 
-
 }

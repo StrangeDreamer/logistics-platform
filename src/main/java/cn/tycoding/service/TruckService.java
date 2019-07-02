@@ -1,6 +1,4 @@
 package cn.tycoding.service;
-
-
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.exception.ShipperException;
@@ -25,12 +23,10 @@ public class TruckService {
     private CargoService cargoService;
     @Autowired
     private CargoRepository cargoRepository;
-
-    private final String truckKey = "Truck";
-    private final String cargoKey="Cargo";
-
     @Autowired
     private RedisTemplate redisTemplate;
+    private final String truckKey = "Truck";
+    private final String cargoKey="Cargo";
 
     // 承运方注册
     public Truck createTruck(Truck truck){
@@ -65,7 +61,6 @@ public class TruckService {
             if (cargo.getStatus() == 10) {
                 throw new TruckException("注销失败！当前货车存在异常订单！！");
             }
-
         }
         truckRepository.findById(id).ifPresent(truck -> {
             truckRepository.delete(truck);
@@ -73,7 +68,6 @@ public class TruckService {
         });
         return "删除Truck"+id+"成功";
     }
-
 
     /**
      * 查询指定承运方，并存入缓存
@@ -93,7 +87,6 @@ public class TruckService {
         return truck;
     }
 
-
     // 查询指定id承运方的订单数量
     public String findTrucksCargoNum(int truckId){
         // 所有该货车具有的订单
@@ -110,12 +103,11 @@ public class TruckService {
         return "货车id"+ truckId
                 + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2+ "个;正在运输订单有" + n3+ "个";
     }
+
     // 查询所有承运方
     public List<Truck> findAll(){
         return truckRepository.findAll();
     }
-
-
 
     public Cargo startShip(int cargoId) {
         // 开始运货请求
@@ -125,9 +117,7 @@ public class TruckService {
         if (cargo.getStatus() != 2){
             throw new TruckException("当前货物状态不正确，无法开始运货");
         }
-
         cargo.setStatus(3);
-
         cargoRepository.save(cargo);
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         return cargoService.findCargoById(cargoId);
@@ -135,7 +125,6 @@ public class TruckService {
 
     public Cargo endShip(int cargoId) {
         //truck已经送达货物，请求验货
-
         // 开始运货请求
         Cargo cargo = cargoService.findCargoById(cargoId);
 
@@ -143,7 +132,6 @@ public class TruckService {
         if (cargo.getStatus() != 3){
             throw new TruckException("当前货物状态不正确，无法转入运达状态");
         }
-
         cargo.setStatus(4);
         cargoRepository.save(cargo);
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
@@ -163,5 +151,4 @@ public class TruckService {
         logger.info("激活成功！");
         return truck;
     }
-
 }

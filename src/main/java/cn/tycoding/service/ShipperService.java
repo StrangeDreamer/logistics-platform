@@ -1,6 +1,4 @@
 package cn.tycoding.service;
-
-
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.Truck;
@@ -25,7 +23,6 @@ public class ShipperService {
         this.shipperRepository = shipperRepository;
         this.cargoRepository = cargoRepository;
     }
-
 
     //发货方注册
     public Shipper createShipper(Shipper shipper){
@@ -89,5 +86,4 @@ public class ShipperService {
         logger.info("激活成功！");
         return shipper;
     }
-
 }

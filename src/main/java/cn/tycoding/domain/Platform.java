@@ -45,9 +45,4 @@ public class Platform implements Serializable {
 
     private int bidingDuration = 180;
 
-
-
-//    // 平台当前的资金
-//    private double lmoney = 0;
-
 }

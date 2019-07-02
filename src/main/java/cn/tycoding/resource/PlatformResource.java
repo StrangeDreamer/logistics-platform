@@ -51,8 +51,6 @@ public class PlatformResource {
         return platformService.savePlatform(platform);
     }
 
-
-
     /**查询平台属性
      * @param
      * @return
@@ -63,7 +61,6 @@ public class PlatformResource {
         return platformService.showPlatformPara();
     }
 
-
     /**查看当前车辆、货物等统计数据
      * @param
      * @return
@@ -73,10 +70,4 @@ public class PlatformResource {
         logger.info("平台信息一览");
         return platformService.showPlatformList();
     }
-
-
-
-
-
-
 }

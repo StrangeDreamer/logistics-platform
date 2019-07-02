@@ -15,19 +15,16 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/trucks")
 public class TruckResource {
 
     private final Logger logger=LoggerFactory.getLogger(TruckResource.class);
     private final TruckService truckService;
     private final CargoRepository cargoRepository;
-
     public TruckResource(TruckService truckService, CargoRepository cargoRepository) {
         this.truckService = truckService;
         this.cargoRepository = cargoRepository;
     }
-
 
     /**
      * 注册
@@ -76,16 +73,11 @@ public class TruckResource {
         return truckService.findTruckById(id);
     }
 
-
-
     @GetMapping("/cargoinfo/{id}")
     public String findTrucksCargoNum(@PathVariable("id") int id){
         logger.info("REST 查询所有货物");
         return truckService.findTrucksCargoNum(id);
     }
-
-
-
 
     /**
      * truck 请求开始运货
@@ -128,9 +120,6 @@ public class TruckResource {
         return truckService.active(id);
     }
 
-
-
-
     @PostMapping("/upload")
     //上传的文件会转换成MultipartFile对象，file名字对应html中上传控件的name
     public String test(MultipartFile file) throws IllegalStateException, IOException {
@@ -141,9 +130,4 @@ public class TruckResource {
         file.transferTo(new File("/home/wangjin/uploadFiles/"+file.getOriginalFilename()));
         return "上传完毕";
     }
-
-
-
-
-
 }

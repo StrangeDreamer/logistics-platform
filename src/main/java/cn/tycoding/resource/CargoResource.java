@@ -39,8 +39,6 @@ public class CargoResource {
         this.platformRepository = platformRepository;
     }
 
-
-
     /**
      * 查询所有货物
      *
@@ -200,7 +198,6 @@ public class CargoResource {
         return cargoService.findAllNormalCargos();
 
     }
-
 
     @GetMapping("/history/{preCargoId}")
     public List<Cargo> getAllTransCargos(@PathVariable int preCargoId) {

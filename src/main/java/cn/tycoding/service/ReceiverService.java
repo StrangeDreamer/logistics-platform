@@ -23,13 +23,11 @@ public class ReceiverService {
     private final ReceiverRepository receiverRepository;
     private final CargoRepository cargoRepository;
 
-
     public ReceiverService(ReceiverRepository receiverRepository, CargoRepository cargoRepository) {
         this.receiverRepository = receiverRepository;
         this.cargoRepository = cargoRepository;
 
     }
-
 
     // 收货方注册
     public Receiver createReceiver(Receiver receiver){
@@ -44,7 +42,6 @@ public class ReceiverService {
         receiverRepository.save(receiver1);
         return receiver1;
     }
-
 
     // 收货方注销
     public String  deleteReceiver(int id){
@@ -76,6 +73,5 @@ public class ReceiverService {
     public List<Receiver> findAll(){
         return receiverRepository.findAll();
     }
-
 
 }
