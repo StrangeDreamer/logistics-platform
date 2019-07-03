@@ -52,10 +52,8 @@ public class BankAccountResource {
     @GetMapping("/findMoneyLog/{id}/{type}")
     public String findTruckById(@PathVariable("id") int id,@PathVariable("type") String type){
         logger.info("REST 查询账户流水");
+//        return  bankAccountService.check(id,type);
         return bankAccountService.findMoneyLog(id,type);
     }
 
 }
-
-
-

@@ -39,6 +39,7 @@ public class BankAccountService {
     // 检查 该参与方是否存在，没有则自动创建,如果已经存在则直接返回该账户
     public BankAccount check (int id, String type) {
         BankAccount bankAccount = bankAccountRepository.findBankAccountByIdAndType(id, type);
+        logger.info("A！");
         if (bankAccount == null) {
             bankAccount = new BankAccount();
             bankAccount.setId(id);
@@ -46,7 +47,11 @@ public class BankAccountService {
             logger.info("该银行账户不存在，自动为其创建银行账户！");
 
             bankAccountRepository.save(bankAccount);
+        } else {
+            logger.info("该银行账户存在！");
         }
+        logger.info("B！");
+
         return bankAccount;
     }
 
@@ -73,10 +78,10 @@ public class BankAccountService {
         bankAccount.setAvailableMoney(bankAccount.getAvailableMoney() + money);
         if (money > 0) {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    "\n" + bankAccount.getType() + bankAccount.getId() + "解冻担保额" + money);
+                    "\n" + bankAccount.getType() + bankAccount.getId() + "解冻担保额" + String.format("%.2f",money));
         } else {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    "\n" + bankAccount.getType() + bankAccount.getId() +"冻结担保额" + (-money));
+                    "\n" + bankAccount.getType() + bankAccount.getId() +"冻结担保额" + String.format("%.2f",(0-money)));
         }
         bankAccountRepository.save(bankAccount);
         return true;
@@ -106,9 +111,9 @@ public class BankAccountService {
         bankAccountA.setAvailableMoney(bankAccountA.getAvailableMoney() - money);
         bankAccountB.setAvailableMoney(bankAccountB.getAvailableMoney() + money);
         bankAccountA.setBankAccountLog(bankAccountA.getBankAccountLog()
-                + "\n" + bankAccountA.getType() + bankAccountA.getId() +"减少资金" + money);
-        bankAccountB.setBankAccountLog(bankAccountA.getBankAccountLog()
-                + "\n" + bankAccountA.getType() + bankAccountA.getId() +"增加资金" + money);
+                + "\n" + bankAccountA.getType() + bankAccountA.getId() +"减少资金" + String.format("%.2f",money));
+        bankAccountB.setBankAccountLog(bankAccountB.getBankAccountLog()
+                + "\n" + bankAccountB.getType() + bankAccountB.getId() +"增加资金" + String.format("%.2f",money));
         bankAccountRepository.save(bankAccountA);
         bankAccountRepository.save(bankAccountB);
         return true;

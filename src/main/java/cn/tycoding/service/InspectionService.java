@@ -1,9 +1,6 @@
 package cn.tycoding.service;
 
-import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.Inspection;
-import cn.tycoding.domain.Platform;
-import cn.tycoding.domain.Truck;
+import cn.tycoding.domain.*;
 import cn.tycoding.exception.InspectionException;
 import cn.tycoding.repository.*;
 import org.slf4j.Logger;
@@ -33,6 +30,15 @@ public class InspectionService {
     private TruckRepository truckRepository;
     @Autowired
     private ShipperRepository shipperRepository;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private BankAccountService bankAccountService;
+    @Autowired
+    private InsuranceAccountRepository insuranceAccountRepository;
+    @Autowired
+    private InsuranceAccountService insuranceAccountService;
+
 
     public String saveInspection(Inspection inspection){
         Inspection inspection1=new Inspection();
@@ -51,15 +57,16 @@ public class InspectionService {
         double platformProfitRatio = platform.getPlatformProfitRatio();
         double shipperProfitRatio = platform.getShipperProfitRatio();
         double truckProfitRatio = platform.getTruckProfitRatio();
-
         String result = "验货结果：";
-
         Cargo cargo = cargoRepository.findCargoById(inspection.getCargoId());
 
         if (cargo.getStatus() != 4) {
             logger.info("货物当前状态不允许验货！");
             throw new InspectionException("货物当前状态不允许验货！");
         }
+
+        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
+        BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
 
         cargo.setStatus(inspection.getInspectionResult());
         cargoRepository.save(cargo);
@@ -92,6 +99,16 @@ public class InspectionService {
             result = "验货正常但出现超时！\n" +
                     "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
                     String.format("%.2f",compensation) + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
+            BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
+            InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
+
+            bankAccountService.addMoneyLog(bankAccountPlatform,"由于承运方运输超时");
+            bankAccountService.addMoneyLog(bankAccountShipper,"由于承运方运输超时");
+            bankAccountService.addMoneyLog(bankAccountTruck,"由于承运方运输超时");
+
+            bankAccountService.transferMoney(bankAccountTruck,bankAccountPlatform,compensation);
+            bankAccountService.transferMoney(bankAccountPlatform,bankAccountShipper,compensation);
+
         }
         // 没有超时则恢复担保额
         else {
@@ -110,9 +127,16 @@ public class InspectionService {
             double bidPrice = cargo.getBidPrice();
             Cargo preCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
 
+
+
             // TODO: 转单酬劳结算
-            // 1 首先前一个承运方支付运费prefare给平台
-            logger.info("承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare);
+            // 创建账户
+            BankAccount bankAccountPreTruck = bankAccountService.check(preCargo.getTruckId(),"truck");
+            BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(),"truck");
+
+
+            // 1 首先前一个承运方支付运费preFare给平台
+            logger.info("承运方" + preCargo.getTruckId() + "向平台支付运费" + preFare);
             // 2 然后平台向后一个承运方支付运费bidprice
             logger.info("平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice);
             // 3 计算利润空间
@@ -148,14 +172,31 @@ public class InspectionService {
                     "/10=" + String.format("%.2f",trueTruck2Profit) +
                     "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                     "\n";
+
+            bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的运输完成");
+            bankAccountService.addMoneyLog(bankAccountPreTruck,"由于订单" + cargo.getId() + "的运输完成");
+            bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的运输完成");
+
+            bankAccountService.transferMoney(bankAccountPreTruck,bankAccountPlatform,freightFare);
+            bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,bidPrice);
+
+            bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的利润分配");
+            bankAccountService.addMoneyLog(bankAccountPreTruck,"由于订单" + cargo.getId() + "的利润分配");
+            bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的利润分配");
+
+            bankAccountService.transferMoney(bankAccountPlatform,bankAccountPreTruck,trueTruck1Profit);
+            bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,trueTruck2Profit);
+
         }
         result = result + "\n进入原始订单结算\n";
 
-        // 此处为第一单承运方（没有转单则为唯一承运方）与发货方的结算；
-        // TODO 酬劳结算
-
         double freightFare = cargo.getFreightFare();
         double bidPrice = cargo.getBidPrice();
+        // 此处为第一单承运方（没有转单则为唯一承运方）与发货方的结算；
+        // 酬劳结算
+        // 创建账户
+        BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
+        InsuranceAccount insuranceAccountTrcuk = insuranceAccountService.check(cargo.getTruckId(),"truck");
 
         // 1 首先前一个承运方支付运费prefare给平台
         logger.info("发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare);
@@ -194,6 +235,21 @@ public class InspectionService {
                 "/10=" + String.format("%.2f",trueTruck2Profit) +
                 "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                 "\n";
+
+        bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的运输完成");
+        bankAccountService.addMoneyLog(bankAccountShipper,"由于订单" + cargo.getId() + "的运输完成");
+        bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的运输完成");
+
+        bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,freightFare);
+        bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,bidPrice);
+
+        bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的利润分配");
+        bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的利润分配");
+        bankAccountService.addMoneyLog(bankAccountShipper,"由于订单" + cargo.getId() + "的利润分配");
+
+        bankAccountService.transferMoney(bankAccountPlatform,bankAccountShipper,trueTruck1Profit);
+        bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,trueTruck2Profit);
+
         cargoRepository.save(cargo);
         return result;
     }

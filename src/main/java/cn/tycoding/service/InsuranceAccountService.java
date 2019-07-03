@@ -65,10 +65,10 @@ public class InsuranceAccountService {
         insuranceAccount.setAvailableMoney(insuranceAccount.getAvailableMoney() + money);
         if (money > 0) {
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
-                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() + "解冻担保额" + money);
+                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() + "解冻担保额" + String.format("%.2f",money));
         } else {
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
-                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + (-money));
+                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + String.format("%.2f",(-money)));
         }
         insuranceAccountRepository.save(insuranceAccount);
         return true;
