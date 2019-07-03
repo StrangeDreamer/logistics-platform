@@ -40,6 +40,6 @@ public class InsuranceAccount {
     // 承运方去除冻结、实际可用的担保额
     private double availableMoney = 100000;
 
-    private String InsuranceAccountLog = "担保账户资金流水：";
+    private String InsuranceAccountLog = "担保账户资金流水：\n初始担保额度为100000";
 }
 

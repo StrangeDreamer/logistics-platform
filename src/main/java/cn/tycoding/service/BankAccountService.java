@@ -39,7 +39,7 @@ public class BankAccountService {
     // 检查 该参与方是否存在，没有则自动创建,如果已经存在则直接返回该账户
     public BankAccount check (int id, String type) {
         BankAccount bankAccount = bankAccountRepository.findBankAccountByIdAndType(id, type);
-        logger.info("A！");
+
         if (bankAccount == null) {
             bankAccount = new BankAccount();
             bankAccount.setId(id);
@@ -48,9 +48,7 @@ public class BankAccountService {
 
             bankAccountRepository.save(bankAccount);
         } else {
-            logger.info("该银行账户存在！");
         }
-        logger.info("B！");
 
         return bankAccount;
     }

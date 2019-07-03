@@ -43,5 +43,5 @@ public class BankAccount {
     private double availableMoney = 100000;
 
     // 账户自己的资金流水；这里不允许平台保存其他用户的资金流通（因为资金流通都会经过平台，所以间接保存了所有资金流通）
-    private String BankAccountLog = "银行账户资金流水：";
+    private String BankAccountLog = "银行账户资金流水：\n参与方初始资金为100000";
 }
