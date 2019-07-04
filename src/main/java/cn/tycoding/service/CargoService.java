@@ -155,7 +155,7 @@ public class CargoService {
 
                 // 车辆的担保额度的恢复
                 insuranceAccountService.addMoneyLog(insuranceAccount,"由于出现已接未运撤单");
-                insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getFreightFare());
+                insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getInsurance());
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
             }

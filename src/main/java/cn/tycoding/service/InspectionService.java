@@ -116,6 +116,10 @@ public class InspectionService {
             if (truck.getRank() <= 0.5)
             truck.setRank(truck.getRank() + 0.5);
             result = "验货正常没有出现超时！\n" + "担保额恢复" + cargo.getInsurance() + "\n";
+
+            InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(),"truck");
+            // 正常运达恢复担保额
+            insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck,cargo.getInsurance());
         }
 
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动

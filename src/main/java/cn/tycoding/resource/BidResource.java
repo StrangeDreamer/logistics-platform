@@ -270,7 +270,7 @@ public class BidResource {
                 List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
                 for (Bid bid: bidlist) {
                     if (bid.getId()!= bidrd.getId()){
-                        // TODO：担保额恢复
+                        // 担保额恢复
                         InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(),"truck");
                         insuranceAccountService.addMoneyLog(insuranceAccount, "由于车辆" + bid.getTruckId() + "出价失败，担保额恢复");
                         insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
