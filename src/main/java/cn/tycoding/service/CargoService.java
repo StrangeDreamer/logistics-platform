@@ -79,16 +79,7 @@ public class CargoService {
 
         logger.info("发货方资金检查，资金充足才可以发货");
 
-        // 发货方冻结发货资金
-        bankAccountService.addMoneyLog(bankAccountShipper, "发货方对货物" + cargo.getId() + "进行发货");
-        bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - cargo.getFreightFare()));
-        logger.info("发货方冻结资金" + cargo.getFreightFare());
 
-        // 发货方支付展位费
-        bankAccountService.addMoneyLog(bankAccountShipper, "发货方支付展位费" );
-        bankAccountService.addMoneyLog(bankAccountPlatform, "发货方支付展位费" );
-        bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,exhibitionFee);
-        logger.info("发货方支付展位费" + exhibitionFee);
 
         Cargo c = new Cargo();
         c.setShipperId(cargo.getShipperId());
@@ -105,6 +96,18 @@ public class CargoService {
         c.setRemarks(cargo.getRemarks());
 
         cargoRepository.save(c);
+
+        // 发货方冻结发货资金
+        bankAccountService.addMoneyLog(bankAccountShipper, "发货方对货物" + cargo.getId() + "进行发货");
+        bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - cargo.getFreightFare()));
+        logger.info("发货方冻结资金" + cargo.getFreightFare());
+
+        // 发货方支付展位费
+        bankAccountService.addMoneyLog(bankAccountShipper, "发货方支付展位费" );
+        bankAccountService.addMoneyLog(bankAccountPlatform, "发货方支付展位费" );
+        bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,exhibitionFee);
+        logger.info("发货方支付展位费" + exhibitionFee);
+
         logger.info("新订单创建成功!");
         return c;
     }
