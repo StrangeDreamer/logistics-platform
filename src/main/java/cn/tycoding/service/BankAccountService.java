@@ -105,7 +105,7 @@ public class BankAccountService {
             return false;
         }
         bankAccountA.setMoney(bankAccountA.getMoney() - money);
-        bankAccountB.setMoney(bankAccountB.getMoney() - money);
+        bankAccountB.setMoney(bankAccountB.getMoney() + money);
         bankAccountA.setAvailableMoney(bankAccountA.getAvailableMoney() - money);
         bankAccountB.setAvailableMoney(bankAccountB.getAvailableMoney() + money);
         bankAccountA.setBankAccountLog(bankAccountA.getBankAccountLog()

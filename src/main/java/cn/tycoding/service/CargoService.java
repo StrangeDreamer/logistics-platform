@@ -98,9 +98,9 @@ public class CargoService {
         cargoRepository.save(c);
 
         // 发货方冻结发货资金
-        bankAccountService.addMoneyLog(bankAccountShipper, "发货方对货物" + cargo.getId() + "进行发货");
-        bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - cargo.getFreightFare()));
-        logger.info("发货方冻结资金" + cargo.getFreightFare());
+        bankAccountService.addMoneyLog(bankAccountShipper, "发货方对货物" + c.getId() + "进行发货");
+        bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - c.getFreightFare()));
+        logger.info("发货方冻结资金" + c.getFreightFare());
 
         // 发货方支付展位费
         bankAccountService.addMoneyLog(bankAccountShipper, "发货方支付展位费" );
