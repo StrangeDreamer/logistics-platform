@@ -2,21 +2,13 @@ package cn.tycoding.service;
 
 
 import cn.tycoding.domain.Platform;
-import cn.tycoding.domain.Receiver;
-import cn.tycoding.domain.TransferredCargo;
-import cn.tycoding.domain.Truck;
-import cn.tycoding.dto.CargoInfoChangeDTO;
-import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
 /**
  * 2 * @Author: qlXie
  * 3 * @Date: 2019-06-17 20:54

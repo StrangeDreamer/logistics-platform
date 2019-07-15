@@ -2,9 +2,6 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Platform;
-import cn.tycoding.domain.Shipper;
-import cn.tycoding.domain.TransferredCargo;
-import cn.tycoding.dto.CargoInfoChangeDTO;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.PlatformRepository;
 import cn.tycoding.service.CargoService;

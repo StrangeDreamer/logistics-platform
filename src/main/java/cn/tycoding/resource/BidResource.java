@@ -124,6 +124,11 @@ public class BidResource {
                     "货物要求担保额为" + cargo.getInsurance());
         }
 
+
+        // 对运输路径是否会出现超时预警进行判断
+
+
+
         //获取系统时间
         //保存竞价请求
         bidRepository.save(bid);
