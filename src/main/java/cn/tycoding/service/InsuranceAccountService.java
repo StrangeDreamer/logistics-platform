@@ -21,7 +21,7 @@ import java.util.List;
 @Repository
 public class InsuranceAccountService {
 
-    private final Logger logger = LoggerFactory.getLogger(TruckService.class);
+    private final Logger logger = LoggerFactory.getLogger(InsuranceAccountService.class);
     @Autowired
     private InsuranceAccountRepository insuranceAccountRepository;
     @Autowired

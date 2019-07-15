@@ -26,7 +26,7 @@ import java.util.List;
 @Repository
 public class BankAccountService {
 
-    private final Logger logger = LoggerFactory.getLogger(TruckService.class);
+    private final Logger logger = LoggerFactory.getLogger(BankAccountService.class);
     @Autowired
     private BankAccountRepository bankAccountRepository;
     @Autowired

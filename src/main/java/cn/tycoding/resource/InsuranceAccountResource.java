@@ -27,7 +27,7 @@ public class InsuranceAccountResource {
      * 4 实现的功能：增减某一账户的可用金额（对应账户的冻结解冻资金）；
      *   增减某账户金额；查询某账户当前可用金额
      */
-    private final Logger logger= LoggerFactory.getLogger(TruckResource.class);
+    private final Logger logger= LoggerFactory.getLogger(InsuranceAccountResource.class);
     private final InsuranceAccountService insuranceAccountService;
     private final InsuranceAccountRepository insuranceAccountRepository;
     public InsuranceAccountResource(InsuranceAccountRepository insuranceAccountRepository, InsuranceAccountService insuranceAccountService) {

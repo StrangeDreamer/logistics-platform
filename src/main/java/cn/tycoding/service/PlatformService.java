@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PlatformService {
 
-    private final Logger logger = LoggerFactory.getLogger(InspectionService.class);
+    private final Logger logger = LoggerFactory.getLogger(PlatformService.class);
     @Autowired
     private PlatformRepository platformRepository;
 
