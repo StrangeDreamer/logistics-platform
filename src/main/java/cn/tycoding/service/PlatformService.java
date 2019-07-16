@@ -1,6 +1,7 @@
 package cn.tycoding.service;
 
 
+import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.repository.*;
 import org.slf4j.Logger;
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 2 * @Author: qlXie
@@ -34,6 +37,9 @@ public class PlatformService {
 
     @Autowired
     private  ReceiverRepository receiverRepository;
+
+    @Autowired
+    private  BidRepository bidRepository;
 
     public Platform savePlatform(Platform platform){
         Platform platform1 = new Platform();
@@ -71,5 +77,11 @@ public class PlatformService {
                 " 个，收货方" + receiverNum + "个,当前正在发布订单" + cargoPublishingNum +
                 "个，当前正在执行的订单" + (cargoNum1 + cargoNum2) + "个，已完成订单" + cargoNum3 +"个" ;
     }
+
+
+    public List<Bid> showAllBid(){
+        return bidRepository.findAll();
+    }
+
 
 }

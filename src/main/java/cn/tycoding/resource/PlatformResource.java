@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.repository.CargoRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -70,4 +72,16 @@ public class PlatformResource {
         logger.info("平台信息一览");
         return platformService.showPlatformList();
     }
+
+    /**查看所有出价
+     * @param
+     * @return
+     */
+    @GetMapping("/bid")
+    public List<Bid> showAllBid() {
+        logger.info("出价信息一览");
+        return platformService.showAllBid();
+    }
+
+
 }
