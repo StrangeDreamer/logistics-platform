@@ -40,6 +40,8 @@ public class BankAccountResource {
     private final String dayKey="lastDayIncome";
     private final int accountId=1;
     private final String accountType="platform";
+    //这里的index可以为负数，-1表示最右边的一个，
+    private final long lastIndex=-1;
 
     public BankAccountResource(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService, RedisTemplate redisTemplate) {
         this.bankAccountRepository = bankAccountRepository;
@@ -83,9 +85,8 @@ public class BankAccountResource {
      */
     @GetMapping("/year")
     public double getCrtYearIncome(){
-        long size=redisTemplate.opsForList().size(yearKey);
         //上一次收入
-        double last=(double)redisTemplate.opsForList().index(yearKey,size);
+        double last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
         //当前收入
         double current=bankAccountService.getAvailableMoney(accountId,accountType);
 
@@ -98,8 +99,7 @@ public class BankAccountResource {
      */
     @GetMapping("/mon")
     public double getCrtMonIncome(){
-        long size=redisTemplate.opsForList().size(monKey);
-        double last=(double) redisTemplate.opsForList().index(yearKey,size);
+        double last=(double) redisTemplate.opsForList().index(yearKey,lastIndex);
         double current=bankAccountService.getAvailableMoney(accountId,accountType);
         return current-last;
     }
@@ -110,8 +110,7 @@ public class BankAccountResource {
      */
     @GetMapping("/day")
     public double getCrtDayIncome(){
-        long size=redisTemplate.opsForList().size(dayKey);
-        double last=(double) redisTemplate.opsForList().index(dayKey,size);
+        double last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
         double current=bankAccountService.getAvailableMoney(accountId,accountType);
         return current-last;
     }
