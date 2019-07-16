@@ -31,18 +31,19 @@ public class Truck {
     @Column(updatable = false, nullable = false)
     private Date modifyTime;
 
-    // 承运方的银行id
-    private long bankId;
-    // 承运方的保险账户
-    private long insuranceId;
+
 
     private boolean activated = false;
 
     // 以下字段仅用于保存，不会被使用
+    // 承运方的银行id
+    private String bankId;
+    // 承运方的保险账户
+    private String insuranceId;
     private int power = 0;
-    private long id_gerenshenfenzheng = 0;
-    private long id_gongsitongyidaima = 0;
-    private long id_xingshizheng = 0;
-    private long id_jiashizheng = 0;
-    private String telNumber = "";
+    private String idgerenshenfenzheng = "0";
+    private String id_gongsitongyidaima = "0";
+    private String id_xingshizheng = "0";
+    private String id_jiashizheng = "0";
+    private String telNumber = "0";
 }

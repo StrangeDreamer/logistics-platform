@@ -30,6 +30,12 @@ public class TruckService {
 
     // 承运方注册
     public Truck createTruck(Truck truck){
+
+        // 先检查该注册人的身份证是否已经用于该项的注册
+        if(truckRepository.existsTruckByIdgerenshenfenzheng(truck.getIdgerenshenfenzheng())) {
+            throw new TruckException("该个人身份证已经被用于注册承运方！");
+        }
+
         Truck truck1 = new Truck();
         truck1.setName(truck.getName());
         truck1.setAvailableWeight(truck.getAvailableWeight());
@@ -38,7 +44,7 @@ public class TruckService {
         truck1.setBankId(truck.getBankId());
         truck1.setInsuranceId(truck.getInsuranceId());
         truck1.setPower(truck.getPower());
-        truck1.setId_gerenshenfenzheng(truck.getId_gerenshenfenzheng());
+        truck1.setIdgerenshenfenzheng(truck.getIdgerenshenfenzheng());
         truck1.setId_gongsitongyidaima(truck.getId_gongsitongyidaima());
         truck1.setId_xingshizheng(truck.getId_xingshizheng());
         truck1.setId_jiashizheng(truck.getId_jiashizheng());

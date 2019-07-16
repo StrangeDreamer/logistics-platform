@@ -26,11 +26,16 @@ public class ShipperService {
 
     //发货方注册
     public Shipper createShipper(Shipper shipper){
+
+        // 先检查该注册人的身份证是否已经用于该项的注册
+        if(shipperRepository.existsShipperByIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng())) {
+            throw new TruckException("该个人身份证已经被用于注册发货方！");
+        }
         Shipper shipper1 = new Shipper();
         shipper1.setName(shipper.getName());
         shipper1.setBankId(shipper.getBankId());
 
-        shipper1.setId_gerenshenfenzheng(shipper.getId_gerenshenfenzheng());
+        shipper1.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
         shipper1.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
         shipper1.setOccupation(shipper.getOccupation());
         shipper1.setTelNumber(shipper.getTelNumber());
@@ -74,7 +79,7 @@ public class ShipperService {
 
 
     public Shipper setShipperRank(int id, double rank) {
-        Shipper shipper = shipperRepository.findById(id).orElseThrow(()->new TruckException("该发货方不存在"));
+        Shipper shipper = shipperRepository.findById(id).orElseThrow(()->new ShipperException("该发货方不存在"));
         shipper.setRank(rank);
         return shipper;
     }

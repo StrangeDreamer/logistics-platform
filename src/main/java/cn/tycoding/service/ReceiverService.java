@@ -4,9 +4,9 @@ package cn.tycoding.service;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 
-import cn.tycoding.domain.Shipper;
+import cn.tycoding.domain.Receiver;
 import cn.tycoding.exception.ReceiverException;
-import cn.tycoding.exception.ShipperException;
+import cn.tycoding.exception.ReceiverException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ReceiverRepository;
 
@@ -31,10 +31,14 @@ public class ReceiverService {
 
     // 收货方注册
     public Receiver createReceiver(Receiver receiver){
+        // 先检查该注册人的身份证是否已经用于该项的注册
+        if(receiverRepository.existsReceiverByIdgerenshenfenzheng(receiver.getIdgerenshenfenzheng())) {
+            throw new ReceiverException("该个人身份证已经被用于注册收货方！");
+        }
+
         Receiver receiver1 = new Receiver();
         receiver1.setName(receiver.getName());
-
-        receiver1.setId_gerenshenfenzheng(receiver.getId_gerenshenfenzheng());
+        receiver1.setIdgerenshenfenzheng(receiver.getIdgerenshenfenzheng());
         receiver1.setId_gongsitongyidaima(receiver.getId_gongsitongyidaima());
         receiver1.setOccupation(receiver.getOccupation());
         receiver1.setTelNumber(receiver.getTelNumber());

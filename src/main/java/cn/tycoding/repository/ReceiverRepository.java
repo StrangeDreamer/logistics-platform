@@ -14,7 +14,7 @@ public interface ReceiverRepository extends JpaRepository<Receiver,Integer> {
 
     int countCargosByIdIsNotNull();
 
-
+    boolean existsReceiverByIdgerenshenfenzheng(String id);
 }
 
 

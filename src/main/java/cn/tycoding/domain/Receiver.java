@@ -29,8 +29,8 @@ public class Receiver {
 
 
     // 以下字段仅用于保存，不会被使用
-    private long id_gerenshenfenzheng = 0;
-    private long id_gongsitongyidaima = 0;
-    private String occupation = " ";
-    private String telNumber = "";
+    private String idgerenshenfenzheng = "0";
+    private String id_gongsitongyidaima = "0";
+    private String occupation = "0";
+    private String telNumber = "0";
 }
