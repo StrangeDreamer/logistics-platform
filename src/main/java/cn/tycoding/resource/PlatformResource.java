@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/platform")
+@CrossOrigin(origins = "*")
 public class PlatformResource {
 
     private final Logger logger= LoggerFactory.getLogger(PlatformResource.class);

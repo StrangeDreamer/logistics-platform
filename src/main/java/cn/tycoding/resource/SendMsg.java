@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class SendMsg {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final WebSocketTest webSocketTest;

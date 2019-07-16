@@ -5,7 +5,6 @@ import cn.tycoding.exception.BidException;
 import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.*;
 import cn.tycoding.service.*;
-import cn.tycoding.websocket.WebSocketServer;
 import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/bids")
+@CrossOrigin(origins = "*")
 public class BidResource {
 
     private final Logger logger=LoggerFactory.getLogger(BidResource.class);

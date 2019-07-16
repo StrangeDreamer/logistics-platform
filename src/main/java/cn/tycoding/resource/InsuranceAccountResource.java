@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/insuranceAccounts")
+@CrossOrigin(origins = "*")
 public class InsuranceAccountResource {
     /**
      * 1 由于只做模拟，不提供银行账户的注册注销接口；不提供设置账户初始资金的接口（使用默认值）

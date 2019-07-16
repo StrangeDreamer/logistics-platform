@@ -5,6 +5,7 @@ import cn.tycoding.repository.BankAccountRepository;
 import cn.tycoding.service.BankAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,6 +17,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bankAccounts")
+@CrossOrigin(origins = "*")
+
+
 public class BankAccountResource {
     /**
      * 1 由于只做模拟，不提供银行账户的注册注销接口；不提供设置账户初始资金的接口（使用默认值）
@@ -30,9 +34,17 @@ public class BankAccountResource {
     private final Logger logger= LoggerFactory.getLogger(BankAccountResource.class);
     private final BankAccountService bankAccountService;
     private final BankAccountRepository bankAccountRepository;
-    public BankAccountResource(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService) {
+    private final RedisTemplate redisTemplate;
+    private final String yearKey="lastYearIncome";
+    private final String monKey="lastMonIncome";
+    private final String dayKey="lastDayIncome";
+    private final int accountId=1;
+    private final String accountType="platform";
+
+    public BankAccountResource(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService, RedisTemplate redisTemplate) {
         this.bankAccountRepository = bankAccountRepository;
         this.bankAccountService = bankAccountService;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -55,5 +67,56 @@ public class BankAccountResource {
 //        return  bankAccountService.check(id,type);
         return bankAccountService.findMoneyLog(id,type);
     }
+
+    /**
+     * 获取平台当前账户余额
+     * @return
+     */
+    @GetMapping("/crtAccount")
+    public double getCrtAccount(){
+        return bankAccountService.getAvailableMoney(accountId,accountType);
+    }
+
+    /**
+     * 前端异步获取当年收入
+     * @return
+     */
+    @GetMapping("/year")
+    public double getCrtYearIncome(){
+        long size=redisTemplate.opsForList().size(yearKey);
+        //上一次收入
+        double last=(double)redisTemplate.opsForList().index(yearKey,size);
+        //当前收入
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+
+        return current-last;
+    }
+
+    /**
+     * 前端异步获取当月收入
+     * @return
+     */
+    @GetMapping("/mon")
+    public double getCrtMonIncome(){
+        long size=redisTemplate.opsForList().size(monKey);
+        double last=(double) redisTemplate.opsForList().index(yearKey,size);
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+        return current-last;
+    }
+
+    /**
+     * 前端异步获取当日收入
+     * @return
+     */
+    @GetMapping("/day")
+    public double getCrtDayIncome(){
+        long size=redisTemplate.opsForList().size(dayKey);
+        double last=(double) redisTemplate.opsForList().index(dayKey,size);
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+        return current-last;
+    }
+
+
+
 
 }

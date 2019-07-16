@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/trucks")
+@CrossOrigin(origins = "*")
 public class TruckResource {
 
     private final Logger logger=LoggerFactory.getLogger(TruckResource.class);

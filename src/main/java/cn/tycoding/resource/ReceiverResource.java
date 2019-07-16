@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/receivers")
+@CrossOrigin(origins = "*")
 public class ReceiverResource {
     private final Logger logger=LoggerFactory.getLogger(ReceiverResource.class);
     private final ReceiverService receiverService;

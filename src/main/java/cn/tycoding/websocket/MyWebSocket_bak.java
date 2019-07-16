@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 //该注解用来指定一个URI，客户端可以通过这个URI来连接到WebSocket。类似Servlet的注解mapping。无需在web.xml中配置。
 @ServerEndpoint(value = "/websocket")
 @Component
-public class MyWebSocket {
+public class MyWebSocket_bak {
     @Value("${spring.rabbitmq.host:127.0.0.1}")
     private String rabbitHost;
     @Value("${spring.rabbitmq.port:5672}")
@@ -26,7 +26,7 @@ public class MyWebSocket {
     @Value("${spring.rabbitmq.password:guest}")
     private String rabbitPass;
 
-    private static Logger log = LogManager.getLogger(MyWebSocket.class);
+    private static Logger log = LogManager.getLogger(MyWebSocket_bak.class);
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 //    @Autowired
 //    public TerminalService terminalServiceInWebSocket;
@@ -37,7 +37,7 @@ public class MyWebSocket {
     private static int onlineCount = 0;
 
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
-    private static CopyOnWriteArraySet<MyWebSocket> webSocketSet = new CopyOnWriteArraySet<MyWebSocket>();
+    private static CopyOnWriteArraySet<MyWebSocket_bak> webSocketSet = new CopyOnWriteArraySet<MyWebSocket_bak>();
 
 
 
@@ -137,7 +137,7 @@ public class MyWebSocket {
     public void onMessage(String message, Session session) {
         log.info("来自客户端的消息:" + message);
         //群发消息
-        for (MyWebSocket item : webSocketSet) {
+        for (MyWebSocket_bak item : webSocketSet) {
             try {
                 item.sendMessage(message);
             } catch (IOException e) {
@@ -185,10 +185,10 @@ public class MyWebSocket {
     }
 
     public static synchronized void addOnlineCount() {
-        MyWebSocket.onlineCount++;
+        MyWebSocket_bak.onlineCount++;
     }
 
     public static synchronized void subOnlineCount() {
-        MyWebSocket.onlineCount--;
+        MyWebSocket_bak.onlineCount--;
     }
 }

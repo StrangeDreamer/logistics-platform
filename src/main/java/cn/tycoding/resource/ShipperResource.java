@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/shippers")
+@CrossOrigin(origins = "*")
 public class ShipperResource {
 
     private final Logger logger=LoggerFactory.getLogger(ShipperResource.class);
