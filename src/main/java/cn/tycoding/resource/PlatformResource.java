@@ -96,12 +96,27 @@ public class PlatformResource {
      * 前端异步获取当年收入
      * @return
      */
-    @GetMapping("/year")
-    public double getCrtYearIncome(){
-        //上一次收入
-        double last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
-        //当前收入
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+    @GetMapping("/{time}")
+    public double getCrtIncome(@RequestParam("time") String time){
+        double last,current;
+        if (time.equals("year")){
+            //上一次收入
+            last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
+            //当前收入
+            current=bankAccountService.getAvailableMoney(accountId,accountType);
+
+        }
+        else if (time.equals("mon")){
+
+            last=(double) redisTemplate.opsForList().index(monKey,lastIndex);
+            current=bankAccountService.getAvailableMoney(accountId,accountType);
+        }
+        else {
+
+            last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
+            current=bankAccountService.getAvailableMoney(accountId,accountType);
+
+        }
 
         return current-last;
     }

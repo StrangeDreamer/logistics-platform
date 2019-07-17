@@ -136,42 +136,27 @@ public class CargoResource {
     /**
      * 查询承运方的所有订单
      *
-     * @param truckId
+     * @param id
      * @return
      */
-    @GetMapping("/trucks/{truckId}")
-    public List<Cargo> getTruckAllCargos(@PathVariable("truckId") int truckId) {
-        logger.info("REST 查询发货方{}所有订单", truckId);
-        return cargoService.findAllByTruckId(truckId);
+    @GetMapping("/{who}/{id}")
+    public List<Cargo> getTruckAllCargos(@RequestParam("who") String who,@RequestParam("id") int id) {
+        if (who.equals("trucks")){
+            int truckId=id;
+            logger.info("REST 查询发货方{}所有订单", truckId);
+            return cargoService.findAllByTruckId(truckId);
+        }
+        else if (who.equals("shippers")){
+            int shipperId=id;
+            logger.info("REST 查询发货方{}所有订单", shipperId);
+            return cargoService.findAllByShipperId(shipperId);
+        }
+        else {
+            int receiverId=id;
+            logger.info("REST 查询发货方{}所有订单", receiverId);
+            return cargoService.findAllByReceiverId(receiverId);
+        }
     }
-
-
-    /**
-     * 查询发货方的所有订单
-     *
-     * @param shipperId
-     * @return
-     */
-
-    @GetMapping("/shippers/{shipperId}")
-    public List<Cargo> getShipperAllCargos(@PathVariable int shipperId) {
-        logger.info("REST 查询发货方{}所有订单", shipperId);
-        return cargoService.findAllByShipperId(shipperId);
-    }
-
-
-    /**
-     * 查询收货方的所有订单
-     *
-     * @param receiverId
-     * @return
-     */
-    @GetMapping("/receivers/{receiverId}")
-    public List<Cargo> getReceiverAllCargos(@PathVariable("receiverId") int receiverId) {
-        logger.info("REST 查询发货方{}所有订单", receiverId);
-        return cargoService.findAllByReceiverId(receiverId);
-    }
-
 
     /**
      * 查询不同状态的货物
