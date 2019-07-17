@@ -97,7 +97,7 @@ public class PlatformResource {
      * @return
      */
     @GetMapping("/{time}")
-    public double getCrtIncome(@RequestParam("time") String time){
+    public double getCrtIncome(@PathVariable("time") String time){
         double last,current;
         if (time.equals("year")){
             //上一次收入

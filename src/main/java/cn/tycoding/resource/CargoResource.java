@@ -140,7 +140,7 @@ public class CargoResource {
      * @return
      */
     @GetMapping("/{who}/{id}")
-    public List<Cargo> getTruckAllCargos(@RequestParam("who") String who,@RequestParam("id") int id) {
+    public List<Cargo> getTruckAllCargos(@PathVariable("who") String who,@PathVariable("id") int id) {
         if (who.equals("trucks")){
             int truckId=id;
             logger.info("REST 查询发货方{}所有订单", truckId);
