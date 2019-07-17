@@ -39,21 +39,21 @@ public class ScheduledTasks {
     public void getAccountLogDay() {
          double nowMoney=bankAccountService.getAvailableMoney(accountId,accountType);
         redisTemplate.opsForList().rightPush(dayKey,nowMoney);
-
+        log.info("redis dayincome refresh");
     }
 
     @Scheduled(fixedDelay = 720000)
     public void getAccountLogMon() {
         double nowMoney=bankAccountService.getAvailableMoney(accountId,accountType);
         redisTemplate.opsForList().rightPush(monKey,nowMoney);
-
+        log.info("redis monincome refresh");
     }
 
     @Scheduled(fixedDelay = 8640000)
     public void getAccountLogYear() {
         double nowMoney=bankAccountService.getAvailableMoney(accountId,accountType);
         redisTemplate.opsForList().rightPush(yearKey,nowMoney);
-
+        log.info("redis yearincome refresh");
     }
 
 

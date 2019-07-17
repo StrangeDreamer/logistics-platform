@@ -34,19 +34,10 @@ public class BankAccountResource {
     private final Logger logger= LoggerFactory.getLogger(BankAccountResource.class);
     private final BankAccountService bankAccountService;
     private final BankAccountRepository bankAccountRepository;
-    private final RedisTemplate redisTemplate;
-    private final String yearKey="lastYearIncome";
-    private final String monKey="lastMonIncome";
-    private final String dayKey="lastDayIncome";
-    private final int accountId=1;
-    private final String accountType="platform";
-    //这里的index可以为负数，-1表示最右边的一个，
-    private final long lastIndex=-1;
 
-    public BankAccountResource(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService, RedisTemplate redisTemplate) {
+    public BankAccountResource(BankAccountRepository bankAccountRepository, BankAccountService bankAccountService) {
         this.bankAccountRepository = bankAccountRepository;
         this.bankAccountService = bankAccountService;
-        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -69,52 +60,6 @@ public class BankAccountResource {
 //        return  bankAccountService.check(id,type);
         return bankAccountService.findMoneyLog(id,type);
     }
-
-    /**
-     * 获取平台当前账户余额
-     * @return
-     */
-    @GetMapping("/crtAccount")
-    public double getCrtAccount(){
-        return bankAccountService.getAvailableMoney(accountId,accountType);
-    }
-
-    /**
-     * 前端异步获取当年收入
-     * @return
-     */
-    @GetMapping("/year")
-    public double getCrtYearIncome(){
-        //上一次收入
-        double last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
-        //当前收入
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
-
-        return current-last;
-    }
-
-    /**
-     * 前端异步获取当月收入
-     * @return
-     */
-    @GetMapping("/mon")
-    public double getCrtMonIncome(){
-        double last=(double) redisTemplate.opsForList().index(yearKey,lastIndex);
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
-        return current-last;
-    }
-
-    /**
-     * 前端异步获取当日收入
-     * @return
-     */
-    @GetMapping("/day")
-    public double getCrtDayIncome(){
-        double last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
-        return current-last;
-    }
-
 
 
 

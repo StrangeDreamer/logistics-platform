@@ -1,13 +1,9 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Bid;
-import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Platform;
-import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.PlatformRepository;
-import cn.tycoding.repository.TruckRepository;
-import cn.tycoding.service.CargoService;
-import cn.tycoding.service.InspectionService;
+import cn.tycoding.service.BankAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +20,25 @@ public class PlatformResource {
 
     private final Logger logger= LoggerFactory.getLogger(PlatformResource.class);
 
-    private final String inspectionsKey = "inspections";
-    private final String cargoKey = "Cargo";
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private CargoService cargoService;
-    @Autowired
-    private CargoRepository cargoRepository;
-    @Autowired
-    private TruckRepository truckRepository;
-    @Autowired
-    private InspectionService inspectionService;
+
+    private final RedisTemplate redisTemplate;
+    private final BankAccountService bankAccountService;
+    private final String yearKey="lastYearIncome";
+    private final String monKey="lastMonIncome";
+    private final String dayKey="lastDayIncome";
+    private final int accountId=1;
+    private final String accountType="platform";
+    //这里的index可以为负数，-1表示最右边的一个，
+    private final long lastIndex=-1;
 
     @Autowired
     private cn.tycoding.service.PlatformService platformService;
-    @Autowired
-    private PlatformRepository platformRepository;
+
+
+    public PlatformResource(RedisTemplate redisTemplate, BankAccountService bankAccountService) {
+        this.redisTemplate = redisTemplate;
+        this.bankAccountService = bankAccountService;
+    }
 
     /**参数设置
      * @param platform
@@ -82,6 +80,52 @@ public class PlatformResource {
     public List<Bid> showAllBid() {
         logger.info("出价信息一览");
         return platformService.showAllBid();
+    }
+
+
+    /**
+     * 获取平台当前账户余额
+     * @return
+     */
+    @GetMapping("/crtAccount")
+    public double getCrtAccount(){
+        return bankAccountService.getAvailableMoney(accountId,accountType);
+    }
+
+    /**
+     * 前端异步获取当年收入
+     * @return
+     */
+    @GetMapping("/year")
+    public double getCrtYearIncome(){
+        //上一次收入
+        double last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
+        //当前收入
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+
+        return current-last;
+    }
+
+    /**
+     * 前端异步获取当月收入
+     * @return
+     */
+    @GetMapping("/mon")
+    public double getCrtMonIncome(){
+        double last=(double) redisTemplate.opsForList().index(monKey,lastIndex);
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+        return current-last;
+    }
+
+    /**
+     * 前端异步获取当日收入
+     * @return
+     */
+    @GetMapping("/day")
+    public double getCrtDayIncome(){
+        double last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
+        double current=bankAccountService.getAvailableMoney(accountId,accountType);
+        return current-last;
     }
 
 
