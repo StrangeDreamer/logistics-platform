@@ -16,7 +16,7 @@ public interface ReceiverRepository extends JpaRepository<Receiver,Integer> {
 
     boolean existsReceiverByIdgerenshenfenzheng(String id);
     boolean existsReceiverByName(String name);
-    Receiver findReceiverByName(String name);
+    Optional<Receiver> findReceiverByName(String name);
 }
 
 

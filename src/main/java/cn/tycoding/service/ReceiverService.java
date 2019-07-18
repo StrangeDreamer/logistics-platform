@@ -31,11 +31,7 @@ public class ReceiverService {
 
     // 登录
     public Receiver login(String name){
-        // 是否查无此人
-        if(!receiverRepository.existsReceiverByIdgerenshenfenzheng(name)) {
-            throw new ReceiverException("该用户未注册！");
-        }
-        return receiverRepository.findReceiverByName(name);
+        return receiverRepository.findReceiverByName(name).orElseThrow(()->new ReceiverException("该用户未注册！"));
     }
 
     // 收货方注册

@@ -4,6 +4,7 @@ import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.service.InspectionService;
 import cn.tycoding.service.ReceiverService;
+import org.hibernate.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ReceiverResource {
      * @return
      */
     @GetMapping("/login/{name}")
-    public Receiver login(@PathVariable("name") String name){
+    public Receiver login(@RequestParam("name") String name){
         logger.info("登录");
         return receiverService.login(name);
     }
