@@ -24,6 +24,15 @@ public class ShipperService {
         this.cargoRepository = cargoRepository;
     }
 
+    // 登录
+    public Shipper login(String name){
+        // 是否查无此人
+        if(!shipperRepository.existsShipperByIdgerenshenfenzheng(name)) {
+            throw new ShipperException("该用户未注册！");
+        }
+        return shipperRepository.findShipperByName(name);
+    }
+
     //发货方注册
     public Shipper createShipper(Shipper shipper){
 
@@ -31,6 +40,13 @@ public class ShipperService {
         if(shipperRepository.existsShipperByIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng())) {
             throw new TruckException("该个人身份证已经被用于注册发货方！");
         }
+
+        // 检查用户名是否已经被占用
+        if(shipperRepository.existsShipperByName(shipper.getName())) {
+            throw new ShipperException("该用户名已被占用！");
+        }
+
+
         Shipper shipper1 = new Shipper();
         shipper1.setName(shipper.getName());
         shipper1.setBankId(shipper.getBankId());

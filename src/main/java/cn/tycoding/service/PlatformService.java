@@ -3,6 +3,7 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Platform;
+import cn.tycoding.domain.Truck;
 import cn.tycoding.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -29,11 +29,25 @@ public class ReceiverService {
 
     }
 
+    // 登录
+    public Receiver login(String name){
+        // 是否查无此人
+        if(!receiverRepository.existsReceiverByIdgerenshenfenzheng(name)) {
+            throw new ReceiverException("该用户未注册！");
+        }
+        return receiverRepository.findReceiverByName(name);
+    }
+
     // 收货方注册
     public Receiver createReceiver(Receiver receiver){
-        // 先检查该注册人的身份证是否已经用于该项的注册
+        // 检查该注册人的身份证是否已经用于该项的注册
         if(receiverRepository.existsReceiverByIdgerenshenfenzheng(receiver.getIdgerenshenfenzheng())) {
             throw new ReceiverException("该个人身份证已经被用于注册收货方！");
+        }
+
+        // 检查用户名是否已经被占用
+        if(receiverRepository.existsReceiverByName(receiver.getName())) {
+            throw new ReceiverException("该用户名已被占用！");
         }
 
         Receiver receiver1 = new Receiver();
@@ -77,5 +91,7 @@ public class ReceiverService {
     public List<Receiver> findAll(){
         return receiverRepository.findAll();
     }
+
+
 
 }

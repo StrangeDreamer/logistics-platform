@@ -11,4 +11,6 @@ public interface TruckRepository extends JpaRepository<Truck,Integer> {
     int countCargosByIdIsNotNull();
     Truck findTruckById(int truckId);
     boolean existsTruckByIdgerenshenfenzheng(String id);
+    boolean existsTruckByName(String id);
+    Truck findTruckByName(String name);
 }

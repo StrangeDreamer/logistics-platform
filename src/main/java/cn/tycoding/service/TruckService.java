@@ -28,6 +28,17 @@ public class TruckService {
     private final String truckKey = "Truck";
     private final String cargoKey="Cargo";
 
+
+    // 登录
+    public Truck login(String name){
+        // 是否查无此人
+        if(!truckRepository.existsTruckByIdgerenshenfenzheng(name)) {
+            throw new TruckException("该用户未注册！");
+        }
+        return truckRepository.findTruckByName(name);
+    }
+
+    
     // 承运方注册
     public Truck createTruck(Truck truck){
 
@@ -35,6 +46,12 @@ public class TruckService {
         if(truckRepository.existsTruckByIdgerenshenfenzheng(truck.getIdgerenshenfenzheng())) {
             throw new TruckException("该个人身份证已经被用于注册承运方！");
         }
+
+        // 检查用户名是否已经被占用
+        if(truckRepository.existsTruckByName(truck.getName())) {
+            throw new TruckException("该用户名已被占用！");
+        }
+
 
         Truck truck1 = new Truck();
         truck1.setName(truck.getName());

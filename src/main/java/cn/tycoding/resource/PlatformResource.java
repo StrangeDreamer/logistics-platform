@@ -33,6 +33,12 @@ public class PlatformResource {
 
     @Autowired
     private cn.tycoding.service.PlatformService platformService;
+    @Autowired
+    private cn.tycoding.service.TruckService truckService;
+    @Autowired
+    private cn.tycoding.service.ShipperService shipperService;
+    @Autowired
+    private cn.tycoding.service.ReceiverService receiverService;
 
 
     public PlatformResource(RedisTemplate redisTemplate, BankAccountService bankAccountService) {
@@ -141,6 +147,27 @@ public class PlatformResource {
         double last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
         double current=bankAccountService.getAvailableMoney(accountId,accountType);
         return current-last;
+    }
+
+
+    /**
+     * 注销，为节省接口空间，合并三方的注销
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{userType}/{id}")
+    public String deleteReceiver(@PathVariable("userType") String userType, @PathVariable("id") int id){
+        logger.info("注销请求");
+        if (userType.equals("trucks")) {
+            return truckService.deleteTruck(id);
+        }
+        if (userType.equals("shippers")) {
+            return shipperService.deleteShipper(id);
+        }
+        if (userType.equals("receivers")) {
+            return receiverService.deleteReceiver(id);
+        }
+        return "注销异常！";
     }
 
 

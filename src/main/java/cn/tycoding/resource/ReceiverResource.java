@@ -26,6 +26,17 @@ public class ReceiverResource {
     }
 
 
+    /**
+     * 登录
+     * @return
+     */
+    @GetMapping("/login/{name}")
+    public Receiver login(@PathVariable("name") String name){
+        logger.info("登录");
+        return receiverService.login(name);
+    }
+
+
     @PostMapping
     public Receiver createReceiver(@RequestBody Receiver receiver){
         logger.info("Rest 收货方注册请求");

@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
+import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.service.ShipperService;
@@ -23,6 +24,16 @@ public class ShipperResource {
         this.shipperService = shipperService;
     }
 
+
+    /**
+     * 登录
+     * @return
+     */
+    @GetMapping("/login/{name}")
+    public Shipper login(@PathVariable("name") String name){
+        logger.info("登录");
+        return shipperService.login(name);
+    }
 
     @PostMapping
     public Shipper createShipper(@RequestBody Shipper shipper){
