@@ -34,7 +34,7 @@ public class TruckResource {
      * @return
      */
     @GetMapping("/login/{name}")
-    public Truck login(@PathVariable("name") String name){
+    public Truck login(@RequestParam("name") String name){
         logger.info("登录");
         return truckService.login(name);
     }

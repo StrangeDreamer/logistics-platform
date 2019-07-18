@@ -30,7 +30,7 @@ public class ShipperResource {
      * @return
      */
     @GetMapping("/login/{name}")
-    public Shipper login(@PathVariable("name") String name){
+    public Shipper login(@RequestParam("name") String name){
         logger.info("登录");
         return shipperService.login(name);
     }

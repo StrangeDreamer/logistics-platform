@@ -2,6 +2,7 @@ package cn.tycoding.service;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.Truck;
+import cn.tycoding.exception.ReceiverException;
 import cn.tycoding.exception.ShipperException;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
@@ -27,10 +28,7 @@ public class ShipperService {
     // 登录
     public Shipper login(String name){
         // 是否查无此人
-        if(!shipperRepository.existsShipperByIdgerenshenfenzheng(name)) {
-            throw new ShipperException("该用户未注册！");
-        }
-        return shipperRepository.findShipperByName(name);
+        return shipperRepository.findShipperByName(name).orElseThrow(()->new ShipperException("该用户未注册！"));
     }
 
     //发货方注册

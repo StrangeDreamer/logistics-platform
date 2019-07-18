@@ -32,10 +32,8 @@ public class TruckService {
     // 登录
     public Truck login(String name){
         // 是否查无此人
-        if(!truckRepository.existsTruckByIdgerenshenfenzheng(name)) {
-            throw new TruckException("该用户未注册！");
-        }
-        return truckRepository.findTruckByName(name);
+        return truckRepository.findTruckByName(name).orElseThrow(()->new TruckException("该用户未注册！"));
+
     }
 
     
