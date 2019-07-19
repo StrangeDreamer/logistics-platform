@@ -7,6 +7,7 @@ import cn.tycoding.exception.ReceiverException;
 import cn.tycoding.exception.ShipperException;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.*;
+import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,8 @@ public class CargoService {
     private InsuranceAccountRepository insuranceAccountRepository;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
+    @Autowired
+    WebSocketTest webSocketTest;
 
 
 
@@ -162,9 +165,8 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
 
-                Truck truck = truckRepository.findTruckById(cargo.getTruckId());
-                // TODO: 通知承运方撤单成功
-
+                // 通知目标承运方撤单成功
+                webSocketTest.sendToUser3(String.valueOf(cargo.getTruckId()),5);
 
 
             }
@@ -179,23 +181,28 @@ public class CargoService {
                 // 车辆的担保额度的恢复
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
-                Cargo cargoBack =  createCargo(cargo);
+                Cargo cargoBack = createCargo(cargo);
                 cargoBack.setStatus(2);
-                cargoBack.setDeparture(cargo.getDestination());
+                cargoBack.setDeparture(cargo.getPosition());
                 cargoBack.setDestination(cargo.getDeparture());
                 cargoBack.setBidPrice(cargo.getBidPrice());
                 cargoBack.setTruckId(cargo.getTruckId());
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
-                return cargoBack;
+                cargoRepository.save(cargoBack);
 
+                // 将原来对订单设置为等待验货状态
+                cargo.setStatus(4);
+                cargoRepository.save(cargo);
 
+                // 通知目标承运方撤单成功
+                webSocketTest.sendToUser3(String.valueOf(cargo.getTruckId()),5);
             }
             else {
                 logger.info("订单当前状态不允许撤单" );
             }
             cargoRepository.save(cargo);
-            return cargo;
+
         }catch (Exception e){
             e.printStackTrace();
         }
