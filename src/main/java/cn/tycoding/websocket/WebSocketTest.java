@@ -108,7 +108,9 @@ public class WebSocketTest {
         String now = getNowTime();
         try {
             if (webSocketSet.get(sendUserno) != null) {
-                webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
+                //webSocketSet.get(sendUserno).sendMessage(now + "用户" + userno + "发来消息：" + " <br/> " + sendMessage);
+                webSocketSet.get(sendUserno).sendMessage(String.valueOf(message));
+
             } else {
                 logger.info("当前用户不在线");
             }

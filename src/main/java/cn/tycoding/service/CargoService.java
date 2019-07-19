@@ -166,7 +166,7 @@ public class CargoService {
                 cargo.setStatus(9);
 
                 // 通知目标承运方撤单成功
-                webSocketTest.sendToUser3(String.valueOf(cargo.getTruckId()),5);
+                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
 
 
             }
@@ -196,7 +196,7 @@ public class CargoService {
                 cargoRepository.save(cargo);
 
                 // 通知目标承运方撤单成功
-                webSocketTest.sendToUser3(String.valueOf(cargo.getTruckId()),5);
+                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
             }
             else {
                 logger.info("订单当前状态不允许撤单" );
