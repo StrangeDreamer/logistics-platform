@@ -94,6 +94,7 @@ public class CargoService {
         c.setDeparture(cargo.getDeparture());
         c.setDestination(cargo.getDestination());
         c.setRemarks(cargo.getRemarks());
+        c.setPosition(cargo.getDeparture());
 
         cargoRepository.save(c);
 
@@ -321,5 +322,22 @@ public class CargoService {
         return cargoRepository.findAllByStatus(10);
     }
 
+
+    // 更新承运方/货物位置信息
+    public List<Cargo> refreshPosition(int truckId, String position) {
+        Truck truck = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
+        truck.setPosition(position);
+        truckRepository.save(truck);
+
+        List<Cargo> cargos = findAllByTruckId(truckId);
+
+        for(int i = 0; i < cargos.size(); i++) {
+            if (cargos.get(i).getStatus() == 3) {
+                cargos.get(i).setPosition(position);
+            }
+        }
+
+        return cargos;
+    }
 
 }

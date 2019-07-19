@@ -32,6 +32,9 @@ public class Truck {
     private Date modifyTime;
 
 
+    // 当前所在地点，会随着不断的接口调用从而不断被刷新
+    private String position;
+
 
     private boolean activated = false;
 

@@ -189,4 +189,16 @@ public class CargoResource {
     }
 
 
+
+    /**
+     * 更新承运方/货物位置信息
+     *
+     * @return
+     */
+    @PutMapping("/refreshPosition/{truckId}/{position}")
+    public List<Cargo> refreshPosition(@RequestParam("truckId") int truckId, @RequestParam("position") String position) {
+        logger.info("更新承运方/货物位置信息");
+        return cargoService.refreshPosition(truckId, position);
+    }
+
 }

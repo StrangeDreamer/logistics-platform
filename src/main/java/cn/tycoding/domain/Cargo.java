@@ -63,6 +63,9 @@ public class Cargo implements Serializable {
     private boolean abnormal = false;
     private double bidPrice = -1;
 
+    // 当前所在地点，会随着不断的接口调用从而不断被刷新
+    private String position;
+
 
     /**
      *
