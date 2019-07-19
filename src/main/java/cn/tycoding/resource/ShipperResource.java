@@ -80,6 +80,8 @@ public class ShipperResource {
         return shipperService.setShipperRank(shipperId, rank);
     }
 
+
+
     @PutMapping("/active/{id}")
     public Shipper active(@PathVariable("id") int id) {
         logger.info("激活用户");

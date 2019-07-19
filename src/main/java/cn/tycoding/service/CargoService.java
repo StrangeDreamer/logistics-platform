@@ -117,19 +117,21 @@ public class CargoService {
      * 撤单
      * @param id
      */
-    public Cargo withdrawalCargo(int id) {
+    public Cargo withdrawCargo(int id) {
         // 获取撤单赔偿比例
         double  withdrawFeeRatio = platformRepository.findRecentPltf().getWithdrawFeeRatio();
         Cargo cargo = cargoService.findCargoById(id);
+
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
         InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
         try {
             // 发布时无人接单撤单  --撤单
-            if (cargo.getStatus() == 0 || cargo.getStatus() ==  1){
+            if (cargo.getStatus() == 0 ){
                 cargo.setStatus(6);
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
+
             }
             // 已接未运撤单  --撤单
             else if (cargo.getStatus() == 2){
@@ -139,7 +141,7 @@ public class CargoService {
                 if (bankAccountShipper.getAvailableMoney() < wMoney) {
                     throw new ShipperException("发货方资金不足，无法进行撤单");
                 }
-                logger.info("询问发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + wMoney +
+                logger.info("查询发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + wMoney +
                 "资金充足才允许撤单");
 
                 bankAccountService.addMoneyLog(bankAccountShipper,"由于出现已接未运撤单");
@@ -159,9 +161,14 @@ public class CargoService {
                 insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getInsurance());
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(9);
+
+                Truck truck = truckRepository.findTruckById(cargo.getTruckId());
+                // TODO: 通知承运方撤单成功
+
+
+
             }
             // 已经运输的撤单，实际操作是为承运方新增一个订单，该订单与原订单除了出发地和目的地之外一切相同
-            // TODO：这是一种很不合理的做法，首先，没有征求承运方的同意,没有考虑承运方是否有足够资格运输新订单；其次在原有的流程里，运到目的地是要验货的，这里都已经撤单了。
             // 只有基于一些少见的情况下，这种做法才是或许可行的.此处不写资金结算，不予演示。
             else if (cargo.getStatus() == 3) {
                 logger.info("询问发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + cargo.getFreightFare() +
@@ -181,6 +188,8 @@ public class CargoService {
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
                 return cargoBack;
+
+
             }
             else {
                 logger.info("订单当前状态不允许撤单" );
@@ -334,6 +343,7 @@ public class CargoService {
         for(int i = 0; i < cargos.size(); i++) {
             if (cargos.get(i).getStatus() == 3) {
                 cargos.get(i).setPosition(position);
+                cargoRepository.save(cargos.get(i));
             }
         }
 

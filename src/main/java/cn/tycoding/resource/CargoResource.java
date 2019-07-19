@@ -111,10 +111,10 @@ public class CargoResource {
      * @param id
      * @return
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/withdrawCargo/{id}")
     public Cargo withdrawalCargo(@PathVariable("id") int id) {
         logger.info("Rest 撤单请求{}" + id);
-        return cargoService.withdrawalCargo(id);
+        return cargoService.withdrawCargo(id);
     }
 
 
