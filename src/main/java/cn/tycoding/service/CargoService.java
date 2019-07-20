@@ -184,7 +184,8 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
                 Cargo cargoBack = createCargo(cargo);
-                cargoBack.setStatus(2);
+                // 返程订单
+                cargoBack.setStatus(12);
                 cargoBack.setDeparture(cargo.getPosition());
                 cargoBack.setDestination(cargo.getDeparture());
                 cargoBack.setBidPrice(cargo.getBidPrice());

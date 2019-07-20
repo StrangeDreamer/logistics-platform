@@ -93,6 +93,7 @@ public class Cargo implements Serializable {
      *
      * 11 被正常转单，本订单已经失效
      *
+     * 12 该订单为第三类撤单产生的返程订单
      */
     private int status = 0;
 
