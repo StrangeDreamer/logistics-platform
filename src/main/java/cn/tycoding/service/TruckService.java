@@ -155,6 +155,8 @@ public class TruckService {
         }
         cargo.setStatus(4);
         cargoRepository.save(cargo);
+        //没交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
+        truckRepository.save((Truck) redisTemplate.boundHashOps(truckKey).get(cargo.getTruckId()));
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         return cargoService.findCargoById(cargoId);
     }

@@ -51,6 +51,8 @@ public class CargoService {
     @Autowired
     private InsuranceAccountService insuranceAccountService;
     @Autowired
+    private TruckService truckService;
+    @Autowired
     WebSocketTest webSocketTest;
 
 
@@ -288,6 +290,7 @@ public class CargoService {
 //        }
 
         return cargoRepository.findAll();
+
     }
 
     public Cargo findCargoById(int id){
@@ -317,8 +320,10 @@ public class CargoService {
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
+
         truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
+
     }
 
     //查询订单流通历史
@@ -342,15 +347,18 @@ public class CargoService {
     // 更新承运方/货物位置信息
     public List<Cargo> refreshPosition(int truckId, String position) {
         Truck truck = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
-        truck.setPosition(position);
-        truckRepository.save(truck);
+        Truck truck1=truckService.findTruckById(truckId);
+        truck1.setPosition(position);
+        //truckRepository.save(truck);
+
 
         List<Cargo> cargos = findAllByTruckId(truckId);
 
         for(int i = 0; i < cargos.size(); i++) {
             if (cargos.get(i).getStatus() == 3) {
-                cargos.get(i).setPosition(position);
-                cargoRepository.save(cargos.get(i));
+                Cargo cargoRedis=cargoRepository.findCargoById(cargos.get(i).getId());
+                cargoRedis.setPosition(position);
+                //cargoRepository.save(cargos.get(i));
             }
         }
 
