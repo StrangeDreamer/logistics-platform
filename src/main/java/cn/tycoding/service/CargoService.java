@@ -136,6 +136,7 @@ public class CargoService {
             // 发布时无人接单撤单  --撤单
             if (cargo.getStatus() == 0 ){
                 cargo.setStatus(6);
+                cargoRepository.save(cargo);
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
 
             }
@@ -166,7 +167,8 @@ public class CargoService {
                 insuranceAccountService.addMoneyLog(insuranceAccount,"由于出现已接未运撤单");
                 insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getInsurance());
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
-                cargo.setStatus(9);
+                cargo.setStatus(7);
+                cargoRepository.save(cargo);
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
