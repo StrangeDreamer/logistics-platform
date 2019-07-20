@@ -165,7 +165,7 @@ public class CargoService {
                 insuranceAccountService.addMoneyLog(insuranceAccount,"由于出现已接未运撤单");
                 insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getInsurance());
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
-                cargo.setStatus(9);
+                cargo.setStatus(7);
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
