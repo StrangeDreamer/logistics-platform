@@ -137,6 +137,7 @@ public class CargoService {
             if (cargo.getStatus() == 0 ){
                 cargo.setStatus(6);
                 cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
 
             }
@@ -169,6 +170,7 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(7);
                 cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
@@ -187,7 +189,6 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
                 Cargo cargoBack = createCargo(cargo);
-                cargoBack.setStatus(2);
                 // 返程订单
                 cargoBack.setStatus(12);
                 cargoBack.setDeparture(cargo.getPosition());
@@ -196,11 +197,16 @@ public class CargoService {
                 cargoBack.setTruckId(cargo.getTruckId());
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
+                cargoBack.setPosition(cargo.getPosition());
                 cargoRepository.save(cargoBack);
+                redisTemplate.boundHashOps(cargoKey).delete(cargoBack.getId());
+
 
                 // 将原来对订单设置为等待验货状态
                 cargo.setStatus(4);
                 cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
