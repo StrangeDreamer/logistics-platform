@@ -36,9 +36,6 @@ public class BidResource {
     @Autowired
     private PlatformRepository platformRepository;
     @Autowired
-    //private TruckRepository truckRepository;
-    private TruckService truckService;
-    @Autowired
     private BidRepository bidRepository;
     @Autowired
     private TruckRepository truckRepository;
@@ -46,14 +43,8 @@ public class BidResource {
     private BidService bidService;
     @Autowired
     private WebSocketTest webSocketTest;
-
-
     @Autowired
     private BankAccountService bankAccountService;
-    @Autowired
-    private BankAccountRepository bankAccountRepository;
-    @Autowired
-    private InsuranceAccountRepository insuranceAccountRepository;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
 

@@ -148,6 +148,7 @@ public class TruckService {
         //truck已经送达货物，请求验货
         // 开始运货请求
         Cargo cargo = cargoService.findCargoById(cargoId);
+        System.out.println("******************"+cargo.getPosition());
 
         // 前提条件的检查
         if (cargo.getStatus() != 3){

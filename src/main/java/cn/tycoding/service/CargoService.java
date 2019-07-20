@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -346,23 +347,25 @@ public class CargoService {
 
     // 更新承运方/货物位置信息
     public List<Cargo> refreshPosition(int truckId, String position) {
-        Truck truck = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
-        Truck truck1=truckService.findTruckById(truckId);
-        truck1.setPosition(position);
-        //truckRepository.save(truck);
+        Truck truck=truckService.findTruckById(truckId);
+        truck.setPosition(position);
 
 
         List<Cargo> cargos = findAllByTruckId(truckId);
-
-        for(int i = 0; i < cargos.size(); i++) {
-            if (cargos.get(i).getStatus() == 3) {
-                Cargo cargoRedis=cargoRepository.findCargoById(cargos.get(i).getId());
+        List<Cargo> res=new ArrayList<>(cargos.size());
+        for (Cargo c :
+                cargos) {
+            if (c.getStatus() == 3) {
+                Cargo cargoRedis=cargoService.findCargoById(c.getId());
                 cargoRedis.setPosition(position);
-                //cargoRepository.save(cargos.get(i));
+                redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
+                res.add(cargoRedis);
+            }else {
+                res.add(c);
             }
-        }
+            }
+            return res;
 
-        return cargos;
     }
 
 }
