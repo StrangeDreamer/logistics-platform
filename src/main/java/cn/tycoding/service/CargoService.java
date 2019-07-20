@@ -186,6 +186,8 @@ public class CargoService {
                 // 为该车辆新创建返程订单
                 Cargo cargoBack = createCargo(cargo);
                 cargoBack.setStatus(2);
+                // 返程订单
+                cargoBack.setStatus(12);
                 cargoBack.setDeparture(cargo.getPosition());
                 cargoBack.setDestination(cargo.getDeparture());
                 cargoBack.setBidPrice(cargo.getBidPrice());
