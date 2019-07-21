@@ -10,10 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
+@Service
 public class TruckService {
 
     private final Logger logger = LoggerFactory.getLogger(TruckService.class);
@@ -23,6 +24,8 @@ public class TruckService {
     private CargoService cargoService;
     @Autowired
     private CargoRepository cargoRepository;
+    @Autowired
+    private TruckService truckService;
     @Autowired
     private RedisTemplate redisTemplate;
     private final String truckKey = "Truck";
@@ -157,7 +160,7 @@ public class TruckService {
         cargo.setStatus(4);
         cargoRepository.save(cargo);
         //没交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
-        truckRepository.save((Truck) redisTemplate.boundHashOps(truckKey).get(cargo.getTruckId()));
+        truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         return cargoService.findCargoById(cargoId);
     }

@@ -10,10 +10,11 @@ import cn.tycoding.repository.ShipperRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
+@Service
 public class ShipperService {
 
     private final Logger logger=LoggerFactory.getLogger(ShipperService.class);
