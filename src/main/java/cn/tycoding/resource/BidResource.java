@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/bids")
-@CrossOrigin(origins = "*")
+
 public class BidResource {
 
     private final Logger logger=LoggerFactory.getLogger(BidResource.class);
