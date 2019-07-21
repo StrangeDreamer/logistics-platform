@@ -135,7 +135,7 @@ public class TruckService {
         Cargo cargo = cargoService.findCargoById(cargoId);
 
         // 前提条件的检查
-        if (cargo.getStatus() != 2){
+        if (cargo.getStatus() != 2 || cargo.getStatus() != 12){
             throw new TruckException("当前货物状态不正确，无法开始运货");
         }
         cargo.setStatus(3);

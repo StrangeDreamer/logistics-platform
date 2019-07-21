@@ -369,6 +369,7 @@ public class CargoService {
                 Cargo cargoRedis=cargoService.findCargoById(c.getId());
                 cargoRedis.setPosition(position);
                 redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
+                cargoRepository.save(cargoRedis);
                 res.add(cargoRedis);
             }else {
                 res.add(c);
