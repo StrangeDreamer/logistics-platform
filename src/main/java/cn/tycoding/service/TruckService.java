@@ -124,8 +124,8 @@ public class TruckService {
                 n3++;
             }
         }
-        return "货车id"+ truckId
-                + "目前共有订单" + n1.size() + "个, 其中已接未运订单有" + n2+ "个;正在运输订单有" + n3+ "个";
+        return "货车"+ truckId
+                +  "当前有已接未运订单" + n2+ "个;正在运输订单" + n3+ "个";
     }
 
     // 查询所有承运方
