@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/bids")
-@CrossOrigin(origins = "*")
+
 public class BidResource {
 
     private final Logger logger=LoggerFactory.getLogger(BidResource.class);
@@ -36,9 +36,6 @@ public class BidResource {
     @Autowired
     private PlatformRepository platformRepository;
     @Autowired
-    //private TruckRepository truckRepository;
-    private TruckService truckService;
-    @Autowired
     private BidRepository bidRepository;
     @Autowired
     private TruckRepository truckRepository;
@@ -46,14 +43,8 @@ public class BidResource {
     private BidService bidService;
     @Autowired
     private WebSocketTest webSocketTest;
-
-
     @Autowired
     private BankAccountService bankAccountService;
-    @Autowired
-    private BankAccountRepository bankAccountRepository;
-    @Autowired
-    private InsuranceAccountRepository insuranceAccountRepository;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
 
@@ -189,6 +180,9 @@ public class BidResource {
             Platform platform = platformRepository.findRecentPltf();
             double exhibitionFee = platform.getExhibitionFee();
             Bid bidrd = bidService.checkRedis(cargoId);
+            if (cargo.getStatus() == 6) {
+                return cargo;
+            }
             // 订单没有人抢/时间段内不存在有效出价：对于转单订单，转手订单原订单继续执行；对于最原始的订单，直接撤单
             if (bidrd == null){
                 // 当precargo 为null，表示最原始的订单，直接撤单

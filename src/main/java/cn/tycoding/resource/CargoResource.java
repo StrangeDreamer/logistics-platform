@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cargos")
-@CrossOrigin(origins = "*")
+
 public class CargoResource {
 
     private final Logger logger = LoggerFactory.getLogger(CargoResource.class);

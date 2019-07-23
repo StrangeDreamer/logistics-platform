@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -133,8 +134,10 @@ public class CargoService {
         InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
         try {
             // 发布时无人接单撤单  --撤单
-            if (cargo.getStatus() == 0 ){
+            if (cargo.getStatus() == 0 || cargo.getStatus() == 1 ){
                 cargo.setStatus(6);
+                cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
 
             }
@@ -167,6 +170,10 @@ public class CargoService {
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(7);
 
+                cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+
+
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
 
@@ -192,11 +199,16 @@ public class CargoService {
                 cargoBack.setTruckId(cargo.getTruckId());
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
+                cargoBack.setPosition(cargo.getPosition());
                 cargoRepository.save(cargoBack);
+                redisTemplate.boundHashOps(cargoKey).delete(cargoBack.getId());
+
 
                 // 将原来对订单设置为等待验货状态
                 cargo.setStatus(4);
                 cargoRepository.save(cargo);
+                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
@@ -305,6 +317,7 @@ public class CargoService {
         }
 
         return cargo;
+
     }
 
     // 查找发货方的所有订单
@@ -347,23 +360,26 @@ public class CargoService {
 
     // 更新承运方/货物位置信息
     public List<Cargo> refreshPosition(int truckId, String position) {
-        Truck truck = truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
-        Truck truck1=truckService.findTruckById(truckId);
-        truck1.setPosition(position);
-        //truckRepository.save(truck);
+        Truck truck=truckService.findTruckById(truckId);
+        truck.setPosition(position);
 
 
         List<Cargo> cargos = findAllByTruckId(truckId);
-
-        for(int i = 0; i < cargos.size(); i++) {
-            if (cargos.get(i).getStatus() == 3) {
-                Cargo cargoRedis=cargoRepository.findCargoById(cargos.get(i).getId());
+        List<Cargo> res=new ArrayList<>(cargos.size());
+        for (Cargo c :
+                cargos) {
+            if (c.getStatus() == 3) {
+                Cargo cargoRedis=cargoService.findCargoById(c.getId());
                 cargoRedis.setPosition(position);
-                //cargoRepository.save(cargos.get(i));
+                redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
+                cargoRepository.save(cargoRedis);
+                res.add(cargoRedis);
+            }else {
+                res.add(c);
             }
-        }
+            }
+            return res;
 
-        return cargos;
     }
 
 }
