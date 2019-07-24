@@ -22,6 +22,11 @@
 **[OpenAPI](https://documenter.getpostman.com/view/7656152/SVSNK85K?version=latest)**
 
 
+### 生产环境
+```$xslt
+java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+```
+
 * docker使用
 `docker kill dockerName`
 `dockcer rm dockerName`
