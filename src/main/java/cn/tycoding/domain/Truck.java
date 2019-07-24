@@ -21,7 +21,7 @@ public class Truck {
     private double availableWeight;
     private double availableVolume;
     private String type;
-    private double rank = 6;
+    private double ranking = 6;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

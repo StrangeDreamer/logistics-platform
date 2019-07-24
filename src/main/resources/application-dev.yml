@@ -1,0 +1,142 @@
+server:
+  hostname: 10.141.209.191
+  port: 8080
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    name: springboot
+    type: com.alibaba.druid.pool.DruidDataSource
+    #druid相关配置
+    druid:
+      #监控统计拦截的filters
+      filter: stat
+      #mysql驱动
+      driver-class-name: com.mysql.jdbc.Driver
+      #基本属性 $mysql -h 192.168.99.100 -u root -p $1234
+      url: jdbc:mysql://10.141.209.191:3306/seckill?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&?zeroDateTimeBehavior=convertToNull
+      username: root
+      password: root
+      #配置初始化大小/最小/最大
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: LEGACYHTML5
+    cache: false
+
+  #文件上传相关设置
+  servlet:
+    multipart:
+      max-file-size: 10Mb
+      max-request-size: 100Mb
+
+  #devtools插件
+  devtools:
+    livereload:
+      enabled: true #是否支持livereload
+      port: 35729
+    restart:
+      enabled: true #是否支持热部署
+
+  #redis缓存
+  redis:
+    #redis数据库索引，默认是0
+    database: 0
+    #redis服务器地址，这里用本地的redis
+    host: 127.0.0.1
+    # Redis服务器连接密码（默认为空）
+    password:
+    #redis服务器连接端口，默认是6379
+    port: 6379
+    # 连接超时时间（毫秒）
+    timeout: 1000
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+  jpa:
+    database: mysql
+    show-sql: true
+    #create：每次加载hibernate时都会删除上一次的生成的表，然后根据你的model类再重新来生成新表，哪怕两次没有任何改变也要这样执行，这就是导致数据库表数据丢失的一个重要原因。
+    # update：最常用的属性，第一次加载hibernate时根据model类会自动建立起表的结构（前提是先建立好数据库），以后加载hibernate时根据 model类自动更新表结构，即使表结构改变了但表中的行仍然存在不会删除以前的行。要注意的是当部署到服务器后，表结构是不会被马上建立起来的，是要等 应用第一次运行起来后才会。
+
+    hibernate:
+      ddl-auto: update
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+    # 开启消息发送确认
+    publisher-confirms: true
+    publisher-returns: true
+    # 返回无法插入队列的消息
+    template:
+      mandatory: true
+  websocket:
+    msg:
+      queue: websocket_msg_queue
+  data:
+    redis:
+      repositories:
+        enabled: false
+  http:
+    multipart:
+      #单文件限制大小
+      max-file-size: 1MB
+      #一次请求限制大小
+      max-request-size: 10MB
+#  resources:
+#    static-locations: classpath:/static/,file:/E/image/
+
+
+message:
+  queue:
+    type: rabbitmq
+
+
+
+#mybatis配置
+#mybatis:
+## 配置mapper xml文件所在路径
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: cn.tycoding.entity
+#  configuration:
+#    # 使用jdbc的getGeneratedKeys 可以获取数据库自增主键值
+#    use-generated-keys: true
+#    # 使用列别名替换列名，默认true。如：select name as title from table
+#    use-column-label: true
+#    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
+#    map-underscore-to-camel-case: true
+
+# 打印sql
+logging:
+  level:
+    cn.tycoding.mapper: DEBUG
+
+
+
+
+
+
+
+

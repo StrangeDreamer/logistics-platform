@@ -91,8 +91,8 @@ public class InspectionService {
         if (inspection.getInspectionResult() == 9) {
             // 订单超时，令承运方评级降低
 
-            if (truck.getRank() >= 1) {
-                truck.setRank(truck.getRank() - 1);
+            if (truck.getRanking() >= 1) {
+                truck.setRanking(truck.getRanking() - 1);
             }
 
             double compensation = cargo.getInsurance() * (overTimeFeeRatio + inspection.getTimeoutPeriod() * 0.01);
@@ -113,8 +113,8 @@ public class InspectionService {
         // 没有超时则恢复担保额
         else {
             // 正常运达则评级增加
-            if (truck.getRank() <= 0.5)
-            truck.setRank(truck.getRank() + 0.5);
+            if (truck.getRanking() <= 0.5)
+            truck.setRanking(truck.getRanking() + 0.5);
             result = "验货正常没有出现超时！\n" + "担保额恢复" + cargo.getInsurance() + "\n";
 
             InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(),"truck");
@@ -151,8 +151,8 @@ public class InspectionService {
             double truck2Profit = truckProfitRatio * profitSpace;
 
             // 5 计算各方评级 以及真正的利润
-            int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRank();
-            int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
+            int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRanking();
+            int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRanking();
 
             double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
             double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
@@ -213,8 +213,8 @@ public class InspectionService {
         double truck1Profit = shipperProfitRatio * profitSpace;
         double truck2Profit = truckProfitRatio * profitSpace;
         // 5 计算各方评级 以及真正的利润
-        int rank1 = (int)shipperRepository.findShippersById(cargo.getShipperId()).getRank();
-        int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRank();
+        int rank1 = (int)shipperRepository.findShippersById(cargo.getShipperId()).getRanking();
+        int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRanking();
 
         double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
         double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
