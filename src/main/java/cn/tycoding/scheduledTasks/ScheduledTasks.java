@@ -66,7 +66,7 @@ public class ScheduledTasks {
 
     @Scheduled(fixedDelay = 24000)
     public void autoSetPlatformPara() {
-        if (!platformRepository.existsById(1)){
+        if (platformRepository.findRecentPltf() == null){
             Platform platform = new Platform();
             platform.setLowestBidPriceRatio(0.4);
             platform.setShipperProfitRatio(0.2);
