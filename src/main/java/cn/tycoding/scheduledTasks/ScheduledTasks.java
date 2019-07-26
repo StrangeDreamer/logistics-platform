@@ -63,24 +63,4 @@ public class ScheduledTasks {
         redisTemplate.opsForList().rightPush(yearKey,nowMoney);
         log.info("redis yearincome refresh");
     }
-
-    @Scheduled(fixedDelay = 24000)
-    public void autoSetPlatformPara() {
-        if (platformRepository.findRecentPltf() == null){
-            Platform platform = new Platform();
-            platform.setLowestBidPriceRatio(0.4);
-            platform.setShipperProfitRatio(0.2);
-            platform.setPlatformProfitRatio(0.3);
-            platform.setTruckProfitRatio(0.5);
-            platform.setWithdrawFeeRatio(0.2);
-            platform.setOverTimeFeeRatio(0.05);
-            platform.setExhibitionFee(10);
-            platform.setBidingDuration(25);
-            platformRepository.save(platform);
-        }
-
-        log.info("自动设置平台参数");
-    }
-
-
 }

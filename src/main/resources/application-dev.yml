@@ -132,11 +132,3 @@ message:
 logging:
   level:
     cn.tycoding.mapper: DEBUG
-
-
-
-
-
-
-
-
