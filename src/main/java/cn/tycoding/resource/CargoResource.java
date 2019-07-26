@@ -178,7 +178,7 @@ public class CargoResource {
             return cargoService.findAbnormalCargos();
         }
         logger.info("REST 查询所有正常完成货物");
-        return cargoService.findAllNormalCargos();
+        return cargoRepository.findAllByStatus(status);
 
     }
 
