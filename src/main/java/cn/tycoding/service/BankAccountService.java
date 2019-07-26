@@ -31,7 +31,7 @@ public class BankAccountService {
     private final Logger logger = LoggerFactory.getLogger(BankAccountService.class);
     @Autowired
     private BankAccountRepository bankAccountRepository;
-    @Autowired
+
 
     // 查询所有的注册账户
     public List<BankAccount> findAll(){
@@ -40,6 +40,16 @@ public class BankAccountService {
 
     // 检查 该参与方是否存在，没有则自动创建,如果已经存在则直接返回该账户
     public synchronized BankAccount check (int id, String type) {
+        if(type.equals("platform")) {
+            type = "平台";
+        } else if(type.equals("shipper")) {
+            type = "发货方";
+        } else if(type.equals("receiver")) {
+            type = "收货方";
+        } else {
+            logger.info(type);
+            return null;
+        }
         BankAccount bankAccount = bankAccountRepository.findBankAccountByIdAndType(id, type);
 
         if (bankAccount == null) {
@@ -80,10 +90,10 @@ public class BankAccountService {
         bankAccount.setAvailableMoney(bankAccount.getAvailableMoney() + money);
         if (money > 0) {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    "\n" + bankAccount.getType() + bankAccount.getId() + "解冻担保额" + String.format("%.2f",money));
+                    ", " + bankAccount.getType() + bankAccount.getId() + "解冻担保额" + String.format("%.2f",money));
         } else {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    "\n" + bankAccount.getType() + bankAccount.getId() +"冻结担保额" + String.format("%.2f",(0-money)));
+                    ", " + bankAccount.getType() + bankAccount.getId() +"冻结担保额" + String.format("%.2f",(0-money)));
         }
         bankAccountRepository.save(bankAccount);
         return true;
@@ -113,9 +123,9 @@ public class BankAccountService {
         bankAccountA.setAvailableMoney(bankAccountA.getAvailableMoney() - money);
         bankAccountB.setAvailableMoney(bankAccountB.getAvailableMoney() + money);
         bankAccountA.setBankAccountLog(bankAccountA.getBankAccountLog()
-                + "\n" + bankAccountA.getType() + bankAccountA.getId() +"减少资金" + String.format("%.2f",money));
+                + ", " + bankAccountA.getType() + bankAccountA.getId() +"减少资金" + String.format("%.2f",money));
         bankAccountB.setBankAccountLog(bankAccountB.getBankAccountLog()
-                + "\n" + bankAccountB.getType() + bankAccountB.getId() +"增加资金" + String.format("%.2f",money));
+                + ", " + bankAccountB.getType() + bankAccountB.getId() +"增加资金" + String.format("%.2f",money));
         bankAccountRepository.save(bankAccountA);
         bankAccountRepository.save(bankAccountB);
         return true;

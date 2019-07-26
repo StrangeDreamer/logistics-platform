@@ -25,7 +25,7 @@ public class InsuranceAccount {
     // 真正的Id是id和type的组合
     private int id;
     // 担保账户的type取值目前只有truck
-    private String type = "truck";
+    private String type = "承运方";
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

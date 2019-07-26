@@ -26,7 +26,7 @@ public class InsuranceAccountService {
     private final Logger logger = LoggerFactory.getLogger(InsuranceAccountService.class);
     @Autowired
     private InsuranceAccountRepository insuranceAccountRepository;
-    @Autowired
+
 
     // 查询所有的注册担保方账户
     public List<InsuranceAccount> findAll(){
@@ -39,7 +39,6 @@ public class InsuranceAccountService {
         if (insuranceAccount == null) {
             insuranceAccount = new InsuranceAccount();
             insuranceAccount.setId(id);
-            insuranceAccount.setType(type);
             logger.info("该承运方账户不存在，自动为其创建承运方账户！");
             insuranceAccountRepository.save(insuranceAccount);
         }
@@ -67,10 +66,10 @@ public class InsuranceAccountService {
         insuranceAccount.setAvailableMoney(insuranceAccount.getAvailableMoney() + money);
         if (money > 0) {
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
-                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() + "解冻担保额" + String.format("%.2f",money));
+                    ", " + insuranceAccount.getType() + insuranceAccount.getId() + "解冻担保额" + String.format("%.2f",money));
         } else {
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
-                    "\n" + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + String.format("%.2f",(-money)));
+                    ", " + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + String.format("%.2f",(-money)));
         }
         insuranceAccountRepository.save(insuranceAccount);
         return true;
