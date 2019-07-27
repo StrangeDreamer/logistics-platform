@@ -46,7 +46,10 @@ public class BankAccountService {
             type = "发货方";
         } else if(type.equals("receiver")) {
             type = "收货方";
-        } else {
+        }
+        else if(type.equals("truck")) {
+        type = "承运方";}
+        else {
             logger.info(type);
             return null;
         }
