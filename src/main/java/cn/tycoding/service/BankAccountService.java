@@ -117,10 +117,10 @@ public class BankAccountService {
             logger.info("转账失败，转账人的资金不足！");
             return false;
         }
-        if (bankAccountA.getAvailableMoney() < money) {
+/*        if (bankAccountA.getAvailableMoney() < money) {
             logger.info("转账失败，转账人的可用资金不足！");
             return false;
-        }
+        }*/
         bankAccountA.setMoney(bankAccountA.getMoney() - money);
         bankAccountB.setMoney(bankAccountB.getMoney() + money);
         bankAccountA.setAvailableMoney(bankAccountA.getAvailableMoney() - money);

@@ -41,7 +41,7 @@ public class Platform implements Serializable {
     // 红包上限，如果实际红包高于该比例与运费的乘积，则以乘积为最终红包
     private double bonusMaxRatioInFare = 0.05;
 
-    private int exhibitionFee = 10;
+    private int exhibitionFee = 500;
 
     private int bidingDuration = 180;
 

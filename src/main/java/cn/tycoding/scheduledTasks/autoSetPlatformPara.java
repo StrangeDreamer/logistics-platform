@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
  * 自动设置平台参数
  * https://blog.csdn.net/rui15111/article/details/80996342
  */
+/*
 @Component
 @Order(value = 1)
 @Slf4j
@@ -37,4 +38,4 @@ public class autoSetPlatformPara  implements ApplicationRunner {
 
         log.info("自动设置平台参数");
     }
-}
+}*/

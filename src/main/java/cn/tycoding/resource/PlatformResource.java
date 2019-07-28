@@ -53,7 +53,7 @@ public class PlatformResource {
     @PostMapping
     public Platform setPlatformElem(@RequestBody Platform platform) {
         String result = "参数设置";
-        platformService.savePlatform(platform);
+//        platformService.savePlatform(platform);
         logger.info(result);
         return platformService.savePlatform(platform);
     }

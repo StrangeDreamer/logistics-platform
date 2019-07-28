@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
-
+/*
 @Component
 @Slf4j
 public class ScheduledTasks {
@@ -38,11 +38,12 @@ public class ScheduledTasks {
 
         this.bankAccountService = bankAccountService;
         this.redisTemplate = redisTemplate;
-    }
+    }*/
 
     /**
      * fixedDelay = 24000表示当前方法执行完毕24000ms后，Spring scheduling会再次调用该方法
      */
+/*
     @Scheduled(fixedDelay = 24000)
     public void getAccountLogDay() {
          double nowMoney=bankAccountService.getAvailableMoney(accountId,accountType);
@@ -63,4 +64,4 @@ public class ScheduledTasks {
         redisTemplate.opsForList().rightPush(yearKey,nowMoney);
         log.info("redis yearincome refresh");
     }
-}
+}*/
