@@ -36,12 +36,12 @@ public class InsuranceAccount {
     private Date modifyTime;
 
     // 承运方的担保额
-    private double Money = 100000;
+    private double Money ;
     // 承运方去除冻结、实际可用的担保额
-    private double availableMoney = 100000;
+    private double availableMoney ;
 
     @Lob
     @Column(columnDefinition="TEXT")
-    private String InsuranceAccountLog = "担保账户资金流水：\n初始担保额度为100000";
+    private String InsuranceAccountLog = "担保账户资金流水：\n";
 }
 

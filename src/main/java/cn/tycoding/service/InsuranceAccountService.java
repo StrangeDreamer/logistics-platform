@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -26,6 +27,8 @@ public class InsuranceAccountService {
     private final Logger logger = LoggerFactory.getLogger(InsuranceAccountService.class);
     @Autowired
     private InsuranceAccountRepository insuranceAccountRepository;
+
+
 
 
     // 查询所有的注册担保方账户
@@ -41,6 +44,12 @@ public class InsuranceAccountService {
             insuranceAccount = new InsuranceAccount();
             insuranceAccount.setId(id);
             logger.info("该承运方账户不存在，自动为其创建承运方账户！");
+            insuranceAccount.setMoney((int)(100000 + 500000 * Math.random()));
+            insuranceAccount.setAvailableMoney((int)(100000 + 500000 * Math.random()));
+
+            insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() + "参与方初始担保额为" + insuranceAccount.getMoney());
+
+
             insuranceAccountRepository.save(insuranceAccount);
         }
         return insuranceAccount;
