@@ -31,6 +31,8 @@ public class BankAccountService {
     private final Logger logger = LoggerFactory.getLogger(BankAccountService.class);
     @Autowired
     private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private InsuranceAccountService insuranceAccountService;
 
 
     // 查询所有的注册账户
@@ -73,7 +75,11 @@ public class BankAccountService {
     // 查询指定注册账户的流水
     public String findMoneyLog(int id, String type) {
         BankAccount bankAccount = check(id, type);
-        return bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
+        String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
+        if (type.equals("truck")) {
+            result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog();
+        }
+        return result;
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结
