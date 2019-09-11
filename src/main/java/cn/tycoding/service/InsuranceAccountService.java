@@ -34,7 +34,8 @@ public class InsuranceAccountService {
     }
 
     // 检查 该承运方方是否存在，没有则自动创建,如果已经存在则直接返回该账户
-    public InsuranceAccount check (int id, String type) {
+    public synchronized InsuranceAccount check (int id, String type) {
+        type = "承运方";
         InsuranceAccount insuranceAccount = insuranceAccountRepository.findInsuranceAccountByIdAndType(id, type);
         if (insuranceAccount == null) {
             insuranceAccount = new InsuranceAccount();

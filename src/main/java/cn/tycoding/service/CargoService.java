@@ -187,7 +187,10 @@ public class CargoService {
                 logger.info("由于货物已经运输，发货方" + cargo.getShipperId() +
                         " 支付平台" + cargo.getTruckId() + "双倍运费" +
                         (cargo.getFreightFare() * 2));
-                // 车辆的担保额度的恢复
+                // 车辆的担保额度的恢复(实际需要一个隐含条件，需要撤单时，该执行承运方也要有足够的担保额）
+
+                // 由于部分功能在前端实现 此处只是扣除承运方担保额度
+                insuranceAccountService.changeAvailableMoney(insuranceAccount,0 - cargo.getInsurance());
                 logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
                 Cargo cargoBack = createCargo(cargo);

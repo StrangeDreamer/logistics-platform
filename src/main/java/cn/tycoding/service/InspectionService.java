@@ -113,12 +113,14 @@ public class InspectionService {
         // 没有超时则恢复担保额
         else {
             // 正常运达则评级增加
+
             if (truck.getRanking() <= 0.5)
             truck.setRanking(truck.getRanking() + 0.5);
             result = "验货正常没有出现超时！\n" + "担保额恢复" + cargo.getInsurance() + "\n";
 
             InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(),"truck");
             // 正常运达恢复担保额
+            insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,"由于正常运达恢复担保额");
             insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck,cargo.getInsurance());
         }
 
@@ -201,6 +203,7 @@ public class InspectionService {
         // 创建账户
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
         InsuranceAccount insuranceAccountTrcuk = insuranceAccountService.check(cargo.getTruckId(),"truck");
+
 
         // 1 首先前一个承运方支付运费prefare给平台
         logger.info("发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare);
