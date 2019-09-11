@@ -31,6 +31,8 @@ public class TruckService {
     private final String truckKey = "Truck";
     private final String cargoKey="Cargo";
 
+    @Autowired
+    private InsuranceAccountService insuranceAccountService;
 
     // 登录
     public Truck login(String name){
@@ -69,6 +71,9 @@ public class TruckService {
         truck1.setTelNumber(truck.getTelNumber());
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
+
+        insuranceAccountService.check(truck1.getId(), "truck");
+
         return truck1;
     }
     // 承运方注销
