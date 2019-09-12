@@ -33,4 +33,5 @@ public class Receiver {
     private String id_gongsitongyidaima = "0";
     private String occupation = "0";
     private String telNumber = "0";
+    private String address = "经营地址";
 }

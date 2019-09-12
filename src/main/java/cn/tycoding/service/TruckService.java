@@ -69,6 +69,7 @@ public class TruckService {
         truck1.setId_xingshizheng(truck.getId_xingshizheng());
         truck1.setId_jiashizheng(truck.getId_jiashizheng());
         truck1.setTelNumber(truck.getTelNumber());
+        truck1.setAddress(truck.getAddress());
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
 

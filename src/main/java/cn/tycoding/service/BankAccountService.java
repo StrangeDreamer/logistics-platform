@@ -62,8 +62,11 @@ public class BankAccountService {
             bankAccount.setId(id);
             bankAccount.setType(type);
             logger.info("该银行账户不存在，自动为其创建银行账户！");
-            bankAccount.setMoney((int)(100000 + 500000 * Math.random()));
-            bankAccount.setAvailableMoney((int)(100000 + 500000 * Math.random()));
+
+            if (type.equals("平台")){
+                bankAccount.setMoney(0);
+                bankAccount.setAvailableMoney(0);
+            }
 
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + "参与方初始资金为" + bankAccount.getMoney());
 

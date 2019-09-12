@@ -49,4 +49,5 @@ public class Truck {
     private String id_xingshizheng = "0";
     private String id_jiashizheng = "0";
     private String telNumber = "0";
+    private String address = "经营地址";
 }

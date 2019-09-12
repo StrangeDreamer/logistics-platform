@@ -45,11 +45,8 @@ public class InsuranceAccountService {
             insuranceAccount.setId(id);
             logger.info("该承运方账户不存在，自动为其创建承运方账户！");
             insuranceAccount.setMoney((int)(100000 + 500000 * Math.random()));
-            insuranceAccount.setAvailableMoney((int)(100000 + 500000 * Math.random()));
-
+            insuranceAccount.setAvailableMoney(insuranceAccount.getMoney());
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() + "参与方初始担保额为" + insuranceAccount.getMoney());
-
-
             insuranceAccountRepository.save(insuranceAccount);
         }
         return insuranceAccount;

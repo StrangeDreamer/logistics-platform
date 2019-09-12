@@ -53,6 +53,7 @@ public class ReceiverService {
         receiver1.setId_gongsitongyidaima(receiver.getId_gongsitongyidaima());
         receiver1.setOccupation(receiver.getOccupation());
         receiver1.setTelNumber(receiver.getTelNumber());
+        receiver1.setAddress(receiver.getAddress());
         
         receiverRepository.save(receiver1);
         return receiver1;

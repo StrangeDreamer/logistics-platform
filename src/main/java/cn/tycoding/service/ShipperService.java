@@ -54,6 +54,7 @@ public class ShipperService {
         shipper1.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
         shipper1.setOccupation(shipper.getOccupation());
         shipper1.setTelNumber(shipper.getTelNumber());
+        shipper1.setAddress(shipper.getAddress());
         shipperRepository.save(shipper1);
         
         return shipper1;
