@@ -68,6 +68,9 @@ public class BankAccountService {
                 bankAccount.setAvailableMoney(0);
             }
 
+            bankAccount.setMoney((int)(100000 + 500000 * Math.random()));
+            bankAccount.setAvailableMoney(bankAccount.getMoney());
+
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + "参与方初始资金为" + bankAccount.getMoney());
 
             bankAccountRepository.save(bankAccount);

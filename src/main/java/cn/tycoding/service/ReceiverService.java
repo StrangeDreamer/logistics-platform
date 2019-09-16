@@ -12,6 +12,7 @@ import cn.tycoding.repository.ReceiverRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ public class ReceiverService {
     private final Logger logger = LoggerFactory.getLogger(ReceiverService.class);
     private final ReceiverRepository receiverRepository;
     private final CargoRepository cargoRepository;
+    @Autowired
+    private BankAccountService bankAccountService;
 
     public ReceiverService(ReceiverRepository receiverRepository, CargoRepository cargoRepository) {
         this.receiverRepository = receiverRepository;
@@ -56,6 +59,9 @@ public class ReceiverService {
         receiver1.setAddress(receiver.getAddress());
         
         receiverRepository.save(receiver1);
+        // 获得银行账号和保险
+        bankAccountService.check(receiver1.getId(),"receiver");
+
         return receiver1;
     }
 

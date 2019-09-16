@@ -9,6 +9,7 @@ import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ShipperRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class ShipperService {
     private final Logger logger=LoggerFactory.getLogger(ShipperService.class);
     private final ShipperRepository shipperRepository;
     private final CargoRepository cargoRepository;
+    @Autowired
+    private BankAccountService bankAccountService;
 
     public ShipperService(ShipperRepository shipperRepository,CargoRepository cargoRepository) {
         this.shipperRepository = shipperRepository;
@@ -56,6 +59,9 @@ public class ShipperService {
         shipper1.setTelNumber(shipper.getTelNumber());
         shipper1.setAddress(shipper.getAddress());
         shipperRepository.save(shipper1);
+
+        // 获得银行账号和保险
+        bankAccountService.check(shipper1.getId(),"shipper");
         
         return shipper1;
     }

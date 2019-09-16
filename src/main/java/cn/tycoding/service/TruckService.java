@@ -1,4 +1,5 @@
 package cn.tycoding.service;
+import cn.tycoding.domain.BankAccount;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.exception.ShipperException;
@@ -33,12 +34,13 @@ public class TruckService {
 
     @Autowired
     private InsuranceAccountService insuranceAccountService;
+    @Autowired
+    private BankAccountService bankAccountService;
 
     // 登录
     public Truck login(String name){
         // 是否查无此人
         return truckRepository.findTruckByName(name).orElseThrow(()->new TruckException("该用户未注册！"));
-
     }
 
     
@@ -73,7 +75,12 @@ public class TruckService {
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
 
+
+
+        // 获得银行账号和保险
+        bankAccountService.check(truck1.getId(),"truck");
         insuranceAccountService.check(truck1.getId(), "truck");
+
 
         return truck1;
     }
