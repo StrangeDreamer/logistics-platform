@@ -87,7 +87,8 @@ public class BankAccountService {
         BankAccount bankAccount = check(id, type);
         String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
         if (type.equals("truck")) {
-            result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog();
+            result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
+            + "\n当前担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
         }
         return result;
     }
