@@ -57,6 +57,7 @@ public class ReceiverService {
         receiver1.setOccupation(receiver.getOccupation());
         receiver1.setTelNumber(receiver.getTelNumber());
         receiver1.setAddress(receiver.getAddress());
+        receiver1.setActivated(false);
         
         receiverRepository.save(receiver1);
         // 获得银行账号和保险
@@ -97,5 +98,12 @@ public class ReceiverService {
     }
 
 
+    public Receiver active(int id) {
+        Receiver receiver = receiverRepository.findById(id).orElseThrow(()->new RuntimeException("该发货方不存在"));
+        receiver.setActivated(true);
+        receiverRepository.save(receiver);
+        logger.info("激活成功！");
+        return receiver;
+    }
 
 }

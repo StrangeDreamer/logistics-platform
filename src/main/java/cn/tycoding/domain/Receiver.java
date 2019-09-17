@@ -27,6 +27,7 @@ public class Receiver {
     @Column(updatable = false, nullable = false)
     private Date modifyTime;
 
+    private boolean activated = false;
 
     // 以下字段仅用于保存，不会被使用
     private String idgerenshenfenzheng = "0";
@@ -34,4 +35,5 @@ public class Receiver {
     private String occupation = "0";
     private String telNumber = "0";
     private String address = "经营地址";
+
 }

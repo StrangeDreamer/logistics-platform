@@ -80,6 +80,13 @@ public class ReceiverResource {
         return  inspectionService.inspectionCargo(inspection);
     }
 
+
+    @PutMapping("/active/{id}")
+    public Receiver active(@PathVariable("id") int id) {
+        logger.info("激活用户");
+        return receiverService.active(id);
+    }
+
 }
 
 
