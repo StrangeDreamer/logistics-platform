@@ -88,7 +88,7 @@ public class BankAccountService {
         String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
         if (type.equals("truck")) {
             result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
-            + "\n当前担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
+            + "\n当前资金为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
         }
         return result;
     }
@@ -110,10 +110,10 @@ public class BankAccountService {
         bankAccount.setAvailableMoney(bankAccount.getAvailableMoney() + money);
         if (money > 0) {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    ", " + bankAccount.getType() + bankAccount.getId() + "解冻担保额" + String.format("%.2f",money));
+                    ", " + bankAccount.getType() + bankAccount.getId() + "解冻资金" + String.format("%.2f",money));
         } else {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    ", " + bankAccount.getType() + bankAccount.getId() +"冻结担保额" + String.format("%.2f",(0-money)));
+                    ", " + bankAccount.getType() + bankAccount.getId() +"冻结资金" + String.format("%.2f",(0-money)));
         }
         bankAccountRepository.save(bankAccount);
         return true;
