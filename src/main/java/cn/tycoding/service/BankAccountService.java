@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class BankAccountService {
     private BankAccountRepository bankAccountRepository;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
+
 
     // 查询所有的注册账户
     public List<BankAccount> findAll(){
@@ -80,8 +82,9 @@ public class BankAccountService {
 
     // 查询指定注册账户的流水
     public String findMoneyLog(int id, String type) {
+        DecimalFormat df = new DecimalFormat("#.00");
         BankAccount bankAccount = check(id, type);
-        String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
+        String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + df.format(bankAccount.getMoney());
         if (type.equals("truck")) {
             result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
             + "\n可用担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
@@ -111,7 +114,7 @@ public class BankAccountService {
                     ", " + bankAccount.getType() + bankAccount.getId() + "解冻资金" + String.format("%.2f",money));
         } else {
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +
-                    ", " + bankAccount.getType() + bankAccount.getId() +"冻结资金" + String.format("%.2f",(0-money)));
+                    ", " + bankAccount.getType() + bankAccount.getId() +"被冻结资金" + String.format("%.2f",(0-money)));
         }
         bankAccountRepository.save(bankAccount);
         return true;

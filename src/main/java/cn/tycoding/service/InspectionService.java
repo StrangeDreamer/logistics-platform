@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-
+import java.text.SimpleDateFormat;
 /**
  * @auther qlXie
  * @date 2019-06-12 11:00
@@ -96,14 +96,14 @@ public class InspectionService {
             InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
-                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                    df.format(new Date()) + "  由于承运方" + truck.getId() +
                             "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
             bankAccountService.addMoneyLog(bankAccountShipper,
 
-                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                    df.format(new Date()) + "  由于承运方" + truck.getId() +
                             "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
             bankAccountService.addMoneyLog(bankAccountTruck,
-                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                    df.format(new Date()) + "  由于承运方" + truck.getId() +
                             "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
 
             bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, compensation);
@@ -119,7 +119,7 @@ public class InspectionService {
             InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(), "truck");
             // 正常运达恢复担保额
             insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,
-                    df.format(new Date()) + "由于承运方" + truck.getId() + "对订单" + cargo.getId() + "正常运达，承运方恢复担保额");
+                    df.format(new Date()) + "  由于承运方" + truck.getId() + "对订单" + cargo.getId() + "正常运达，承运方恢复担保额");
             insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck, cargo.getInsurance());
         }
 
@@ -178,21 +178,21 @@ public class InspectionService {
                     "\n";
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
             bankAccountService.addMoneyLog(bankAccountPreTruck,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
             bankAccountService.addMoneyLog(bankAccountTruck,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
 
             bankAccountService.transferMoney(bankAccountPreTruck, bankAccountPlatform, freightFare);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.addMoneyLog(bankAccountPreTruck,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.addMoneyLog(bankAccountTruck,
-                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountPreTruck, trueTruck1Profit);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
         }
@@ -249,21 +249,21 @@ public class InspectionService {
                 "\n";
 
         bankAccountService.addMoneyLog(bankAccountPlatform,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
         bankAccountService.addMoneyLog(bankAccountShipper,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
         bankAccountService.addMoneyLog(bankAccountTruck,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
 
         bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, freightFare);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
         bankAccountService.addMoneyLog(bankAccountPlatform,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
         bankAccountService.addMoneyLog(bankAccountTruck,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
         bankAccountService.addMoneyLog(bankAccountShipper,
-                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
 
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, trueTruck1Profit);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
