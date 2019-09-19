@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,13 +35,13 @@ public class BankAccountService {
     @Autowired
     private InsuranceAccountService insuranceAccountService;
 
-
     // 查询所有的注册账户
     public List<BankAccount> findAll(){
         return bankAccountRepository.findAll();
     }
 
     // 检查 该参与方是否存在，没有则自动创建,如果已经存在则直接返回该账户
+    @Transactional
     public synchronized BankAccount check (int id, String type) {
         if(type.equals("platform")) {
             type = "平台";
@@ -62,23 +63,18 @@ public class BankAccountService {
             bankAccount.setId(id);
             bankAccount.setType(type);
             logger.info("该银行账户不存在，自动为其创建银行账户！");
-
             if (type.equals("平台")){
                 bankAccount.setMoney(0);
                 bankAccount.setAvailableMoney(0);
             }
-
             bankAccount.setMoney((int)(100000 + 500000 * Math.random()));
             bankAccount.setAvailableMoney(bankAccount.getMoney());
-
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + "参与方初始资金为" + bankAccount.getMoney());
-
             bankAccountRepository.save(bankAccount);
         } else {
             logger.info(type + id + "该银行账户存在！");
 
         }
-
         return bankAccount;
     }
 
@@ -88,13 +84,14 @@ public class BankAccountService {
         String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + bankAccount.getMoney();
         if (type.equals("truck")) {
             result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
-            + "\n当前资金为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
+            + "\n可用担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
         }
         return result;
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结
     // 如果转账成功则返回true，失败则返回false，表示资金不足，不可以转账
+    @Transactional
     public boolean changeAvailableMoney(int id, String type, double money) {
         BankAccount bankAccount = check(id,type);
         return changeAvailableMoney(bankAccount, money);
@@ -102,6 +99,7 @@ public class BankAccountService {
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结
     // 如果转账成功则返回true，失败则返回false，表示资金不足，不可以转账
+    @Transactional
     public boolean changeAvailableMoney(BankAccount bankAccount, double money) {
         if (bankAccount.getAvailableMoney() < money) {
             logger.info("冻结失败，资金不足！");
@@ -121,6 +119,7 @@ public class BankAccountService {
 
     // 资金变动，A向B支付money数值的钱
     // 如果转账成功则返回true，失败则返回false，表示资金不足，不可以转账
+    @Transactional
     public boolean transferMoney(int A_id, String A_type, int B_id, String B_type, double money) {
         BankAccount bankAccountA = check(A_id, A_type);
         BankAccount bankAccountB = check(B_id, B_type);
@@ -129,6 +128,7 @@ public class BankAccountService {
 
     // 资金变动，A向B支付money数值的钱
     // 如果转账成功则返回true，失败则返回false，表示资金不足，不可以转账
+    @Transactional
     public boolean transferMoney(BankAccount bankAccountA, BankAccount bankAccountB, double money) {
         if (bankAccountA.getMoney() < money) {
             logger.info("转账失败，转账人的资金不足！");

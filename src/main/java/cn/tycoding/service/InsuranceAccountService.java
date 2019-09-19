@@ -30,14 +30,13 @@ public class InsuranceAccountService {
     private InsuranceAccountRepository insuranceAccountRepository;
 
 
-
-
     // 查询所有的注册担保方账户
     public List<InsuranceAccount> findAll(){
         return insuranceAccountRepository.findAll();
     }
 
     // 检查 该承运方方是否存在，没有则自动创建,如果已经存在则直接返回该账户
+    @Transactional
     public synchronized InsuranceAccount check (int id, String type) {
         type = "承运方";
         InsuranceAccount insuranceAccount = insuranceAccountRepository.findInsuranceAccountByIdAndType(id, type);
@@ -56,7 +55,7 @@ public class InsuranceAccountService {
     // 查询指定注册承运方账户担保额的流水
     public String findMoneyLog(int id, String type) {
         InsuranceAccount insuranceAccount = check(id, type);
-        return insuranceAccount.getInsuranceAccountLog() + "\n参与方当前可用担保额为" + insuranceAccount.getMoney();
+        return insuranceAccount.getInsuranceAccountLog() + "\n参与方可用担保额为" + insuranceAccount.getMoney();
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结

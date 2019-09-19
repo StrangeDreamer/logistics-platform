@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,7 +31,6 @@ public class ReceiverService {
     public ReceiverService(ReceiverRepository receiverRepository, CargoRepository cargoRepository) {
         this.receiverRepository = receiverRepository;
         this.cargoRepository = cargoRepository;
-
     }
 
     // 登录
@@ -39,6 +39,7 @@ public class ReceiverService {
     }
 
     // 收货方注册
+    @Transactional
     public Receiver createReceiver(Receiver receiver){
         // 检查该注册人的身份证是否已经用于该项的注册
         if(receiverRepository.existsReceiverByIdgerenshenfenzheng(receiver.getIdgerenshenfenzheng())) {
@@ -58,11 +59,9 @@ public class ReceiverService {
         receiver1.setTelNumber(receiver.getTelNumber());
         receiver1.setAddress(receiver.getAddress());
         receiver1.setActivated(false);
-        
         receiverRepository.save(receiver1);
         // 获得银行账号和保险
         bankAccountService.check(receiver1.getId(),"receiver");
-
         return receiver1;
     }
 
@@ -96,7 +95,6 @@ public class ReceiverService {
     public List<Receiver> findAll(){
         return receiverRepository.findAll();
     }
-
 
     public Receiver active(int id) {
         Receiver receiver = receiverRepository.findById(id).orElseThrow(()->new RuntimeException("该发货方不存在"));

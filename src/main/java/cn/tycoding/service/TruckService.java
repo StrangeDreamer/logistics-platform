@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,22 +30,21 @@ public class TruckService {
     private TruckService truckService;
     @Autowired
     private RedisTemplate redisTemplate;
-    private final String truckKey = "Truck";
-    private final String cargoKey="Cargo";
-
     @Autowired
     private InsuranceAccountService insuranceAccountService;
     @Autowired
     private BankAccountService bankAccountService;
+    private final String truckKey = "Truck";
+    private final String cargoKey="Cargo";
 
     // 登录
     public Truck login(String name){
         // 是否查无此人
         return truckRepository.findTruckByName(name).orElseThrow(()->new TruckException("该用户未注册！"));
     }
-
     
     // 承运方注册
+    @Transactional
     public Truck createTruck(Truck truck){
 
         // 先检查该注册人的身份证是否已经用于该项的注册
@@ -56,7 +56,6 @@ public class TruckService {
         if(truckRepository.existsTruckByName(truck.getName())) {
             throw new TruckException("该用户名已被占用！");
         }
-
 
         Truck truck1 = new Truck();
         truck1.setName(truck.getName());
@@ -75,15 +74,13 @@ public class TruckService {
         truckRepository.save(truck1);
         logger.info("A new truck is created !");
 
-
-
         // 获得银行账号和保险
         bankAccountService.check(truck1.getId(),"truck");
         insuranceAccountService.check(truck1.getId(), "truck");
-
-
         return truck1;
     }
+
+
     // 承运方注销
     public String deleteTruck(int id){
         truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
@@ -120,7 +117,6 @@ public class TruckService {
             logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
             truck= (Truck) redisTemplate.boundHashOps(truckKey).get(id);
         }
-
         return truck;
     }
 
@@ -141,11 +137,13 @@ public class TruckService {
                 +  "当前有已接未运订单" + n2+ "个;正在运输订单" + n3+ "个";
     }
 
+
     // 查询所有承运方
     public List<Truck> findAll(){
         return truckRepository.findAll();
     }
 
+    @Transactional
     public Cargo startShip(int cargoId) {
         // 开始运货请求
         Cargo cargo = cargoService.findCargoById(cargoId);
@@ -160,6 +158,7 @@ public class TruckService {
         return cargoService.findCargoById(cargoId);
     }
 
+    @Transactional
     public Cargo endShip(int cargoId) {
         //truck已经送达货物，请求验货
         // 开始运货请求
@@ -172,7 +171,7 @@ public class TruckService {
         }
         cargo.setStatus(4);
         cargoRepository.save(cargo);
-        //没交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
+        // 每交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
         truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         return cargoService.findCargoById(cargoId);

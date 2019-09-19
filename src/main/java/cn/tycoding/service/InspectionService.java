@@ -31,26 +31,13 @@ public class InspectionService {
     @Autowired
     private ShipperRepository shipperRepository;
     @Autowired
-    private BankAccountRepository bankAccountRepository;
-    @Autowired
     private BankAccountService bankAccountService;
-    @Autowired
-    private InsuranceAccountRepository insuranceAccountRepository;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
 
-
-    public String saveInspection(Inspection inspection){
-        Inspection inspection1=new Inspection();
-        inspection1.setCargoId(inspection.getCargoId());
-        inspection1.setInspectionResult(inspection.getInspectionResult());
-        logger.info("保存验货请求");
-        inspectionRepository.save(inspection1);
-        return "保存验货请求成功";
-    }
-
+    // 验货
+    @Transactional
     public String inspectionCargo(Inspection inspection){
-
         Platform platform = platformRepository.findRecentPltf();
 
         double overTimeFeeRatio = platform.getOverTimeFeeRatio();
@@ -87,6 +74,7 @@ public class InspectionService {
         }
 
         Truck truck = truckRepository.findTruckById(cargo.getTruckId());
+
         // 如果超时，则先结算超时赔偿
         if (inspection.getInspectionResult() == 9) {
             // 订单超时，令承运方评级降低
@@ -108,7 +96,6 @@ public class InspectionService {
 
             bankAccountService.transferMoney(bankAccountTruck,bankAccountPlatform,compensation);
             bankAccountService.transferMoney(bankAccountPlatform,bankAccountShipper,compensation);
-
         }
         // 没有超时则恢复担保额
         else {
@@ -126,14 +113,11 @@ public class InspectionService {
 
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动
         while (cargo.getPreCargoId() != null) {
-
             result = result + "\n进入转单结算\n";
             double preFare = cargo.getPreFare();
             double freightFare = cargo.getFreightFare();
             double bidPrice = cargo.getBidPrice();
             Cargo preCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
-
-
 
             // TODO: 转单酬劳结算
             // 创建账户

@@ -108,10 +108,10 @@ public class BidResource {
         else if (insuranceAccountService.getAvailableMoney(truck.getId(),"truck") < cargo.getInsurance()) {
             // 车辆剩余担保额充足才可以接单
             logger.info("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方的担保额度不足！\n " +
-                    "当前该货车担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
+                    "当前该货车可用担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
                     "货物要求担保额为" + cargo.getInsurance());
             throw new BidException("货车"+bid.getTruckId()+"对订单" + cargo.getId() + "出价无效！该承运方的担保额度不足！\n " +
-                    "当前该货车担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
+                    "当前该货车可用担保额度为" + insuranceAccountService.getAvailableMoney(truck.getId(),"truck") +
                     "货物要求担保额为" + cargo.getInsurance());
         }
 

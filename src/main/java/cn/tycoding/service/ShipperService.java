@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ShipperService {
     }
 
     //发货方注册
+    @Transactional
     public Shipper createShipper(Shipper shipper){
 
         // 先检查该注册人的身份证是否已经用于该项的注册
@@ -47,8 +49,6 @@ public class ShipperService {
         if(shipperRepository.existsShipperByName(shipper.getName())) {
             throw new ShipperException("该用户名已被占用！");
         }
-
-
         Shipper shipper1 = new Shipper();
         shipper1.setName(shipper.getName());
         shipper1.setBankId(shipper.getBankId());
@@ -62,7 +62,6 @@ public class ShipperService {
 
         // 获得银行账号和保险
         bankAccountService.check(shipper1.getId(),"shipper");
-        
         return shipper1;
     }
 
@@ -83,7 +82,6 @@ public class ShipperService {
         shipperRepository.findById(id).ifPresent(shipper -> {
             shipperRepository.delete(shipper);
             logger.info("发货发注销成功！");
-
         });
         return  "发货方" + id + "注销成功！";
     }

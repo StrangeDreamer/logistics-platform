@@ -79,10 +79,8 @@ public class PlatformService {
                 "个，当前正在执行的订单" + (cargoNum1 + cargoNum2) + "个，已完成订单" + cargoNum3 +"个" ;
     }
 
-
     public List<Bid> showAllBid(){
         return bidRepository.findAll();
     }
-
 
 }
