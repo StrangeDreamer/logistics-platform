@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * @auther qlXie
@@ -35,9 +37,12 @@ public class InspectionService {
     @Autowired
     private InsuranceAccountService insuranceAccountService;
 
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
+
     // 验货
     @Transactional
-    public String inspectionCargo(Inspection inspection){
+    public String inspectionCargo(Inspection inspection) {
         Platform platform = platformRepository.findRecentPltf();
 
         double overTimeFeeRatio = platform.getOverTimeFeeRatio();
@@ -68,7 +73,7 @@ public class InspectionService {
             result = "货物出现异常，交给第三方处理";
             return result;
 
-        } else if(inspection.getInspectionResult() != 8 && inspection.getInspectionResult() != 9) {
+        } else if (inspection.getInspectionResult() != 8 && inspection.getInspectionResult() != 9) {
             logger.info("验货结果设置错误！");
             throw new InspectionException("验货结果设置错误！");
         }
@@ -85,32 +90,42 @@ public class InspectionService {
 
             double compensation = cargo.getInsurance() * (overTimeFeeRatio + inspection.getTimeoutPeriod() * 0.01);
             result = "验货正常但出现超时！\n" +
-                    "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId()  +"需要支付赔偿金：" +
-                    String.format("%.2f",compensation) + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n" ;
+                    "超时时长为：" + inspection.getTimeoutPeriod() + "\n承运方" + cargo.getTruckId() + "需要支付赔偿金：" +
+                    String.format("%.2f", compensation) + ";\n承运方" + cargo.getTruckId() + "的担保额度恢复仅当超时赔偿金支付完成后恢复！\n";
             BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
             InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
 
-            bankAccountService.addMoneyLog(bankAccountPlatform,"由于承运方运输超时");
-            bankAccountService.addMoneyLog(bankAccountShipper,"由于承运方运输超时");
-            bankAccountService.addMoneyLog(bankAccountTruck,"由于承运方运输超时");
+            bankAccountService.addMoneyLog(bankAccountPlatform,
+                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                            "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
+            bankAccountService.addMoneyLog(bankAccountShipper,
 
-            bankAccountService.transferMoney(bankAccountTruck,bankAccountPlatform,compensation);
-            bankAccountService.transferMoney(bankAccountPlatform,bankAccountShipper,compensation);
+                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                            "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
+            bankAccountService.addMoneyLog(bankAccountTruck,
+                    df.format(new Date()) + "由于承运方" + truck.getId() +
+                            "对订单" + cargo.getId() + "运输超时" + inspection.getTimeoutPeriod() + "单位时间");
+
+            bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, compensation);
+            bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, compensation);
         }
         // 没有超时则恢复担保额
         else {
             // 正常运达则评级增加
-
             if (truck.getRanking() <= 0.5)
-            truck.setRanking(truck.getRanking() + 0.5);
+                truck.setRanking(truck.getRanking() + 0.5);
             result = "验货正常没有出现超时！\n" + "担保额恢复" + cargo.getInsurance() + "\n";
 
-            InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(),"truck");
+            InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(), "truck");
             // 正常运达恢复担保额
-            insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,"由于正常运达恢复担保额");
-            insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck,cargo.getInsurance());
+            insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,
+                    df.format(new Date()) + "由于承运方" + truck.getId() + "对订单" + cargo.getId() + "正常运达，承运方恢复担保额");
+            insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck, cargo.getInsurance());
         }
 
+        /**
+         * 转单部分的资金结算
+         */
         // 不停结算，直到追溯到发货方；此处的均为承运方与承运方之间的资金流动
         while (cargo.getPreCargoId() != null) {
             result = result + "\n进入转单结算\n";
@@ -119,16 +134,15 @@ public class InspectionService {
             double bidPrice = cargo.getBidPrice();
             Cargo preCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
 
-            // TODO: 转单酬劳结算
+            // 转单部分的酬劳结算
             // 创建账户
-            BankAccount bankAccountPreTruck = bankAccountService.check(preCargo.getTruckId(),"truck");
-            BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(),"truck");
-
+            BankAccount bankAccountPreTruck = bankAccountService.check(preCargo.getTruckId(), "truck");
+            BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
 
             // 1 首先前一个承运方支付运费preFare给平台
             logger.info("承运方" + preCargo.getTruckId() + "向平台支付运费" + preFare);
             // 2 然后平台向后一个承运方支付运费bidprice
-            logger.info("平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice);
+            logger.info("平台向承运方" + cargo.getTruckId() + "支付酬劳" + bidPrice);
             // 3 计算利润空间
             double profitSpace = freightFare - bidPrice;
             // 4 计算各方分配的收益
@@ -137,13 +151,13 @@ public class InspectionService {
             double truck2Profit = truckProfitRatio * profitSpace;
 
             // 5 计算各方评级 以及真正的利润
-            int rank1 = (int)truckRepository.findTruckById(preCargo.getTruckId()).getRanking();
-            int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRanking();
+            int rank1 = (int) truckRepository.findTruckById(preCargo.getTruckId()).getRanking();
+            int rank2 = (int) truckRepository.findTruckById(cargo.getTruckId()).getRanking();
 
             double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
             double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
 
-            double  bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
+            double bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
             double maxbonux = bonusMaxRatioInFare * cargo.getFreightFare();
             // 6 获取利润分配资金与利润分配上限的最低值作为真正的利润分配
             double trueTruck1Profit = trueTruck1ProfitTemp < maxbonux ? trueTruck1ProfitTemp : maxbonux;
@@ -153,46 +167,53 @@ public class InspectionService {
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
             cargo = preCargo;
             result = result + "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
-                    "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
+                    "\n平台向承运方" + cargo.getTruckId() + "支付酬劳" + String.format("%.2f", bidPrice) +
                     "\n平台向原转单承运方" + preCargo.getTruckId() +
-                    "支付利润分配" + String.format("%.2f",truck1Profit) + "*" + rank1 +
-                    "/10=" + String.format("%.2f",trueTruck1Profit) +
+                    "支付利润分配" + String.format("%.2f", truck1Profit) + "*" + rank1 +
+                    "/10=" + String.format("%.2f", trueTruck1Profit) +
                     "\n平台向接单承运方" + cargo.getTruckId() +
-                    "支付利润分配" + String.format("%.2f",truck2Profit) + "*" + rank2 +
-                    "/10=" + String.format("%.2f",trueTruck2Profit) +
+                    "支付利润分配" + String.format("%.2f", truck2Profit) + "*" + rank2 +
+                    "/10=" + String.format("%.2f", trueTruck2Profit) +
                     "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                     "\n";
 
-            bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的运输完成");
-            bankAccountService.addMoneyLog(bankAccountPreTruck,"由于订单" + cargo.getId() + "的运输完成");
-            bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的运输完成");
+            bankAccountService.addMoneyLog(bankAccountPlatform,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+            bankAccountService.addMoneyLog(bankAccountPreTruck,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+            bankAccountService.addMoneyLog(bankAccountTruck,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
 
-            bankAccountService.transferMoney(bankAccountPreTruck,bankAccountPlatform,freightFare);
-            bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,bidPrice);
+            bankAccountService.transferMoney(bankAccountPreTruck, bankAccountPlatform, freightFare);
+            bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
-            bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的利润分配");
-            bankAccountService.addMoneyLog(bankAccountPreTruck,"由于订单" + cargo.getId() + "的利润分配");
-            bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的利润分配");
-
-            bankAccountService.transferMoney(bankAccountPlatform,bankAccountPreTruck,trueTruck1Profit);
-            bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,trueTruck2Profit);
-
+            bankAccountService.addMoneyLog(bankAccountPlatform,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+            bankAccountService.addMoneyLog(bankAccountPreTruck,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+            bankAccountService.addMoneyLog(bankAccountTruck,
+                    df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+            bankAccountService.transferMoney(bankAccountPlatform, bankAccountPreTruck, trueTruck1Profit);
+            bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
         }
+
+        /**
+         * 非转单部分的资金结算
+         * 此处为第一单承运方（没有转单则为唯一承运方）与发货方的结算；
+         */
         result = result + "\n进入原始订单结算\n";
 
         double freightFare = cargo.getFreightFare();
         double bidPrice = cargo.getBidPrice();
-        // 此处为第一单承运方（没有转单则为唯一承运方）与发货方的结算；
         // 酬劳结算
         // 创建账户
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
-        InsuranceAccount insuranceAccountTrcuk = insuranceAccountService.check(cargo.getTruckId(),"truck");
-
+        InsuranceAccount insuranceAccountTrcuk = insuranceAccountService.check(cargo.getTruckId(), "truck");
 
         // 1 首先前一个承运方支付运费prefare给平台
         logger.info("发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare);
         // 2 然后平台向后一个承运方支付运费bidprice
-        logger.info("平台向承运方" + cargo.getTruckId() +"支付酬劳" + bidPrice);
+        logger.info("平台向承运方" + cargo.getTruckId() + "支付酬劳" + bidPrice);
         // 3 计算利润空间
         double profitSpace = freightFare - bidPrice;
         // 4 计算各方分配的收益
@@ -200,13 +221,13 @@ public class InspectionService {
         double truck1Profit = shipperProfitRatio * profitSpace;
         double truck2Profit = truckProfitRatio * profitSpace;
         // 5 计算各方评级 以及真正的利润
-        int rank1 = (int)shipperRepository.findShippersById(cargo.getShipperId()).getRanking();
-        int rank2 = (int)truckRepository.findTruckById(cargo.getTruckId()).getRanking();
+        int rank1 = (int) shipperRepository.findShippersById(cargo.getShipperId()).getRanking();
+        int rank2 = (int) truckRepository.findTruckById(cargo.getTruckId()).getRanking();
 
         double trueTruck1ProfitTemp = truck1Profit * rank1 * 0.1;
         double trueTruck2ProfitTemp = truck2Profit * rank2 * 0.1;
 
-        double  bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
+        double bonusMaxRatioInFare = platform.getBonusMaxRatioInFare();
         double maxbonux = bonusMaxRatioInFare * cargo.getFreightFare();
 
         // 6 获取利润分配资金与利润分配上限的最低值作为真正利润分配
@@ -217,30 +238,35 @@ public class InspectionService {
         logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
         result = result + "发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare +
-                "\n平台向承运方" + cargo.getTruckId() +"支付酬劳" + String.format("%.2f",bidPrice) +
+                "\n平台向承运方" + cargo.getTruckId() + "支付酬劳" + String.format("%.2f", bidPrice) +
                 "\n平台向发货方" + cargo.getShipperId() +
-                "支付利润分配" + String.format("%.2f",truck1Profit) + "*" + rank1 +
-                "/10=" + String.format("%.2f",trueTruck1Profit) +
+                "支付利润分配" + String.format("%.2f", truck1Profit) + "*" + rank1 +
+                "/10=" + String.format("%.2f", trueTruck1Profit) +
                 "\n平台向接单承运方" + cargo.getTruckId() +
-                "支付利润分配" + String.format("%.2f",truck2Profit) + "*" + rank2 +
-                "/10=" + String.format("%.2f",trueTruck2Profit) +
+                "支付利润分配" + String.format("%.2f", truck2Profit) + "*" + rank2 +
+                "/10=" + String.format("%.2f", trueTruck2Profit) +
                 "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
                 "\n";
 
-        bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的运输完成");
-        bankAccountService.addMoneyLog(bankAccountShipper,"由于订单" + cargo.getId() + "的运输完成");
-        bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的运输完成");
+        bankAccountService.addMoneyLog(bankAccountPlatform,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+        bankAccountService.addMoneyLog(bankAccountShipper,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
+        bankAccountService.addMoneyLog(bankAccountTruck,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的运输完成");
 
-        bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,freightFare);
-        bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,bidPrice);
+        bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, freightFare);
+        bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
-        bankAccountService.addMoneyLog(bankAccountPlatform,"由于订单" + cargo.getId() + "的利润分配");
-        bankAccountService.addMoneyLog(bankAccountTruck,"由于订单" + cargo.getId() + "的利润分配");
-        bankAccountService.addMoneyLog(bankAccountShipper,"由于订单" + cargo.getId() + "的利润分配");
+        bankAccountService.addMoneyLog(bankAccountPlatform,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+        bankAccountService.addMoneyLog(bankAccountTruck,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
+        bankAccountService.addMoneyLog(bankAccountShipper,
+                df.format(new Date()) + "由于订单" + cargo.getId() + "的利润分配");
 
-        bankAccountService.transferMoney(bankAccountPlatform,bankAccountShipper,trueTruck1Profit);
-        bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,trueTruck2Profit);
-
+        bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, trueTruck1Profit);
+        bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
         cargoRepository.save(cargo);
         return result;
     }

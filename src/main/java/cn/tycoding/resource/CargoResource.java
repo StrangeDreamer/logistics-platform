@@ -49,7 +49,6 @@ public class CargoResource {
     }
 
 
-
     /**
      * 查询指定ID订单
      *
@@ -78,10 +77,7 @@ public class CargoResource {
     }
 
 
-
-
     /**
-     *
      * 平台确定某运单
      *
      * @return
@@ -140,19 +136,17 @@ public class CargoResource {
      * @return
      */
     @GetMapping("/{who}/{id}")
-    public List<Cargo> getTruckAllCargos(@PathVariable("who") String who,@PathVariable("id") int id) {
-        if (who.equals("trucks")){
-            int truckId=id;
+    public List<Cargo> getTruckAllCargos(@PathVariable("who") String who, @PathVariable("id") int id) {
+        if (who.equals("trucks")) {
+            int truckId = id;
             logger.info("REST 查询发货方{}所有订单", truckId);
             return cargoService.findAllByTruckId(truckId);
-        }
-        else if (who.equals("shippers")){
-            int shipperId=id;
+        } else if (who.equals("shippers")) {
+            int shipperId = id;
             logger.info("REST 查询发货方{}所有订单", shipperId);
             return cargoService.findAllByShipperId(shipperId);
-        }
-        else {
-            int receiverId=id;
+        } else {
+            int receiverId = id;
             logger.info("REST 查询发货方{}所有订单", receiverId);
             return cargoService.findAllByReceiverId(receiverId);
         }
@@ -187,7 +181,6 @@ public class CargoResource {
         logger.info("REST 查询订单转运历史");
         return cargoService.findAllByPreCargoId(preCargoId);
     }
-
 
 
     /**

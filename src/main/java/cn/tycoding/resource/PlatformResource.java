@@ -18,18 +18,17 @@ import java.util.List;
 
 public class PlatformResource {
 
-    private final Logger logger= LoggerFactory.getLogger(PlatformResource.class);
-
+    private final Logger logger = LoggerFactory.getLogger(PlatformResource.class);
 
     private final RedisTemplate redisTemplate;
     private final BankAccountService bankAccountService;
-    private final String yearKey="lastYearIncome";
-    private final String monKey="lastMonIncome";
-    private final String dayKey="lastDayIncome";
-    private final int accountId=1;
-    private final String accountType="platform";
+    private final String yearKey = "lastYearIncome";
+    private final String monKey = "lastMonIncome";
+    private final String dayKey = "lastDayIncome";
+    private final int accountId = 1;
+    private final String accountType = "platform";
     //这里的index可以为负数，-1表示最右边的一个，
-    private final long lastIndex=-1;
+    private final long lastIndex = -1;
 
     @Autowired
     private cn.tycoding.service.PlatformService platformService;
@@ -40,13 +39,14 @@ public class PlatformResource {
     @Autowired
     private cn.tycoding.service.ReceiverService receiverService;
 
-
     public PlatformResource(RedisTemplate redisTemplate, BankAccountService bankAccountService) {
         this.redisTemplate = redisTemplate;
         this.bankAccountService = bankAccountService;
     }
 
-    /**参数设置
+    /**
+     * 参数设置
+     *
      * @param platform
      * @return
      */
@@ -58,7 +58,9 @@ public class PlatformResource {
         return platformService.savePlatform(platform);
     }
 
-    /**查询平台属性
+    /**
+     * 查询平台属性
+     *
      * @param
      * @return
      */
@@ -68,7 +70,9 @@ public class PlatformResource {
         return platformService.showPlatformPara();
     }
 
-    /**查看当前车辆、货物等统计数据
+    /**
+     * 查看当前车辆、货物等统计数据
+     *
      * @param
      * @return
      */
@@ -78,7 +82,9 @@ public class PlatformResource {
         return platformService.showPlatformList();
     }
 
-    /**查看所有出价
+    /**
+     * 查看所有出价
+     *
      * @param
      * @return
      */
@@ -91,72 +97,75 @@ public class PlatformResource {
 
     /**
      * 获取平台当前账户余额
+     *
      * @return
      */
     @GetMapping("/crtAccount")
-    public double getCrtAccount(){
-        return bankAccountService.getAvailableMoney(accountId,accountType);
+    public double getCrtAccount() {
+        return bankAccountService.getAvailableMoney(accountId, accountType);
     }
 
     /**
      * 前端异步获取当年收入
+     *
      * @return
      */
     @GetMapping("/{time}")
-    public double getCrtIncome(@PathVariable("time") String time){
-        double last,current;
-        if (time.equals("year")){
+    public double getCrtIncome(@PathVariable("time") String time) {
+        double last, current;
+        if (time.equals("year")) {
             //上一次收入
-            last=(double)redisTemplate.opsForList().index(yearKey,lastIndex);
+            last = (double) redisTemplate.opsForList().index(yearKey, lastIndex);
             //当前收入
-            current=bankAccountService.getAvailableMoney(accountId,accountType);
+            current = bankAccountService.getAvailableMoney(accountId, accountType);
+
+        } else if (time.equals("mon")) {
+
+            last = (double) redisTemplate.opsForList().index(monKey, lastIndex);
+            current = bankAccountService.getAvailableMoney(accountId, accountType);
+        } else {
+
+            last = (double) redisTemplate.opsForList().index(dayKey, lastIndex);
+            current = bankAccountService.getAvailableMoney(accountId, accountType);
 
         }
-        else if (time.equals("mon")){
 
-            last=(double) redisTemplate.opsForList().index(monKey,lastIndex);
-            current=bankAccountService.getAvailableMoney(accountId,accountType);
-        }
-        else {
-
-            last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
-            current=bankAccountService.getAvailableMoney(accountId,accountType);
-
-        }
-
-        return current-last;
+        return current - last;
     }
 
     /**
      * 前端异步获取当月收入
+     *
      * @return
      */
     @GetMapping("/mon")
-    public double getCrtMonIncome(){
-        double last=(double) redisTemplate.opsForList().index(monKey,lastIndex);
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
-        return current-last;
+    public double getCrtMonIncome() {
+        double last = (double) redisTemplate.opsForList().index(monKey, lastIndex);
+        double current = bankAccountService.getAvailableMoney(accountId, accountType);
+        return current - last;
     }
 
     /**
      * 前端异步获取当日收入
+     *
      * @return
      */
     @GetMapping("/day")
-    public double getCrtDayIncome(){
-        double last=(double) redisTemplate.opsForList().index(dayKey,lastIndex);
-        double current=bankAccountService.getAvailableMoney(accountId,accountType);
-        return current-last;
+    public double getCrtDayIncome() {
+        double last = (double) redisTemplate.opsForList().index(dayKey, lastIndex);
+        double current = bankAccountService.getAvailableMoney(accountId, accountType);
+        return current - last;
     }
 
 
     /**
      * 注销，为节省接口空间，合并三方的注销
+     *
      * @param id
      * @return
      */
     @DeleteMapping("/{userType}/{id}")
-    public String deleteReceiver(@PathVariable("userType") String userType, @PathVariable("id") int id){
+    public String deleteReceiver(@PathVariable("userType") String userType, @PathVariable("id") int id) {
         logger.info("注销请求");
         if (userType.equals("trucks")) {
             return truckService.deleteTruck(id);
@@ -169,6 +178,5 @@ public class PlatformResource {
         }
         return "注销异常！";
     }
-
 
 }
