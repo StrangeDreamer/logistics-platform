@@ -84,7 +84,8 @@ public class BankAccountService {
     public String findMoneyLog(int id, String type) {
         DecimalFormat df = new DecimalFormat("#.00");
         BankAccount bankAccount = check(id, type);
-        String result = bankAccount.getBankAccountLog() + "\n参与方当前资金为" + df.format(bankAccount.getMoney());
+        String result = bankAccount.getBankAccountLog() + "\n参与方现有资金为" + df.format(bankAccount.getMoney())
+                + "    可用余额为" + df.format(bankAccount.getAvailableMoney());
         if (type.equals("truck")) {
             result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
             + "\n可用担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
