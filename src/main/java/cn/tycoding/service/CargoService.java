@@ -49,6 +49,8 @@ public class CargoService {
     private TruckService truckService;
     @Autowired
     WebSocketTest webSocketTest;
+    @Autowired
+    private BidRepository bidRepository;
 
     private final String cargoKey = "Cargo";
     private final String truckKey = "Truck";
@@ -123,19 +125,18 @@ public class CargoService {
         try {
             // 发布时无人接单撤单  第一阶段，货物未上挂撤单
             if (cargo.getStatus() == 0 || cargo.getStatus() == 1 ){
+                // 对第二阶段的撤单，还需要对所有出价的货车发送出价失败通知
+                if (cargo.getStatus() == 1) {
+                    List<Bid> bidlist = bidRepository.findAllByCargoId(cargo.getId());
+                    for (Bid bid : bidlist) {
+                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
+                    }
+                }
                 cargo.setStatus(6);
                 cargoRepository.save(cargo);
                 redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
-
-                // 对第二阶段的撤单，还需要对所有出价的货车发送出价失败通知
-                if (cargo.getStatus() == 1) {
-                    //TODO:通知
-
-
-                }
-
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
             // 已接未运撤单  --撤单
