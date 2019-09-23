@@ -55,7 +55,7 @@ spring:
     #redis数据库索引，默认是0
     database: 0
     #redis服务器地址，这里用本地的redis
-    host: 127.0.0.1
+    host: 10.141.209.191
     # Redis服务器连接密码（默认为空）
     password:
     #redis服务器连接端口，默认是6379

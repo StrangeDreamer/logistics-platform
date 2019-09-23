@@ -165,17 +165,7 @@ public class InspectionService {
 
             logger.info("平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit);
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
-            cargo = preCargo;
-            result = result + "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
-                    "\n平台向承运方" + cargo.getTruckId() + "支付酬劳" + String.format("%.2f", bidPrice) +
-                    "\n平台向原转单承运方" + preCargo.getTruckId() +
-                    "支付利润分配" + String.format("%.2f", truck1Profit) + "*" + rank1 +
-                    "/10=" + String.format("%.2f", trueTruck1Profit) +
-                    "\n平台向接单承运方" + cargo.getTruckId() +
-                    "支付利润分配" + String.format("%.2f", truck2Profit) + "*" + rank2 +
-                    "/10=" + String.format("%.2f", trueTruck2Profit) +
-                    "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
-                    "\n";
+
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
@@ -195,6 +185,18 @@ public class InspectionService {
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountPreTruck, trueTruck1Profit);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
+
+            cargo = preCargo;
+            result = result + "承运方" + preCargo.getTruckId() + "向平台支付运费" + freightFare +
+                    "\n平台向承运方" + cargo.getTruckId() + "支付酬劳" + String.format("%.2f", bidPrice) +
+                    "\n平台向原转单承运方" + preCargo.getTruckId() +
+                    "支付利润分配" + String.format("%.2f", truck1Profit) + "*" + rank1 +
+                    "/10=" + String.format("%.2f", trueTruck1Profit) +
+                    "\n平台向接单承运方" + cargo.getTruckId() +
+                    "支付利润分配" + String.format("%.2f", truck2Profit) + "*" + rank2 +
+                    "/10=" + String.format("%.2f", trueTruck2Profit) +
+                    "平台该订单收益为" + (profitSpace - trueTruck1Profit - trueTruck2Profit) +
+                    "\n";
         }
 
         /**
