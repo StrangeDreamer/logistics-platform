@@ -260,6 +260,7 @@ public class InspectionService {
         bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, freightFare);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
+        bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
         bankAccountService.addMoneyLog(bankAccountPlatform,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
         bankAccountService.addMoneyLog(bankAccountTruck,
