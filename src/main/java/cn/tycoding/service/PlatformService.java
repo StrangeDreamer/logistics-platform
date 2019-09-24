@@ -52,6 +52,7 @@ public class PlatformService {
         platform1.setOverTimeFeeRatio(platform.getOverTimeFeeRatio());
         platform1.setExhibitionFee(platform.getExhibitionFee());
         platform1.setBidingDuration(platform.getBidingDuration());
+        platform1.setSpeedup(platform.getSpeedup());
 
         platform1.setBonusMaxRatioInFare(platform.getBonusMaxRatioInFare());
         logger.info("保存平台参数设定");

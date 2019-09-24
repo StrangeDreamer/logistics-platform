@@ -178,7 +178,11 @@ public class BidResource {
 
         //平台前端发过来的停止抢单命令的时间可能会在实际上的抢单截至时间
         Date nowTime = new Date();
-        if (nowTime.getTime() >= cargo.getBidEndTime().getTime()) {
+//        if (nowTime.getTime() >= cargo.getBidEndTime().getTime()) {
+        int t=(platformRepository.findRecentPltf().getBidingDuration()/3600);
+        Date bidEndTimeSpeedup = new Date(cargo.getBidStartTime().getTime()+t);
+
+        if (nowTime.getTime() >= bidEndTimeSpeedup.getTime()) {
             Platform platform = platformRepository.findRecentPltf();
             double exhibitionFee = platform.getExhibitionFee();
             Bid bidrd = bidService.checkRedis(cargoId);

@@ -45,4 +45,7 @@ public class Platform implements Serializable {
 
     private int bidingDuration = 180;
 
+    //默认半小时为1秒
+    private int speedup=1800;
+
 }
