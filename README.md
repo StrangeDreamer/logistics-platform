@@ -90,11 +90,12 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 - [ ] 承运方推送：6__________(10位订单号)后面加红包数目-现金红包）
 - [ ] 发货方推送：3加上订单号加红包数目
-- [x] 发货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货;）
-- [x] 收货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货）
+- [x] @ServerEndpoint("/websocket3/{userno}") 发货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货;）
+- [x] @ServerEndpoint("/websocket4/{userno}") 收货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货）
 
 
-- 承运方websocket消息码（1-通知承运方抢到该单;2-通知承运方未抢到该单;3-通知承运方有新单可抢;4-转单成功通知；5-通知承运方的撤单成功请求;
+- @ServerEndpoint("/websocket2/{userno}") 承运方websocket消息码（1-通知承运方抢到该单;2-通知承运方未抢到该单;3-通知承运方有新单可抢;4-转单成功通知；5-通知承运方的撤单成功请求;
+
 **货物状态**
 
      * 0 订单创建未发布 --创建订单
