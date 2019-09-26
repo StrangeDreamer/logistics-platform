@@ -1,8 +1,11 @@
+
 package cn.tycoding.service;
 
 import cn.tycoding.domain.*;
 import cn.tycoding.exception.InspectionException;
 import cn.tycoding.repository.*;
+import cn.tycoding.websocket.WebSocketTest;
+import cn.tycoding.websocket.WebSocketTest3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.text.SimpleDateFormat;
+import cn.tycoding.service.BonusService;
+
 /**
  * @auther qlXie
  * @date 2019-06-12 11:00
@@ -36,6 +40,13 @@ public class InspectionService {
     private BankAccountService bankAccountService;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
+    @Autowired
+    private BonusService bonusService;
+    @Autowired
+    private WebSocketTest webSocketTest;
+    @Autowired
+    private WebSocketTest3 webSocketTest3;
+
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
@@ -166,7 +177,6 @@ public class InspectionService {
             logger.info("平台向原转单承运方" + preCargo.getTruckId() + "支付利润分配" + truck1Profit);
             logger.info("平台向接单承运方" + cargo.getTruckId() + "支付利润分配" + truck2Profit);
 
-
             bankAccountService.addMoneyLog(bankAccountPlatform,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
             bankAccountService.addMoneyLog(bankAccountPreTruck,
@@ -174,6 +184,8 @@ public class InspectionService {
             bankAccountService.addMoneyLog(bankAccountTruck,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
 
+            // 完成订单后先解冻资金
+            bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
             bankAccountService.transferMoney(bankAccountPreTruck, bankAccountPlatform, freightFare);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
@@ -183,6 +195,10 @@ public class InspectionService {
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.addMoneyLog(bankAccountTruck,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
+
+            webSocketTest.sendToUser2(String.valueOf(bankAccountPreTruck.getId()), "6*" + String.valueOf(cargo.getId()) + "*"  + String.valueOf(trueTruck1Profit));
+            webSocketTest.sendToUser2(String.valueOf(bankAccountTruck.getId()), "6*" + String.valueOf(cargo.getId()) + "*"  + String.valueOf(trueTruck2Profit));
+
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountPreTruck, trueTruck1Profit);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
 
@@ -257,18 +273,25 @@ public class InspectionService {
         bankAccountService.addMoneyLog(bankAccountTruck,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
 
+
+        // 完成订单后先解冻资金
+        bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
         bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, freightFare);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
-        bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
         bankAccountService.addMoneyLog(bankAccountPlatform,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
         bankAccountService.addMoneyLog(bankAccountTruck,
-                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，平台支付"
+                        + String.format("%.2f", trueTruck1Profit) + "作为红包");
         bankAccountService.addMoneyLog(bankAccountShipper,
-                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
+                df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，发货方获得红包"
+                        + String.format("%.2f", trueTruck1Profit));
 
-        bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, trueTruck1Profit);
+        webSocketTest3.sendToUser2(String.valueOf(bankAccountShipper.getId()),"3*" + String.valueOf(cargo.getId()) + "*" + String.valueOf(trueTruck1Profit));
+        webSocketTest.sendToUser2(String.valueOf(bankAccountTruck.getId()), "6*" + String.valueOf(cargo.getId()) + "*"  + String.valueOf(trueTruck2Profit));
+
+        bonusService.getBonus(bankAccountShipper,trueTruck1Profit);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
         cargoRepository.save(cargo);
         return result;

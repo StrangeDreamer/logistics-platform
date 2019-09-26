@@ -66,6 +66,8 @@ public class Cargo implements Serializable {
     // 当前所在地点，会随着不断的接口调用从而不断被刷新
     private String position;
 
+    // 订单完成度
+    private double completeRatio = 0;
 
     /**
      *

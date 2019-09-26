@@ -94,6 +94,7 @@ public class CargoService {
         c.setDestination(cargo.getDestination());
         c.setRemarks(cargo.getRemarks());
         c.setPosition(cargo.getDeparture());
+        c.setCompleteRatio(0);
         cargoRepository.save(c);
 
         // 发货方冻结发货资金
@@ -354,6 +355,16 @@ public class CargoService {
             }
         }
         return res;
+    }
+
+    // 更新完成度
+    @Transactional
+    public Cargo refreshCompleteRatio(int cargoId, Double ratio) {
+        // TODO 缓存
+        Cargo cargo = cargoService.findCargoById(cargoId);
+        cargo.setCompleteRatio(ratio);
+        cargoRepository.save(cargo);
+        return cargo;
     }
 
 }

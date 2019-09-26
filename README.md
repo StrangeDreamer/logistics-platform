@@ -88,7 +88,7 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 - [x] bid在停止抢单请求的时候会将bid缓存与数据库同步，同时删除该cargoId对应的bid缓存
 
 
-- [ ] 承运方推送：6__________(10位订单号)后面加红包数目-现金红包）
+- [ ] 承运方推送：6\*订单号\*红包数值
 - [ ] 发货方推送：3加上订单号加红包数目
 - [x] @ServerEndpoint("/websocket3/{userno}") 发货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货;）
 - [x] @ServerEndpoint("/websocket4/{userno}") 收货方websocket消息码（1加上10位订单号-装货运输;2加上10位订单号-确认交货）

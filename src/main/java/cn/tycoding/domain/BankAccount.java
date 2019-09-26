@@ -44,6 +44,8 @@ public class BankAccount {
     // 除去冻结实际可用资金
     private double availableMoney ;
 
+    // 红包数值  该字段只有发货方的会发生改变
+    private double bonus = 0;
 
     // 账户自己的资金流水；这里不允许平台保存其他用户的资金流通（因为资金流通都会经过平台，所以间接保存了所有资金流通）
     @Lob

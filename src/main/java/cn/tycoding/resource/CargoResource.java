@@ -198,4 +198,16 @@ public class CargoResource {
         return cargoService.refreshPosition(truckId, position);
     }
 
+
+    /**
+     * 更新完成度
+     *
+     * @return
+     */
+    @PutMapping("/refreshCompleteRatio/{cargoId}/{ratio}")
+    public Cargo refreshPosition(@RequestParam("cargoId") int cargoId, @RequestParam("ratio") Double ratio) {
+        logger.info("更新承运方/货物位置信息");
+        return cargoService.refreshCompleteRatio(cargoId, ratio);
+    }
+
 }
