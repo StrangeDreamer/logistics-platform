@@ -210,6 +210,7 @@ public class CargoService {
 
                 // 将原来对订单设置为等待验货状态
                 cargo.setStatus(4);
+
                 cargoRepository.save(cargo);
                 redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
 
@@ -363,6 +364,15 @@ public class CargoService {
         // TODO 缓存
         Cargo cargo = cargoService.findCargoById(cargoId);
         cargo.setCompleteRatio(ratio);
+        cargoRepository.save(cargo);
+        return cargo;
+    }
+
+    // 更新货物状态为收货方未按时验货
+    @Transactional
+    public Cargo statusChangeTo13(int cargoId) {
+        Cargo cargo = cargoService.findCargoById(cargoId);
+        cargo.setStatus(13);
         cargoRepository.save(cargo);
         return cargo;
     }

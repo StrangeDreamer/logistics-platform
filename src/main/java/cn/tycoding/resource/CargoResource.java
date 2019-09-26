@@ -210,4 +210,14 @@ public class CargoResource {
         return cargoService.refreshCompleteRatio(cargoId, ratio);
     }
 
+    /**
+     * 货物状态改为13
+     *
+     * @return
+     */
+    @PutMapping("/statusChangeTo13/{cargoId}")
+    public Cargo statusChangeTo13(@RequestParam("cargoId") int cargoId) {
+        return cargoService.statusChangeTo13(cargoId);
+    }
+
 }
