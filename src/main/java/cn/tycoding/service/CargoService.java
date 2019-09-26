@@ -48,7 +48,7 @@ public class CargoService {
     @Autowired
     private TruckService truckService;
     @Autowired
-    WebSocketTest webSocketTest;
+    private WebSocketTest webSocketTest;
     @Autowired
     private BidRepository bidRepository;
 

@@ -6,6 +6,7 @@ import cn.tycoding.exception.ShipperException;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
+import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class TruckService {
     private InsuranceAccountService insuranceAccountService;
     @Autowired
     private BankAccountService bankAccountService;
+    @Autowired
+    private WebSocketTest webSocketTest;
     private final String truckKey = "Truck";
     private final String cargoKey="Cargo";
 
@@ -155,6 +158,13 @@ public class TruckService {
         cargo.setStatus(3);
         cargoRepository.save(cargo);
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        //向发货方推送装货运输的通知
+        webSocketTest.sendToUser2(String.valueOf(cargo.getShipperId()),"1"+String.valueOf(cargo.getId()));
+
+        //向收货方推送装货运输的通知,格式为1+后面订单号
+        webSocketTest.sendToUser2(String.valueOf(cargo.getReceiverId()),"1"+String.valueOf(cargo.getId()));
+
+
         return cargoService.findCargoById(cargoId);
     }
 
@@ -174,6 +184,12 @@ public class TruckService {
         // 每交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
         truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        //向发货方推送确认交货的通知
+        webSocketTest.sendToUser2(String.valueOf(cargo.getShipperId()),"2"+String.valueOf(cargo.getId()));
+
+        //向收货方推送确认交货的通知,格式为1+后面订单号
+        webSocketTest.sendToUser2(String.valueOf(cargo.getReceiverId()),"2"+String.valueOf(cargo.getId()));
+
         return cargoService.findCargoById(cargoId);
     }
 
