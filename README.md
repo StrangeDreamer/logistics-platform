@@ -124,7 +124,7 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
      *
      * 12 该订单为第三类撤单产生的返程订单
      *
-     * 13货物状态为收货方未按时验货
+     * 13 收货方未按时验货
      
      
      
