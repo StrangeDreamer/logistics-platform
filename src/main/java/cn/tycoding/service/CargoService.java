@@ -52,6 +52,10 @@ public class CargoService {
     @Autowired
     private WebSocketTest webSocketTest;
     @Autowired
+    private WebSocketTest3 webSocketTest3;
+    @Autowired
+    private WebSocketTest4 webSocketTest4;
+    @Autowired
     private BidRepository bidRepository;
 
     private final String cargoKey = "Cargo";
@@ -374,6 +378,9 @@ public class CargoService {
         Cargo cargo = cargoService.findCargoById(cargoId);
         cargo.setStatus(13);
         cargoRepository.save(cargo);
+        //通知发货方收货方订单验货超时
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getShipperId()),"3*"+String.valueOf(cargoId));
         return cargo;
     }
 
