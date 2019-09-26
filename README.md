@@ -19,8 +19,8 @@
 * adminer(localhost:8000)是web端的mysql管理工具，用户名/密码是root/1234，
 * 如果已经安装相关组件，请配置好 [application.yml](https://github.com/TyCoding/springboot-seckill/blob/master/src/main/resources/application.yml) 中连接数据库的用户名和密码，以及Redis服务器的地址和端口信息。同时，请创建数据库`seckill`，建表SQL语句放在：db。
 
-**[OpenAPI](https://documenter.getpostman.com/view/7656152/SVSNK85K?version=latest)**
-
+**[OpenAPI](https://documenter.getpostman.com/view/7656152/SVSNK85K?version=latest)**  
+**[需求变更记录](https://docs.google.com/document/d/1EUJGxyS2pTmbTStve1gEUCYWkn1KCf-pr_MBShYaBlI/edit?usp=sharing)**
 
 ### 生产环境
 ```$xslt
