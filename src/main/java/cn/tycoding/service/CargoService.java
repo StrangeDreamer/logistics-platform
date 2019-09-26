@@ -361,9 +361,9 @@ public class CargoService {
     // 更新完成度
     @Transactional
     public Cargo refreshCompleteRatio(int cargoId, Double ratio) {
-        // TODO 缓存
         Cargo cargo = cargoService.findCargoById(cargoId);
         cargo.setCompleteRatio(ratio);
+        redisTemplate.boundHashOps(cargoKey).put(cargoId,cargo);
         cargoRepository.save(cargo);
         return cargo;
     }
