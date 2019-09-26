@@ -88,7 +88,10 @@ public class TruckService {
     }
 
 
-    // 承运方注销
+    /** 承运方注销
+     *
+     */
+
     public String deleteTruck(int id){
         truckRepository.findById(id).orElseThrow(()->new TruckException("该承运方不存在"));
         List<Cargo> list = cargoRepository.findAllByTruckId(id);
@@ -150,6 +153,11 @@ public class TruckService {
         return truckRepository.findAll();
     }
 
+    /**开始装货运输
+     *
+     * @param cargoId
+     * @return
+     */
     @Transactional
     public Cargo startShip(int cargoId) {
         // 开始运货请求
@@ -163,15 +171,20 @@ public class TruckService {
         cargoRepository.save(cargo);
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         //向发货方推送装货运输的通知
-        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"1"+String.valueOf(cargo.getId()));
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"1*"+String.valueOf(cargo.getId()));
 
         //向收货方推送装货运输的通知,格式为1+后面订单号
-        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"1"+String.valueOf(cargo.getId()));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"1*"+String.valueOf(cargo.getId()));
 
 
         return cargoService.findCargoById(cargoId);
     }
 
+    /**确认交货
+     *
+     * @param cargoId
+     * @return
+     */
     @Transactional
     public Cargo endShip(int cargoId) {
         //truck已经送达货物，请求验货
@@ -189,10 +202,10 @@ public class TruckService {
         truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         //向发货方推送确认交货的通知
-        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"2"+String.valueOf(cargo.getId()));
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"2*"+String.valueOf(cargo.getId()));
 
         //向收货方推送确认交货的通知,格式为1+后面订单号
-        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"2"+String.valueOf(cargo.getId()));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"2*"+String.valueOf(cargo.getId()));
 
         return cargoService.findCargoById(cargoId);
     }
