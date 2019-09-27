@@ -185,7 +185,6 @@ public class CargoResource {
      * @param status
      * @return
      */
-
     @GetMapping("/cargoStatus/{status}")
     public List<Cargo> getAllNormalCargos(@PathVariable int status) {
         if (status == 9) {
@@ -239,7 +238,7 @@ public class CargoResource {
      * @return
      */
     @PutMapping("/statusChangeTo13/{cargoId}")
-    public Cargo statusChangeTo13(@RequestParam("cargoId") int cargoId) {
+    public Cargo statusChangeTo13(@PathVariable int cargoId) {
         return cargoService.statusChangeTo13(cargoId);
     }
 
