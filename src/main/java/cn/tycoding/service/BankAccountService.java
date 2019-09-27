@@ -62,14 +62,19 @@ public class BankAccountService {
             bankAccount.setId(id);
             bankAccount.setType(type);
             logger.info("该银行账户不存在，自动为其创建银行账户！");
-            if (type.equals("平台")) {
+            if (type.equals("平台") || type.equals("platform")) {
                 bankAccount.setMoney(0);
                 bankAccount.setAvailableMoney(0);
             }
             bankAccount.setMoney((int) (100000 + 500000 * Math.random()));
             bankAccount.setAvailableMoney(bankAccount.getMoney());
             bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + "参与方初始资金为" + bankAccount.getMoney()
-            + "，参与方初始可用资金为" + bankAccount.getMoney() + "，参与方初始红包为" + bankAccount.getMoney());
+            + "，参与方初始可用资金为" + bankAccount.getMoney());
+
+            if (type.equals("发货方") || type.equals("shipper")) {
+                bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +"，参与方初始红包为" + bankAccount.getBonus());
+            }
+
             bankAccountRepository.save(bankAccount);
         } else {
             logger.info(type + id + "该银行账户存在！");

@@ -2,8 +2,11 @@ package cn.tycoding.resource;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Platform;
+import cn.tycoding.domain.Truck;
+import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.PlatformRepository;
+import cn.tycoding.repository.TruckRepository;
 import cn.tycoding.service.CargoService;
 import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
@@ -25,16 +28,21 @@ public class CargoResource {
     private final CargoService cargoService;
     private final CargoRepository cargoRepository;
     private final PlatformRepository platformRepository;
+    private final TruckRepository truckRepository;
     private final String cargoKey = "Cargo";
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
     private WebSocketTest webSocketTest;
 
-    public CargoResource(CargoService cargoService, CargoRepository cargoRepository, PlatformRepository platformRepository) {
+
+    public CargoResource(CargoService cargoService, CargoRepository cargoRepository,
+                         PlatformRepository platformRepository,TruckRepository truckRepository
+                         ) {
         this.cargoService = cargoService;
         this.cargoRepository = cargoRepository;
         this.platformRepository = platformRepository;
+        this.truckRepository = truckRepository;
     }
 
     /**
@@ -101,7 +109,22 @@ public class CargoResource {
         //删除map中的某个对象
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         logger.info("订单{}*****{}开始抢", cargoId, bidStartTime);
-        webSocketTest.sendAllCode(3);
+
+        // 发布订单前检查订单是否是群发给所有承运方
+        // 如果是货物提交属性filed为"全体承运方"则群发给所有承运方；否则只发给与订单filed属性相同的承运方
+        if (cargo.getField().equals("全体承运方")) {
+            webSocketTest.sendAllCode(3);
+        } else {
+            List<Truck> trucks = truckRepository.findTruckByField(cargo.getField());
+            if(trucks.size() == 0) {
+                throw new CargoException("平台目前没有任何符合圈子条件的承运方！");
+            }
+            for (Truck truck:
+                    trucks) {
+                // TODO 发送给指定承运方新订单消息
+                webSocketTest.sendToUser3(String.valueOf(truck.getId()),3);
+            }
+        }
         return cargo;
     }
 

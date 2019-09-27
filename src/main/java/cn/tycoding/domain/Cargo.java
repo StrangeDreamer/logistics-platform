@@ -101,4 +101,7 @@ public class Cargo implements Serializable {
 
     private String remarks = "";
 
+    // 订单发布范围：在平台发布订单的时候，只会对同样在该范围的承运方进行发布
+    private String field = "全体承运方";
+
 }

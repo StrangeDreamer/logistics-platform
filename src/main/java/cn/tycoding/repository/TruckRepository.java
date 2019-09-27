@@ -15,4 +15,6 @@ public interface TruckRepository extends JpaRepository<Truck,Integer> {
     boolean existsTruckByName(String id);
 
     Optional<Truck> findTruckByName(String name);
+    List<Truck> findTruckByField(String field);
+
 }

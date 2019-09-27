@@ -123,8 +123,12 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
       12 该订单为第三类撤单产生的返程订单
      
       13 收货方未按时验货
-          
+           
      
+**车队圈子功能：**
+
+1 发布订单前检查订单是否是群发给所有承运方
+2 如果是货物提交属性filed为"全体承运方"则群发给所有承运方；否则只发给与订单filed属性相同的承运方
      
      
 **关于财务模拟的说明**
@@ -137,4 +141,3 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 4 实现的功能：增减某一账户的可用金额（对应账户的冻结解冻资金）；
   增减某账户金额；查询某账户当前可用金额
-

@@ -99,6 +99,7 @@ public class CargoService {
         c.setRemarks(cargo.getRemarks());
         c.setPosition(cargo.getDeparture());
         c.setCompleteRatio(0);
+        c.setField(cargo.getField());
         cargoRepository.save(c);
 
         // 发货方冻结发货资金
@@ -209,6 +210,7 @@ public class CargoService {
                 cargoBack.setBidEndTime(cargo.getBidEndTime());
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
                 cargoBack.setPosition(cargo.getPosition());
+                cargoBack.setField(cargo.getField());
                 cargoRepository.save(cargoBack);
                 redisTemplate.boundHashOps(cargoKey).delete(cargoBack.getId());
 
@@ -256,6 +258,7 @@ public class CargoService {
         transferredCargo.setDeparture(cargo.getDeparture());
         transferredCargo.setDestination(cargo.getDestination());
         transferredCargo.setInsurance(cargo.getInsurance());
+        transferredCargo.setField(cargo.getField());
 
         // 转单更新
         transferredCargo.setPreFare(cargo.getFreightFare());

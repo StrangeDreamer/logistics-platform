@@ -50,4 +50,7 @@ public class Truck {
     private String id_jiashizheng = "0";
     private String telNumber = "0";
     private String address = "经营地址";
+
+    // 订单发布范围：在平台发布订单的时候，只会对同样在该范围的承运方进行发布
+    private String field = "默认";
 }
