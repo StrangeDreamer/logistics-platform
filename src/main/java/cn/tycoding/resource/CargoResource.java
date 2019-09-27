@@ -227,7 +227,7 @@ public class CargoResource {
      * @return
      */
     @PutMapping("/refreshCompleteRatio/{cargoId}/{ratio}")
-    public Cargo refreshPosition(@PathVariable("cargoId") int cargoId, @PathVariable("ratio") Double ratio) {
+    public Cargo refreshPosition(@RequestParam("cargoId") int cargoId, @RequestParam("ratio") Double ratio) {
         logger.info("更新承运方/货物位置信息");
         return cargoService.refreshCompleteRatio(cargoId, ratio);
     }
