@@ -5,50 +5,32 @@ import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Truck;
 import cn.tycoding.repository.CargoRepository;
+import cn.tycoding.repository.TruckRepository;
+import cn.tycoding.security.jwt.JwtTokenProvider;
 import cn.tycoding.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/trucks")
-
 public class TruckResource {
 
     private final Logger logger=LoggerFactory.getLogger(TruckResource.class);
-    private final TruckService truckService;
-    private final CargoRepository cargoRepository;
-    public TruckResource(TruckService truckService, CargoRepository cargoRepository) {
-        this.truckService = truckService;
-        this.cargoRepository = cargoRepository;
-    }
+    @Autowired
+    private TruckService truckService;
 
-
-    /**
-     * 登录
-     * @return
-     */
-    @GetMapping("/login/{name}")
-    public Truck login(@RequestParam("name") String name){
-        logger.info("登录");
-        return truckService.login(name);
-    }
-
-    /**
-     * 注册
-     * @param truck
-     * @return
-     */
-    @PostMapping
-    public Truck createTruck(@RequestBody Truck truck){
-        return truckService.createTruck(truck);
-
-    }
 
     /**
      * 注销
@@ -82,13 +64,11 @@ public class TruckResource {
      */
     @GetMapping("/{id}")
     public Truck findTruckById(@PathVariable("id") int id){
-        logger.info("REST 查询所有货物");
         return truckService.findTruckById(id);
     }
 
     @GetMapping("/cargoinfo/{id}")
     public String findTrucksCargoNum(@PathVariable("id") int id){
-        logger.info("REST 查询所有货物");
         return truckService.findTrucksCargoNum(id);
     }
 

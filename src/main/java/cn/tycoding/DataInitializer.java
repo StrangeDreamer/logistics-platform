@@ -1,3 +1,4 @@
+/*
 package cn.tycoding;
 
 import cn.tycoding.domain.Truck;
@@ -24,13 +25,13 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        this.users.save(Truck.builder()
-                        .name("user")
-//            .password(this.passwordEncoder.encode("password"))
-                        .password("password")
-                        .roles(Arrays.asList("ROLE_USER"))
-                        .build()
-        );
+//        this.users.save(Truck.builder()
+//                        .name("user")
+////            .password(this.passwordEncoder.encode("password"))
+//                        .password("password")
+//                        .roles(Arrays.asList("ROLE_USER"))
+//                        .build()
+//        );
 
         this.users.save(Truck.builder()
                         .name("admin")
@@ -44,3 +45,4 @@ public class DataInitializer implements CommandLineRunner {
         this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
     }
 }
+*/

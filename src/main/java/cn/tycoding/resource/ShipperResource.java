@@ -25,21 +25,6 @@ public class ShipperResource {
     }
 
 
-    /**
-     * 登录
-     * @return
-     */
-    @GetMapping("/login/{name}")
-    public Shipper login(@RequestParam("name") String name){
-        logger.info("登录");
-        return shipperService.login(name);
-    }
-
-    @PostMapping
-    public Shipper createShipper(@RequestBody Shipper shipper){
-        return shipperService.createShipper(shipper);
-
-    }
 
     @DeleteMapping("/{id}")
     // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。

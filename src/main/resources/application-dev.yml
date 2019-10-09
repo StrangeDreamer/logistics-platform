@@ -48,7 +48,7 @@ spring:
       enabled: true #是否支持livereload
       port: 35729
     restart:
-      enabled: true #是否支持热部署
+      enabled: false #是否支持热部署
 
   #redis缓存
   redis:
@@ -56,6 +56,7 @@ spring:
     database: 0
     #redis服务器地址，这里用本地的redis
     host: 10.141.209.191
+#    host: 127.0.0.1
     # Redis服务器连接密码（默认为空）
     password:
     #redis服务器连接端口，默认是6379
