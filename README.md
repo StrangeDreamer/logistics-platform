@@ -143,6 +143,9 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
   增减某账户金额；查询某账户当前可用金额
   
 **关于JWT**
+
 1 所有的注册与登录均在/auth/**下
+
 2 /auth/login/**进入 会返回一个token,会因此产生一个Token用于后序访问
+
 3 任何一方只要有Token均可访问任意api 方便前端调用
