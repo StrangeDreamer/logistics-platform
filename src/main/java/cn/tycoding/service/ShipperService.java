@@ -2,27 +2,23 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Shipper;
-import cn.tycoding.domain.Truck;
-import cn.tycoding.exception.ReceiverException;
+import cn.tycoding.domain.User;
 import cn.tycoding.exception.ShipperException;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ShipperRepository;
+import cn.tycoding.repository.UserRepository;
 import cn.tycoding.security.jwt.JwtTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Repository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ShipperService {
@@ -38,23 +34,14 @@ public class ShipperService {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public ShipperService(ShipperRepository shipperRepository, CargoRepository cargoRepository) {
         this.shipperRepository = shipperRepository;
         this.cargoRepository = cargoRepository;
-    }
-
-    // 登录
-    public Map login(String name, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
-        Shipper shipper = this.shipperRepository.findShipperByName(name).orElseThrow(() -> new UsernameNotFoundException("Username " + name + "not found"));
-        String token = jwtTokenProvider.createToken(name, shipper.getRoles());
-        Map<Object, Object> model = new HashMap<>();
-        model.put("id", shipper.getId());
-        model.put("name", name);
-        model.put("token", token);
-        return model;
-
     }
 
     //发货方注册
@@ -78,10 +65,18 @@ public class ShipperService {
                 .occupation(shipper.getOccupation())
                 .telNumber(shipper.getTelNumber())
                 .address(shipper.getAddress())
-                .roles(Arrays.asList("ROLE_USER"))
                 .build());
-        Shipper shipper1 = shipperRepository.findShipperByName(shipper.getName()).get();
 
+        Shipper shipper1 = shipperRepository.findShipperByName(shipper.getName()).get();
+        this.userRepository.save(User.builder()
+                .username(shipper.getName())
+                .kind(2)
+                .ownId(shipper1.getId())
+                .password(this.passwordEncoder.encode(shipper.getPassword()))
+                .roles(Arrays.asList( "ROLE_USER"))
+                .build()
+
+        );
         // 获得银行账号和保险
         bankAccountService.check(shipper1.getId(), "shipper");
         return shipper1;

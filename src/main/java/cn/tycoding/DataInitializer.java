@@ -1,8 +1,7 @@
-/*
 package cn.tycoding;
 
-import cn.tycoding.domain.Truck;
-import cn.tycoding.repository.TruckRepository;
+import cn.tycoding.domain.User;
+import cn.tycoding.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,32 +16,25 @@ public class DataInitializer implements CommandLineRunner {
 
 
     @Autowired
-    TruckRepository users;
+    UserRepository users;
 
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
 
-//        this.users.save(Truck.builder()
-//                        .name("user")
-////            .password(this.passwordEncoder.encode("password"))
-//                        .password("password")
-//                        .roles(Arrays.asList("ROLE_USER"))
-//                        .build()
-//        );
+        if(!users.findUserByUsernameAndKind("admin",4).isPresent()){
+            this.users.save(User.builder()
+                    .username("admin")
+                    .password(this.passwordEncoder.encode("admin"))
+                    .kind(4)
+                    .roles(Arrays.asList("ROLE_ADMIN"))
+                    .build());
+        }
 
-        this.users.save(Truck.builder()
-                        .name("admin")
-//            .password(this.passwordEncoder.encode("password"))
-                        .password("password")
-                        .roles(Arrays.asList("ROLE_USER", "ROLE_ADMIN"))
-                        .build()
-        );
 
-        log.debug("printing all users...");
-        this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
+
+
     }
 }
-*/

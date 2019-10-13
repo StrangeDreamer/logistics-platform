@@ -1,31 +1,25 @@
 package cn.tycoding.service;
 
 
-import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.Receiver;
+import cn.tycoding.domain.*;
 
 import cn.tycoding.domain.Receiver;
-import cn.tycoding.domain.Truck;
-import cn.tycoding.exception.ReceiverException;
 import cn.tycoding.exception.ReceiverException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.ReceiverRepository;
 
+import cn.tycoding.repository.UserRepository;
 import cn.tycoding.security.jwt.JwtTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Repository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ReceiverService {
@@ -40,23 +34,16 @@ public class ReceiverService {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public ReceiverService(ReceiverRepository receiverRepository, CargoRepository cargoRepository) {
         this.receiverRepository = receiverRepository;
         this.cargoRepository = cargoRepository;
     }
 
-    // 登录
-    public Map login(String name, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
-        Receiver receiver = this.receiverRepository.findReceiverByName(name).orElseThrow(() -> new UsernameNotFoundException("Username " + name + "not found"));
-        String token = jwtTokenProvider.createToken(name, receiver.getRoles());
-        Map<Object, Object> model = new HashMap<>();
-        model.put("id", receiver.getId());
-        model.put("name", name);
-        model.put("token", token);
-        return model;
-    }
 
     // 收货方注册
     @Transactional
@@ -78,9 +65,20 @@ public class ReceiverService {
                 .telNumber(receiver.getTelNumber())
                 .address(receiver.getAddress())
                 .activated(false)
-                .roles(Arrays.asList("ROLE_USER"))
                 .build());
+
         Receiver receiver1 = receiverRepository.findReceiverByName(receiver.getName()).get();
+
+        this.userRepository.save(User.builder()
+                .username(receiver.getName())
+                .kind(3)
+                .password(this.passwordEncoder.encode(receiver.getPassword()))
+                .ownId(receiver1.getId())
+                .roles(Arrays.asList( "ROLE_USER"))
+                .build()
+
+        );
+
         // 获得银行账号和保险
         bankAccountService.check(receiver1.getId(), "receiver");
         return receiver1;

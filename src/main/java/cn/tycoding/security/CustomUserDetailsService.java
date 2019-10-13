@@ -1,7 +1,7 @@
 package cn.tycoding.security;
 
-import cn.tycoding.exception.TruckException;
-import cn.tycoding.repository.TruckRepository;
+
+import cn.tycoding.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,16 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-//    private UserRepository users;
-    private TruckRepository truckRepository;
+    private UserRepository users;
 
-    public CustomUserDetailsService(TruckRepository truckRepository) {
-        this.truckRepository = truckRepository;
+    public CustomUserDetailsService(UserRepository users) {
+        this.users = users;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String truckName) throws UsernameNotFoundException {
-        return this.truckRepository.findTruckByName(truckName).orElseThrow(() -> new UsernameNotFoundException("Username: " + truckName + " not found"));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.users.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
+    }
 
+    public UserDetails loadUserByUsernameAndKind(String username,int kind) throws UsernameNotFoundException{
+        return this.users.findUserByUsernameAndKind(username,kind).orElseThrow(()->new UsernameNotFoundException("Username "+username+" not found"));
     }
 }

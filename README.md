@@ -148,4 +148,8 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 2 /auth/login/**进入 会返回一个token,会因此产生一个Token用于后序访问
 
-3 任何一方只要有Token均可访问任意api 方便前端调用
+3 数据库保存各方角色：承运方是1,发货方是2,收货方是3,平台方是4,前端直接访问正确的URI，并带上用户名/密码即可登录
+
+4 平台帐号只有admin/admin
+
+5 任何一方只要有Token均可访问任意api 方便前端调用

@@ -2,10 +2,11 @@ package cn.tycoding.service;
 
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Truck;
+import cn.tycoding.domain.User;
 import cn.tycoding.exception.TruckException;
 import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TruckRepository;
-import cn.tycoding.security.jwt.JwtTokenProvider;
+import cn.tycoding.repository.UserRepository;
 import cn.tycoding.websocket.WebSocketTest3;
 import cn.tycoding.websocket.WebSocketTest4;
 import org.slf4j.Logger;
@@ -13,17 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -50,29 +46,14 @@ public class TruckService {
     private WebSocketTest4 webSocketTest4;
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
+    private UserRepository userRepository;
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private final String cargoKey = "Cargo";
-    private final String truck_rolesKey="TruckRoles";
+    private final String truck_rolesKey = "TruckRoles";
 
-    // 登录
-    public Map login(String name,String password) {
-
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
-        Truck truck= this.truckRepository.findTruckByName(name).orElseThrow(() -> new UsernameNotFoundException("Username " + name + "not found"));
-        String token = jwtTokenProvider.createToken(name,truck.getRoles());
-        Map<Object, Object> model = new HashMap<>();
-        model.put("id", truck.getId());
-        model.put("name",name);
-        model.put("token", token);
-        return model;
-    }
 
     // 承运方注册
     @Transactional
@@ -91,7 +72,6 @@ public class TruckService {
 
         this.truckRepository.save(Truck.builder()
                 .name(truck.getName())
-                .password(this.passwordEncoder.encode(truck.getPassword()))
                 .availableWeight(truck.getAvailableWeight())
                 .availableVolume(truck.getAvailableVolume())
                 .type(truck.getType())
@@ -105,11 +85,22 @@ public class TruckService {
                 .telNumber(truck.getTelNumber())
                 .address(truck.getAddress())
                 .field(truck.getField())
-                .roles(Arrays.asList("ROLE_USER"))
                 .build()
         );
+
         logger.info("A new truck is created !");
-        Truck truck1=truckRepository.findTruckByName(truck.getName()).get();
+        Truck truck1 = truckRepository.findTruckByName(truck.getName()).get();
+
+        this.userRepository.save(User.builder()
+                .username(truck.getName())
+                .kind(1)
+                .ownId(truck1.getId())
+                .password(this.passwordEncoder.encode(truck.getPassword()))
+                .roles(Arrays.asList( "ROLE_USER"))
+                .build()
+
+        );
+
         // 获得银行账号和保险
         bankAccountService.check(truck1.getId(), "truck");
         insuranceAccountService.check(truck1.getId(), "truck");
@@ -151,9 +142,9 @@ public class TruckService {
     @Transactional
     public Truck findTruckById(int id) {
 //        Object truck = redisTemplate.boundHashOps(truckKey).get(id);
-        String key = "truck_"+id;
+        String key = "truck_" + id;
         boolean hasKey = redisTemplate.hasKey(key);
-        ValueOperations<String,Truck> operations = redisTemplate.opsForValue();
+        ValueOperations<String, Truck> operations = redisTemplate.opsForValue();
         //redis中没有缓存该运单
         if (hasKey) {
             //不支持热部署，否则会类型无法转换
@@ -164,7 +155,7 @@ public class TruckService {
         //从数据库中获取
         Truck truckDb = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
         //插入缓存
-        operations.set(key,truckDb,30, TimeUnit.SECONDS); //缓存的时间仅有30秒钟
+        operations.set(key, truckDb, 30, TimeUnit.SECONDS); //缓存的时间仅有30秒钟
         logger.info("Truck插入缓存 >> ");
         return truckDb;
     }

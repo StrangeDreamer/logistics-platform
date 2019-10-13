@@ -8,6 +8,7 @@ import cn.tycoding.security.jwt.JwtTokenProvider;
 import cn.tycoding.service.ReceiverService;
 import cn.tycoding.service.ShipperService;
 import cn.tycoding.service.TruckService;
+import cn.tycoding.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,9 @@ public class AuthenticationController {
     @Autowired
     ReceiverService receiverService;
 
+    @Autowired
+    UserService userService;
+
     /**
      * 承运方登录
      *
@@ -45,7 +49,7 @@ public class AuthenticationController {
     @GetMapping("/login/trucks")
     public ResponseEntity truckLogin(@RequestBody AuthenticationRequest data) {
         log.info("承运方登录");
-        return ok(truckService.login(data.getName(), data.getPassword()));
+        return ok(userService.login(data.getName(), data.getPassword(),1));
     }
 
     /**
@@ -57,7 +61,7 @@ public class AuthenticationController {
     @GetMapping("/login/shippers")
     public ResponseEntity shipperLogin(@RequestBody AuthenticationRequest data) {
         log.info("发货方方登录");
-        return ok(shipperService.login(data.getName(), data.getPassword()));
+        return ok(userService.login(data.getName(), data.getPassword(),2));
     }
 
     /**
@@ -69,9 +73,15 @@ public class AuthenticationController {
     @GetMapping("/login/receivers")
     public ResponseEntity ReceiverLogin(@RequestBody AuthenticationRequest data) {
         log.info("收货方登录");
-        return ok(receiverService.login(data.getName(), data.getPassword()));
+        return ok(userService.login(data.getName(), data.getPassword(),3));
     }
 
+
+    @GetMapping("/login/platform")
+    public ResponseEntity PlatformLogin(@RequestBody AuthenticationRequest data) {
+        log.info("平台方登录");
+        return ok(userService.platformLogin(data.getName(), data.getPassword(),4));
+    }
     /**
      * 承运方注册
      *
