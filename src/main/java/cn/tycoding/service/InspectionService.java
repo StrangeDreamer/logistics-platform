@@ -83,7 +83,7 @@ public class InspectionService {
             // 异常的时候 暂时不对评级进行变化
             result = "货物出现异常，交给第三方处理";
 
-            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 收货方成功对订单"
                     + cargo.getId() + "进行验收，验收结果为：货物出现异常，交给第三方处理");
             cargoRepository.save(cargo);
             return result;
@@ -124,7 +124,7 @@ public class InspectionService {
             bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, compensation);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, compensation);
 
-            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 收货方成功对订单"
                     + cargo.getId() + "进行验收，验收结果为：订单超时" + inspection.getTimeoutPeriod() + "小时");
             cargoRepository.save(cargo);
         }
