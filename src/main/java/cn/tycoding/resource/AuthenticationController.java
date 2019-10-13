@@ -41,46 +41,37 @@ public class AuthenticationController {
 
     /**
      * 承运方登录
-     *
-     * @param data
-     * @return
      */
 
     @GetMapping("/login/trucks")
-    public ResponseEntity truckLogin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity truckLogin(@RequestParam String name,@RequestParam String password) {
         log.info("承运方登录");
-        return ok(userService.login(data.getName(), data.getPassword(),1));
+        return ok(userService.login(name, password,1));
     }
 
     /**
      * 发货方登录
-     *
-     * @param data
-     * @return
      */
     @GetMapping("/login/shippers")
-    public ResponseEntity shipperLogin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity shipperLogin(@RequestParam String name,@RequestParam String password) {
         log.info("发货方方登录");
-        return ok(userService.login(data.getName(), data.getPassword(),2));
+        return ok(userService.login(name, password,2));
     }
 
     /**
      * 收货方登录
-     *
-     * @param data
-     * @return
      */
     @GetMapping("/login/receivers")
-    public ResponseEntity ReceiverLogin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity ReceiverLogin(@RequestParam String name,@RequestParam String password) {
         log.info("收货方登录");
-        return ok(userService.login(data.getName(), data.getPassword(),3));
+        return ok(userService.login(name, password,3));
     }
 
 
     @GetMapping("/login/platform")
-    public ResponseEntity PlatformLogin(@RequestBody AuthenticationRequest data) {
+    public ResponseEntity PlatformLogin(@RequestParam String name,@RequestParam String password) {
         log.info("平台方登录");
-        return ok(userService.platformLogin(data.getName(), data.getPassword(),4));
+        return ok(userService.platformLogin(name, password,4));
     }
     /**
      * 承运方注册
