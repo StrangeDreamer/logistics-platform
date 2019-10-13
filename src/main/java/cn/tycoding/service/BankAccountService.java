@@ -72,7 +72,7 @@ public class BankAccountService {
             + "，参与方初始可用资金为" + bankAccount.getMoney());
 
             if (type.equals("发货方") || type.equals("shipper")) {
-                bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +"，参与方初始红包为" + bankAccount.getBonus());
+                bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +"，参与方初始红包为" + String.format("%.2f", bankAccount.getBonus()));
             }
 
             bankAccountRepository.save(bankAccount);

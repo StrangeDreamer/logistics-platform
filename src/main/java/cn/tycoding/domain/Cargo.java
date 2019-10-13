@@ -96,6 +96,8 @@ public class Cargo implements Serializable {
      * 11 被正常转单，本订单已经失效
      *
      * 12 该订单为第三类撤单产生的返程订单
+     *
+     * 13 验收超时
      */
     private int status = 0;
 
@@ -104,4 +106,8 @@ public class Cargo implements Serializable {
     // 订单发布范围：在平台发布订单的时候，只会对同样在该范围的承运方进行发布
     private String field = "全体承运方";
 
+    // 货物状态变更日志；目前只记录验货状态，如果后面需要其他状态日志，可以加上去
+    @Lob
+    @Column(columnDefinition="TEXT")
+    private String cargoStatusLog = "目前货物尚未运达";
 }

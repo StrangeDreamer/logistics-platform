@@ -60,7 +60,7 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 - [x]  按照条件查询订单：承运方id、发货方id、收货方id、货物状态（目前的需求包括异常订单、超时订单、正常完成的订单、正在发布的订单）
 
-- [x]  3 已经在运  --truck发送请求说明开始运该单
+- [x]  3 已经在运  --df.format(new Date()) + "发送请求说明开始运该单
 
 - [x]  4 已运达等待收货  --truck发送已经运达请求，要求验货
 

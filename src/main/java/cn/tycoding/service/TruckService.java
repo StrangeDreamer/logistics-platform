@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +55,8 @@ public class TruckService {
 
     private final String cargoKey = "Cargo";
     private final String truck_rolesKey = "TruckRoles";
+
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
     // 承运方注册
@@ -218,7 +222,7 @@ public class TruckService {
      */
     @Transactional
     public Cargo endShip(int cargoId) {
-        //truck已经送达货物，请求验货
+        //df.format(new Date()) + "货物，请求验货
         // 开始运货请求
         Cargo cargo = cargoService.findCargoById(cargoId);
         System.out.println("******************" + cargo.getPosition());
@@ -228,16 +232,20 @@ public class TruckService {
             throw new TruckException("当前货物状态不正确，无法转入运达状态");
         }
         cargo.setStatus(4);
+
+        cargo.setCargoStatusLog(df.format(new Date()) + " 承运方" + truckRepository.findTruckById(cargo.getTruckId()).getName()
+                + "将订单" + cargo.getId() + "运达至" + cargo.getDestination() + ",等待收货方验货");
+
         cargoRepository.save(cargo);
         // 每交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
         truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
+
         redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         //向发货方推送确认交货的通知
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "2*" + String.valueOf(cargo.getId()));
 
         //向收货方推送确认交货的通知,格式为1+后面订单号
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()), "2*" + String.valueOf(cargo.getId()));
-
         return cargoService.findCargoById(cargoId);
     }
 

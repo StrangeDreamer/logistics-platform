@@ -296,15 +296,16 @@ public class CargoService {
     }
 
     public Cargo findCargoById(int id){
-        Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
-        //redis中没有缓存该运单
-        if (cargo == null){
-            Cargo cargoDb = cargoRepository.findById(id).orElseThrow(()->new CargoException("该订单不存在！"));
-            redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
-            logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
-            cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
-        }
-        return cargo;
+        return cargoRepository.findCargoById(id);
+//        Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
+//        //redis中没有缓存该运单
+//        if (cargo == null){
+//            Cargo cargoDb = cargoRepository.findById(id).orElseThrow(()->new CargoException("该订单不存在！"));
+//            redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
+//            logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
+//            cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
+//        }
+//        return cargo;
     }
 
     // 查找发货方的所有订单

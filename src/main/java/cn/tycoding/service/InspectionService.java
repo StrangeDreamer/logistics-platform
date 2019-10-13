@@ -82,6 +82,10 @@ public class InspectionService {
 
             // 异常的时候 暂时不对评级进行变化
             result = "货物出现异常，交给第三方处理";
+
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
+                    + cargo.getId() + "进行验收，验收结果为：货物出现异常，交给第三方处理");
+            cargoRepository.save(cargo);
             return result;
 
         } else if (inspection.getInspectionResult() != 8 && inspection.getInspectionResult() != 9) {
@@ -119,6 +123,10 @@ public class InspectionService {
 
             bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, compensation);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, compensation);
+
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
+                    + cargo.getId() + "进行验收，验收结果为：订单超时" + inspection.getTimeoutPeriod() + "小时");
+            cargoRepository.save(cargo);
         }
         // 没有超时则恢复担保额
         else {
@@ -132,6 +140,9 @@ public class InspectionService {
             insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,
                     df.format(new Date()) + "  由于承运方" + truck.getId() + "对订单" + cargo.getId() + "正常运达，承运方恢复担保额");
             insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck, cargo.getInsurance());
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
+                    + cargo.getId() + "进行验收，验收结果为：订单正常完成 ");
+            cargoRepository.save(cargo);
         }
 
         /**
@@ -224,9 +235,7 @@ public class InspectionService {
         double freightFare = cargo.getFreightFare();
         double bidPrice = cargo.getBidPrice();
         // 酬劳结算
-        // 创建账户
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
-        InsuranceAccount insuranceAccountTrcuk = insuranceAccountService.check(cargo.getTruckId(), "truck");
 
         // 1 首先前一个承运方支付运费prefare给平台
         logger.info("发货方" + cargo.getShipperId() + "向平台支付运费" + freightFare);
@@ -272,7 +281,6 @@ public class InspectionService {
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
         bankAccountService.addMoneyLog(bankAccountTruck,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
-
 
         // 完成订单后先解冻资金
         bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
