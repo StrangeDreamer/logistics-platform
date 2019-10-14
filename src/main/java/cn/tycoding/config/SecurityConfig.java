@@ -33,8 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/bankAccounts/**").authenticated()
+                .antMatchers("/bids/**").authenticated()
+                .antMatchers("/cargos/**").authenticated()
+                .antMatchers("/insuranceAccounts/**").authenticated()
+                .antMatchers("/platform/**").authenticated()
+                .antMatchers("/receivers/**").authenticated()
+                .antMatchers("/shippers/**").authenticated()
+                .antMatchers("/trucks/**").authenticated()
+                .anyRequest().permitAll()
             .and()
             .apply(new JwtSecurityConfigurer(jwtTokenProvider));
         //@formatter:on

@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
  * @ServerEndpoint 可以把当前类变成websocket服务类
  */
+//承运方
 @ServerEndpoint("/websocket2/{userno}")
 @Component
 public class WebSocketTest {
