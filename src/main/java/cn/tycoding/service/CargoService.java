@@ -381,11 +381,33 @@ public class CargoService {
     public Cargo statusChangeTo13(int cargoId) {
         Cargo cargo = cargoService.findCargoById(cargoId);
         cargo.setStatus(13);
+
+        cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货超时！收货方未在指定时间前对订单"
+                + cargo.getId() + "进行验收！");
+
         cargoRepository.save(cargo);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"3*"+String.valueOf(cargoId));
+
         return cargo;
     }
+
+    // 更新货物状态为 提醒验货时刻
+    @Transactional
+    public Cargo statusChangeTo14(int cargoId) {
+        Cargo cargo = cargoService.findCargoById(cargoId);
+        cargo.setStatus(14);
+
+        cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货即将超时！提醒收货方尽快对货物"
+                + cargo.getId() + "进行验收！ ");
+
+        cargoRepository.save(cargo);
+        //通知发货方和收货方订单验货超时
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"6*"+String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"5*"+String.valueOf(cargoId));
+        return cargo;
+    }
+
 
 }

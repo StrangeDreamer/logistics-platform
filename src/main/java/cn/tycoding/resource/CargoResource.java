@@ -242,4 +242,15 @@ public class CargoResource {
         return cargoService.statusChangeTo13(cargoId);
     }
 
+
+    /**
+     * 货物状态改为14
+     *
+     * @return
+     */
+    @PutMapping("/statusChangeTo14/{cargoId}")
+    public Cargo statusChangeTo14(@PathVariable int cargoId) {
+        return cargoService.statusChangeTo14(cargoId);
+    }
+
 }
