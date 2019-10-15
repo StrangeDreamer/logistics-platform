@@ -404,8 +404,8 @@ public class CargoService {
 
         cargoRepository.save(cargo);
         //通知发货方和收货方订单验货超时
-        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"6*"+String.valueOf(cargoId));
-        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"5*"+String.valueOf(cargoId));
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"5*"+String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"4*"+String.valueOf(cargoId));
         return cargo;
     }
 
