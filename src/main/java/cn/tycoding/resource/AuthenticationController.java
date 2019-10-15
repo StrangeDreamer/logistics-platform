@@ -46,7 +46,7 @@ public class AuthenticationController {
     @GetMapping("/login/trucks")
     public ResponseEntity truckLogin(@RequestParam String name,@RequestParam String password) {
         log.info("承运方登录");
-        return ok(userService.login(name, password,1));
+        return ok(userService.truckLogin(name, password,1));
     }
 
     /**
