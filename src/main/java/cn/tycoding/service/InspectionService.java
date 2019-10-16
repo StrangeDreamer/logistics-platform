@@ -63,7 +63,7 @@ public class InspectionService {
         String result = "验货结果：";
         Cargo cargo = cargoRepository.findCargoById(inspection.getCargoId());
 
-        if (cargo.getStatus() != 4) {
+        if (cargo.getStatus() != 4 && cargo.getStatus() != 14) {
             logger.info("货物当前状态不允许验货！");
             throw new InspectionException("货物当前状态不允许验货！");
         }

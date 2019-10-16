@@ -380,11 +380,14 @@ public class CargoService {
     @Transactional
     public Cargo statusChangeTo13(int cargoId) {
         Cargo cargo = cargoService.findCargoById(cargoId);
-        cargo.setStatus(13);
-
+        if (cargo.getStatus() == 4 || cargo.getStatus() == 14){
+            cargo.setStatus(13);
+        } else {
+            logger.info("当前状态不为4或者14，无法改为状态13");
+            return cargo;
+        }
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货超时！收货方未在指定时间前对订单"
                 + cargo.getId() + "进行验收！");
-
         cargoRepository.save(cargo);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));
@@ -397,17 +400,20 @@ public class CargoService {
     @Transactional
     public Cargo statusChangeTo14(int cargoId) {
         Cargo cargo = cargoService.findCargoById(cargoId);
-        cargo.setStatus(14);
 
+        if (cargo.getStatus() == 4){
+            cargo.setStatus(14);
+        } else {
+            logger.info("当前状态不为4，无法改为状态14");
+            return cargo;
+        }
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货即将超时！提醒收货方尽快对货物"
                 + cargo.getId() + "进行验收！ ");
-
         cargoRepository.save(cargo);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"5*"+String.valueOf(cargoId));
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"4*"+String.valueOf(cargoId));
         return cargo;
     }
-
 
 }
