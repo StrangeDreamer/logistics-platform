@@ -34,16 +34,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/websocket2/**").permitAll()
                 .antMatchers("/websocket3/**").permitAll()
                 .antMatchers("/websocket4/**").permitAll()
                 .antMatchers("/**/*.html").permitAll()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .cors()
                 .and()
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));
         //@formatter:on
+
+
     }
 
 
