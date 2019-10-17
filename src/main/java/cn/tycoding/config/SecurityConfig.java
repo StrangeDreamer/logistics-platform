@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -28,22 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //@formatter:off
         http
-            .httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                .antMatchers("/bankAccounts/**").authenticated()
-                .antMatchers("/bids/**").authenticated()
-                .antMatchers("/cargos/**").authenticated()
-                .antMatchers("/insuranceAccounts/**").authenticated()
-                .antMatchers("/platform/**").authenticated()
-                .antMatchers("/receivers/**").authenticated()
-                .antMatchers("/shippers/**").authenticated()
-                .antMatchers("/trucks/**").authenticated()
-                .anyRequest().permitAll()
-            .and()
-            .apply(new JwtSecurityConfigurer(jwtTokenProvider));
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/websocket2/**").permitAll()
+                .antMatchers("/websocket3/**").permitAll()
+                .antMatchers("/websocket4/**").permitAll()
+                .antMatchers("/**/*.html").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .apply(new JwtSecurityConfigurer(jwtTokenProvider));
         //@formatter:on
     }
 
