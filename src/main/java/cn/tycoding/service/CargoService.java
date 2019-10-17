@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 // SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 //         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
 
@@ -63,6 +65,19 @@ public class CargoService {
     private final String shipperKey = "Shipper";
     private final String receiverKey = "Receiver";
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+
+
+    @Transactional
+    public void delCargoRedis(int cargoId) {
+        String key = "cargo_" + cargoId;
+        boolean hasKey = redisTemplate.hasKey(key);
+        if (hasKey) {
+            redisTemplate.delete(key);
+            logger.info("从缓存中删除货物！");
+
+        }
+    }
+
 
     // 发货方创建订单
     @Transactional
@@ -124,7 +139,7 @@ public class CargoService {
     public Cargo withdrawCargo(int id) {
         // 获取撤单赔偿比例
         double  withdrawFeeRatio = platformRepository.findRecentPltf().getWithdrawFeeRatio();
-        Cargo cargo = cargoService.findCargoById(id);
+        Cargo cargo = findCargoById(id);
 
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
@@ -142,7 +157,8 @@ public class CargoService {
                 }
                 cargo.setStatus(6);
                 cargoRepository.save(cargo);
-                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+//                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+                delCargoRedis(id);
                 bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
                 bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
@@ -176,7 +192,8 @@ public class CargoService {
                 cargo.setStatus(7);
 
                 cargoRepository.save(cargo);
-                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+//                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+                delCargoRedis(id);
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
@@ -212,13 +229,13 @@ public class CargoService {
                 cargoBack.setPosition(cargo.getPosition());
                 cargoBack.setField(cargo.getField());
                 cargoRepository.save(cargoBack);
-                redisTemplate.boundHashOps(cargoKey).delete(cargoBack.getId());
 
                 // 将原来对订单设置为等待验货状态
                 cargo.setStatus(4);
 
                 cargoRepository.save(cargo);
-                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+//                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
+                delCargoRedis(id);
 
                 // 通知目标承运方撤单成功
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
@@ -273,6 +290,7 @@ public class CargoService {
         cargo.setStatus(5);
         transferredCargo.setStatus(0);
         cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
         cargoRepository.save(transferredCargo);
 
         // 转手承运方向平台支付展位费
@@ -285,7 +303,7 @@ public class CargoService {
 
         logger.info("由于订单转手，承运方" + cargo.getTruckId() + "向平台支付展位费" + exhibitionFee);
 //        transferredCargo.setStatus(5);
-        cargoRepository.save(transferredCargo);
+//        cargoRepository.save(transferredCargo);
 
         logger.info("转单创建成功！");
         return transferredCargo;
@@ -296,16 +314,23 @@ public class CargoService {
     }
 
     public Cargo findCargoById(int id){
-        return cargoRepository.findCargoById(id);
-//        Cargo cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
-//        //redis中没有缓存该运单
-//        if (cargo == null){
-//            Cargo cargoDb = cargoRepository.findById(id).orElseThrow(()->new CargoException("该订单不存在！"));
-//            redisTemplate.boundHashOps(cargoKey).put(id, cargoDb);
-//            logger.info("RedisTemplate -> 从数据库中读取并放入缓存中");
-//            cargo= (Cargo) redisTemplate.boundHashOps(cargoKey).get(id);
-//        }
-//        return cargo;
+        //        Object truck = redisTemplate.boundHashOps(truckKey).get(id);
+        String key = "cargo_" + id;
+        boolean hasKey = redisTemplate.hasKey(key);
+        ValueOperations<String, Cargo> operations = redisTemplate.opsForValue();
+        //redis中没有缓存该运单
+        if (hasKey) {
+            //不支持热部署，否则会类型无法转换
+            Cargo cargo = operations.get(key);
+            logger.info("从缓存中获取Cargo");
+            return cargo;
+        }
+        //从数据库中获取
+        Cargo cargoDb = cargoRepository.findById(id).orElseThrow(() -> new TruckException("该货物不存在"));
+        //插入缓存
+        operations.set(key, cargoDb, 30, TimeUnit.SECONDS); //缓存的时间仅有30秒钟
+        logger.info("Cargo插入缓存 >> ");
+        return cargoDb;
     }
 
     // 查找发货方的所有订单
@@ -354,10 +379,11 @@ public class CargoService {
         for (Cargo c :
                 cargos) {
             if (c.getStatus() == 3) {
-                Cargo cargoRedis=cargoService.findCargoById(c.getId());
+                Cargo cargoRedis=findCargoById(c.getId());
                 cargoRedis.setPosition(position);
-                redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
+//                redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
                 cargoRepository.save(cargoRedis);
+                delCargoRedis(c.getId());
                 res.add(cargoRedis);
             }else {
                 res.add(c);
@@ -371,15 +397,16 @@ public class CargoService {
     public Cargo refreshCompleteRatio(int cargoId, Double ratio) {
         Cargo cargo = cargoService.findCargoById(cargoId);
         cargo.setCompleteRatio(ratio);
-        redisTemplate.boundHashOps(cargoKey).put(cargoId,cargo);
+//        redisTemplate.boundHashOps(cargoKey).put(cargoId,cargo);
         cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
         return cargo;
     }
 
     // 更新货物状态为收货方未按时验货
     @Transactional
     public Cargo statusChangeTo13(int cargoId) {
-        Cargo cargo = cargoService.findCargoById(cargoId);
+        Cargo cargo = findCargoById(cargoId);
         if (cargo.getStatus() == 4 || cargo.getStatus() == 14){
             cargo.setStatus(13);
         } else {
@@ -389,6 +416,7 @@ public class CargoService {
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货超时！收货方未在指定时间前对订单"
                 + cargo.getId() + "进行验收！");
         cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"3*"+String.valueOf(cargoId));
@@ -399,7 +427,7 @@ public class CargoService {
     // 更新货物状态为 提醒验货时刻
     @Transactional
     public Cargo statusChangeTo14(int cargoId) {
-        Cargo cargo = cargoService.findCargoById(cargoId);
+        Cargo cargo = findCargoById(cargoId);
 
         if (cargo.getStatus() == 4){
             cargo.setStatus(14);
@@ -410,6 +438,7 @@ public class CargoService {
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货即将超时！提醒收货方尽快对货物"
                 + cargo.getId() + "进行验收！ ");
         cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"5*"+String.valueOf(cargoId));
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"4*"+String.valueOf(cargoId));

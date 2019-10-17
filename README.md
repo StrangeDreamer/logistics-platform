@@ -155,3 +155,10 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 4 平台帐号只有admin/admin
 
 5 任何一方只要有Token均可访问任意api 方便前端调用
+
+**关于Redis**
+
+1 仿照CargoService和TruckService里面的例子，完成其他
+
+2 遵循的原则：删除/更新数据库之后一定要删除缓存;查找频繁使用的数据一定要同时放进缓存里面
+

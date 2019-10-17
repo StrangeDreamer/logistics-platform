@@ -59,6 +59,45 @@ public class TruckService {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
+    @Transactional
+    public void delTruckRedis(int truckId) {
+        String key = "truck_" + truckId;
+        boolean hasKey = redisTemplate.hasKey(key);
+        if (hasKey) {
+            redisTemplate.delete(key);
+            logger.info("从缓存中删除承运方！");
+
+        }
+    }
+
+
+    /**
+     * 查询指定承运方，并存入缓存
+     *
+     * @param id
+     * @return
+     */
+    @Transactional
+    public Truck findTruckById(int id) {
+//        Object truck = redisTemplate.boundHashOps(truckKey).get(id);
+        String key = "truck_" + id;
+        boolean hasKey = redisTemplate.hasKey(key);
+        ValueOperations<String, Truck> operations = redisTemplate.opsForValue();
+        //redis中没有缓存该运单
+        if (hasKey) {
+            //不支持热部署，否则会类型无法转换
+            Truck truck = operations.get(key);
+            logger.info("从缓存中获取Truck");
+            return truck;
+        }
+        //从数据库中获取
+        Truck truckDb = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+        //插入缓存
+        operations.set(key, truckDb, 30, TimeUnit.SECONDS); //缓存的时间仅有30秒钟
+        logger.info("Truck插入缓存 >> ");
+        return truckDb;
+    }
+
     // 承运方注册
     @Transactional
     public Truck createTruck(Truck truck) {
@@ -100,7 +139,7 @@ public class TruckService {
                 .kind(1)
                 .ownId(truck1.getId())
                 .password(this.passwordEncoder.encode(truck.getPassword()))
-                .roles(Arrays.asList( "ROLE_USER"))
+                .roles(Arrays.asList("ROLE_USER"))
                 .build()
 
         );
@@ -117,7 +156,8 @@ public class TruckService {
      */
 
     public String deleteTruck(int id) {
-        truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+        findTruckById(id);
+//        truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
         List<Cargo> list = cargoRepository.findAllByTruckId(id);
         // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
         // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
@@ -130,39 +170,12 @@ public class TruckService {
                 throw new TruckException("注销失败！当前货车存在异常订单！！");
             }
         }
-        truckRepository.findById(id).ifPresent(truck -> {
-            truckRepository.delete(truck);
-            logger.info("发货发注销成功！");
-        });
+        truckRepository.deleteById(id);
+        delTruckRedis(id);
+        logger.info("发货发注销成功！");
         return "删除Truck" + id + "成功";
     }
 
-    /**
-     * 查询指定承运方，并存入缓存
-     *
-     * @param id
-     * @return
-     */
-    @Transactional
-    public Truck findTruckById(int id) {
-//        Object truck = redisTemplate.boundHashOps(truckKey).get(id);
-        String key = "truck_" + id;
-        boolean hasKey = redisTemplate.hasKey(key);
-        ValueOperations<String, Truck> operations = redisTemplate.opsForValue();
-        //redis中没有缓存该运单
-        if (hasKey) {
-            //不支持热部署，否则会类型无法转换
-            Truck truck = operations.get(key);
-            logger.info("从缓存中获取Truck");
-            return truck;
-        }
-        //从数据库中获取
-        Truck truckDb = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
-        //插入缓存
-        operations.set(key, truckDb, 30, TimeUnit.SECONDS); //缓存的时间仅有30秒钟
-        logger.info("Truck插入缓存 >> ");
-        return truckDb;
-    }
 
     // 查询指定id承运方的订单数量
     public String findTrucksCargoNum(int truckId) {
@@ -186,6 +199,7 @@ public class TruckService {
         return truckRepository.findAll();
     }
 
+
     /**
      * 开始装货运输
      *
@@ -203,7 +217,8 @@ public class TruckService {
         }
         cargo.setStatus(3);
         cargoRepository.save(cargo);
-        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        cargoService.delCargoRedis(cargoId);
+
         //向发货方推送装货运输的通知
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "1*" + String.valueOf(cargo.getId()));
 
@@ -240,7 +255,8 @@ public class TruckService {
         // 每交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失
         truckRepository.save(truckService.findTruckById(cargo.getTruckId()));
 
-        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        cargoService.delCargoRedis(cargoId);
+//        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
         //向发货方推送确认交货的通知
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "2*" + String.valueOf(cargo.getId()));
 
@@ -250,16 +266,22 @@ public class TruckService {
     }
 
     public Truck setTruckRank(int id, double rank) {
-        Truck truck = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+
+//        Truck truck = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+        Truck truck=findTruckById(id);
         truck.setRanking(rank);
+        truckRepository.save(truck);
+        delTruckRedis(id);
         return truck;
     }
 
     public Truck active(int id) {
-        Truck truck = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+//        Truck truck = truckRepository.findById(id).orElseThrow(() -> new TruckException("该承运方不存在"));
+        Truck truck=findTruckById(id);
         truck.setActivated(true);
         truckRepository.save(truck);
         logger.info("激活成功！");
+        delTruckRedis(id);
         return truck;
     }
 }
