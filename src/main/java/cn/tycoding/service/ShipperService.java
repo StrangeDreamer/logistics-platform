@@ -65,6 +65,7 @@ public class ShipperService {
                 .occupation(shipper.getOccupation())
                 .telNumber(shipper.getTelNumber())
                 .address(shipper.getAddress())
+                .ranking(shipper.getRanking())
                 .build());
 
         Shipper shipper1 = shipperRepository.findShipperByName(shipper.getName()).get();

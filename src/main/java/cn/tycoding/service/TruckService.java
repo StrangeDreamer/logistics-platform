@@ -128,6 +128,7 @@ public class TruckService {
                 .telNumber(truck.getTelNumber())
                 .address(truck.getAddress())
                 .field(truck.getField())
+                .ranking(truck.getRanking())
                 .build()
         );
 
