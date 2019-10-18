@@ -64,7 +64,7 @@ public class ReceiverResource {
     }
 
 
-    @PutMapping("/active/{id}")
+    @PutMapping("/{id}/activate")
     public Receiver active(@PathVariable("id") int id) {
         logger.info("激活用户");
         return receiverService.active(id);

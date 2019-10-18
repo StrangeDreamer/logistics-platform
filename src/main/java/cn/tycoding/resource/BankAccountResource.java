@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/bankAccounts")
+@RequestMapping("/bank-accounts")
 
 
 
@@ -44,17 +44,17 @@ public class BankAccountResource {
      * 查询所有银行注册账户
      * @return
      */
-    @GetMapping("/findAll")
+    @GetMapping()
     public List<BankAccount> getAll(){
         logger.info("REST 查询所有账户");
         return bankAccountRepository.findAll();
     }
 
-    /**
+    /**TODO
      * 查询查询账户流水
      * @return
      */
-    @GetMapping("/findMoneyLog/{id}/{type}")
+    @GetMapping("/money-log/{id}/{type}")
     public String findTruckById(@PathVariable("id") int id,@PathVariable("type") String type){
         logger.info("REST 查询账户流水");
 //        return  bankAccountService.check(id,type);

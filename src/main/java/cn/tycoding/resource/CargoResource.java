@@ -121,7 +121,6 @@ public class CargoResource {
             }
             for (Truck truck:
                     trucks) {
-                // TODO 发送给指定承运方新订单消息
                 webSocketTest.sendToUser3(String.valueOf(truck.getId()),3);
             }
         }
@@ -134,7 +133,7 @@ public class CargoResource {
      * @param id
      * @return
      */
-    @DeleteMapping("/withdrawCargo/{id}")
+    @DeleteMapping("/{id}/withdraw")
     public Cargo withdrawalCargo(@PathVariable("id") int id) {
         logger.info("Rest 撤单请求{}" + id);
         return cargoService.withdrawCargo(id);
@@ -148,7 +147,7 @@ public class CargoResource {
      * @return
      */
 
-    @PutMapping("/{cargoId}/{freightFare}")
+    @PutMapping("/{cargoId}/{freightFare}/transfer")
     public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare) {
         logger.info("REST 转单");
         //return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
@@ -157,13 +156,13 @@ public class CargoResource {
 
 
     /**
-     * 查询承运方的所有订单
+     * 查询各方的所有订单
      *
      * @param id
      * @return
      */
-    @GetMapping("/{who}/{id}")
-    public List<Cargo> getTruckAllCargos(@PathVariable("who") String who, @PathVariable("id") int id) {
+    @GetMapping("/{part}/{id}")
+    public List<Cargo> getTruckAllCargos(@PathVariable("part") String who, @PathVariable("id") int id) {
         if (who.equals("trucks")) {
             int truckId = id;
             logger.info("REST 查询发货方{}所有订单", truckId);
@@ -185,7 +184,7 @@ public class CargoResource {
      * @param status
      * @return
      */
-    @GetMapping("/cargoStatus/{status}")
+    @GetMapping("/cargo-status/{status}")
     public List<Cargo> getAllNormalCargos(@PathVariable int status) {
         if (status == 9) {
 
@@ -202,7 +201,33 @@ public class CargoResource {
 
     }
 
-    @GetMapping("/history/{preCargoId}")
+    /**
+     * 货物状态更新13
+     *
+     * @return
+     */
+    @PutMapping("/cargo-status-13/{cargoId}")
+    public Cargo statusChangeTo13(@PathVariable int cargoId) {
+        return cargoService.statusChangeTo13(cargoId);
+    }
+
+
+    /**
+     * 货物状态改为14
+     *
+     * @return
+     */
+    @PutMapping("/cargo-status-14/{cargoId}")
+    public Cargo statusChangeTo14(@PathVariable int cargoId) {
+        return cargoService.statusChangeTo14(cargoId);
+    }
+
+    /**
+     * 转单历史
+     * @param preCargoId
+     * @return
+     */
+    @GetMapping("/transferred-cargos/{preCargoId}")
     public List<Cargo> getAllTransCargos(@PathVariable int preCargoId) {
         logger.info("REST 查询订单转运历史");
         return cargoService.findAllByPreCargoId(preCargoId);
@@ -214,7 +239,7 @@ public class CargoResource {
      *
      * @return
      */
-    @PutMapping("/refreshPosition/{truckId}/{position}")
+    @PutMapping("/position/{truckId}/{position}")
     public List<Cargo> refreshPosition(@RequestParam("truckId") int truckId, @RequestParam("position") String position) {
         logger.info("更新承运方/货物位置信息");
         return cargoService.refreshPosition(truckId, position);
@@ -226,31 +251,11 @@ public class CargoResource {
      *
      * @return
      */
-    @PutMapping("/refreshCompleteRatio/{cargoId}/{ratio}")
+    @PutMapping("/complete-ratio/{cargoId}/{ratio}")
     public Cargo refreshPosition(@RequestParam("cargoId") int cargoId, @RequestParam("ratio") Double ratio) {
         logger.info("更新承运方/货物位置信息");
         return cargoService.refreshCompleteRatio(cargoId, ratio);
     }
 
-    /**
-     * 货物状态改为13
-     *
-     * @return
-     */
-    @PutMapping("/statusChangeTo13/{cargoId}")
-    public Cargo statusChangeTo13(@PathVariable int cargoId) {
-        return cargoService.statusChangeTo13(cargoId);
-    }
-
-
-    /**
-     * 货物状态改为14
-     *
-     * @return
-     */
-    @PutMapping("/statusChangeTo14/{cargoId}")
-    public Cargo statusChangeTo14(@PathVariable int cargoId) {
-        return cargoService.statusChangeTo14(cargoId);
-    }
 
 }

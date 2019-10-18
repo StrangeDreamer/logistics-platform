@@ -60,10 +60,10 @@ public class CargoService {
     @Autowired
     private BidRepository bidRepository;
 
-    private final String cargoKey = "Cargo";
-    private final String truckKey = "Truck";
-    private final String shipperKey = "Shipper";
-    private final String receiverKey = "Receiver";
+//    private final String cargoKey = "Cargo";
+//    private final String truckKey = "Truck";
+//    private final String shipperKey = "Shipper";
+//    private final String receiverKey = "Receiver";
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
@@ -444,5 +444,6 @@ public class CargoService {
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"4*"+String.valueOf(cargoId));
         return cargo;
     }
+
 
 }

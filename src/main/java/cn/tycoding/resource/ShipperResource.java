@@ -54,20 +54,20 @@ public class ShipperResource {
     }
 
     /**
-     * 设置承运方评级
+     * 设置发货方评级
      *
      * @return
      */
 
-    @PutMapping("/setShipperRank/{shipperId}/{rank}")
+    @PutMapping("/ranking/{shipperId}/{rank}")
     public Shipper setShipperRank(@PathVariable("shipperId") int shipperId, @PathVariable("rank") double rank) {
-        logger.info("设置承运方评级");
+        logger.info("设置发货方评级");
         return shipperService.setShipperRank(shipperId, rank);
     }
 
 
 
-    @PutMapping("/active/{id}")
+    @PutMapping("/{id}/activate")
     public Shipper active(@PathVariable("id") int id) {
         logger.info("激活用户");
         return shipperService.active(id);

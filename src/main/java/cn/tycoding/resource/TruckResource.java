@@ -101,18 +101,30 @@ public class TruckResource {
      * @return
      */
 
-    @PutMapping("/setTruckRank/{truckId}/{rank}")
+    @PutMapping("/ranking/{truckId}/{rank}")
     public Truck setTruckRank(@PathVariable("truckId") int truckId, @PathVariable("rank") double rank) {
         logger.info("设置承运方评级");
         return truckService.setTruckRank(truckId, rank);
     }
 
-    @PutMapping("/active/{id}")
+    /**承运方激活
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/{id}/activate")
     public Truck active(@PathVariable("id") int id) {
         logger.info("激活用户");
         return truckService.active(id);
     }
 
+    /**
+     * TODO 上传文件激活
+     * @param file
+     * @return
+     * @throws IllegalStateException
+     * @throws IOException
+     */
     @PostMapping("/upload")
     //上传的文件会转换成MultipartFile对象，file名字对应html中上传控件的name
     public String test(MultipartFile file) throws IllegalStateException, IOException {
