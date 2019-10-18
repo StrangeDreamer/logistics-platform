@@ -416,6 +416,15 @@ public class CargoService {
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货超时！收货方未在指定时间前对订单"
                 + cargo.getId() + "进行验收！");
         cargoRepository.save(cargo);
+
+        BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
+        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
+        BankAccount bankAccountPlatform = bankAccountService.check(1,"platform");
+
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
+
         delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));

@@ -275,7 +275,8 @@ public class BidResource {
                 }
 
                 redisTemplate.boundHashOps(bidsKey).delete(cargoId);
-                redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+//                redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+                cargoService.delCargoRedis(cargoId);
 
                 // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
                 List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);

@@ -107,7 +107,8 @@ public class CargoResource {
         cargo.setStatus(1);
         cargoRepository.save(cargo);
         //删除map中的某个对象
-        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+//        redisTemplate.boundHashOps(cargoKey).delete(cargoId);
+        cargoService.delCargoRedis(cargoId);
         logger.info("订单{}*****{}开始抢", cargoId, bidStartTime);
 
         // 发布订单前检查订单是否是群发给所有承运方
