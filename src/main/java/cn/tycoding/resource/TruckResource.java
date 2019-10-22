@@ -1,26 +1,18 @@
 package cn.tycoding.resource;
 
-import cn.tycoding.config.MyLog;
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Cargo;
-import cn.tycoding.domain.Inspection;
-import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Truck;
-import cn.tycoding.repository.CargoRepository;
-import cn.tycoding.repository.TruckRepository;
-import cn.tycoding.security.jwt.JwtTokenProvider;
 import cn.tycoding.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
 

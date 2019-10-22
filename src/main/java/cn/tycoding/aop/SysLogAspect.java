@@ -1,4 +1,4 @@
-package cn.tycoding.config;
+package cn.tycoding.aop;
 
 import cn.tycoding.Utils.*;
 import cn.tycoding.domain.SysLog;
@@ -30,14 +30,13 @@ public class SysLogAspect {
 
     //定义切点 @Pointcut
     //在注解的位置切入代码
-    @Pointcut("@annotation( cn.tycoding.config.MyLog)")
+    @Pointcut("@annotation( cn.tycoding.aop.MyLog)")
     public void logPoinCut() {
     }
 
     //切面 配置通知
     @AfterReturning("logPoinCut()")
     public void saveSysLog(JoinPoint joinPoint) {
-        System.out.println("切面。。。。。");
         //保存日志
         SysLog sysLog = new SysLog();
 
@@ -72,6 +71,9 @@ public class SysLogAspect {
         //获取用户ip地址
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         sysLog.setIp(IpAddressUtil.getIpAddress(request));
+
+        //获取用户请求url
+        sysLog.setUri(request.getRequestURI());
 
         //调用service保存SysLog实体类到数据库
         sysLogService.save(sysLog);

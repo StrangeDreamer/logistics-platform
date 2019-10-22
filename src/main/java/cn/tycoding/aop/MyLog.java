@@ -1,4 +1,4 @@
-package cn.tycoding.config;
+package cn.tycoding.aop;
 
 import java.lang.annotation.*;
 

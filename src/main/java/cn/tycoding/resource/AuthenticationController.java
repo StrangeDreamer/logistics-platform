@@ -1,7 +1,7 @@
 package cn.tycoding.resource;
 
 
-import cn.tycoding.config.MyLog;
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.Truck;

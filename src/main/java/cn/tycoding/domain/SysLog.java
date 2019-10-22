@@ -23,9 +23,12 @@ public class SysLog implements Serializable {
 
     private String method; //方法名
 
+    private String uri;
+
     private String params; //参数
 
     private String ip; //ip地址
+
 
     @CreatedDate
     private Date createDate; //操作时间
