@@ -167,7 +167,7 @@ public class BankAccountService {
             );
             bankAccountB.setBankAccountLog(bankAccountB.getBankAccountLog()
                     + ", " + bankAccountB.getType() + bankAccountB.getId()
-                    + "增加资金" + String.format("%.2f", money)
+                    + "增加资金" + String.format("%.2f", money )
                     + "，其中红包支付了" + String.format("%.2f", money - spendWithBonus)
             );
             money = spendWithBonus;
