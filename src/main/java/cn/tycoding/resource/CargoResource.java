@@ -100,7 +100,7 @@ public class CargoResource {
         Cargo cargo = cargoService.findCargoById(cargoId);
         Date bidStartTime = new Date();
         //小时
-        Date bidEndTime = new Date(bidStartTime.getTime() + time * 1000*3600);
+        Date bidEndTime = new Date(bidStartTime.getTime() + time * 1000 * speedup);
         //先更新DB，再删除cache
         cargo.setBidStartTime(bidStartTime);
         cargo.setBidEndTime(bidEndTime);

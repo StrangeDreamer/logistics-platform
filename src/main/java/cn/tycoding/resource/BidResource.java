@@ -149,8 +149,7 @@ public class BidResource {
                     "扣除担保额度" + cargo.getInsurance());
 
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
-                    "\n货车" + bid.getTruckId() + "由于对订单" + cargo.getId() + "的出价");
-
+                    "\n" + df.format(new Date()) + "货车" + bid.getTruckId() + "由于对订单" + cargo.getId() + "的出价");
             insuranceAccountService.changeAvailableMoney(truck.getId(), "truck", (0 - cargo.getInsurance()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,8 +215,8 @@ public class BidResource {
                     cargo.setStatus(6);
                     // 冻结资金恢复
                     BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(), "truck");
-                    bankAccountService.addMoneyLog(bankAccountShipper,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货方" + cargo.getTruckId() + "冻结的资金恢复");
+                    bankAccountService.addMoneyLog(bankAccountTruck,
+                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货承运方" + cargo.getTruckId() + "冻结的资金恢复");
                     bankAccountService.changeAvailableMoney(bankAccountTruck, cargo.getFreightFare());
 
                     logger.info("车辆" + cargo.getTruckId() + "的订单" + cargo.getPreCargoId() + "转手失败,展位费不予退回！");
