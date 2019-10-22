@@ -162,3 +162,7 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 2 遵循的原则：删除/更新数据库之后一定要删除缓存;查找频繁使用的数据一定要同时放进缓存里面
 
+**关于记录用户操作的log**
+
+1 所有加了@MyLog注解的方法均会存入mongodb数据库中    例子：@MyLog(value = "查询某个承运方")
+

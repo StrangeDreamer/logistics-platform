@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.config.MyLog;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Receiver;
@@ -62,6 +63,7 @@ public class TruckResource {
      * 查询指定承运方
      * @return
      */
+    @MyLog(value = "查询某个承运方")
     @GetMapping("/{id}")
     public Truck findTruckById(@PathVariable("id") int id){
         return truckService.findTruckById(id);

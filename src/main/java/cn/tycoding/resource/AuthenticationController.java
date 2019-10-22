@@ -1,6 +1,7 @@
 package cn.tycoding.resource;
 
 
+import cn.tycoding.config.MyLog;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Shipper;
 import cn.tycoding.domain.Truck;
@@ -43,6 +44,7 @@ public class AuthenticationController {
      * 承运方登录
      */
 
+    @MyLog(value = "承运方登录")
     @GetMapping("/login/trucks")
     public ResponseEntity truckLogin(@RequestParam String name,@RequestParam String password) {
         log.info("承运方登录");
@@ -67,7 +69,7 @@ public class AuthenticationController {
         return ok(userService.login(name, password,3));
     }
 
-
+    @MyLog(value = "平台登录")
     @GetMapping("/login/platform")
     public ResponseEntity PlatformLogin(@RequestParam String name,@RequestParam String password) {
         log.info("平台方登录");

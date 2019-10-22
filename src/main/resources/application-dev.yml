@@ -99,12 +99,16 @@ spring:
     redis:
       repositories:
         enabled: false
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/ww_logs
   http:
     multipart:
       #单文件限制大小
       max-file-size: 1MB
       #一次请求限制大小
       max-request-size: 10MB
+  aop:
+    auto: true
 #  resources:
 #    static-locations: classpath:/static/,file:/E/image/
 

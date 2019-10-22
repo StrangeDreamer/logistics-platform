@@ -1,5 +1,7 @@
 package cn.tycoding.security.jwt;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -13,6 +15,8 @@ import java.io.IOException;
 
 public class JwtTokenAuthenticationFilter extends GenericFilterBean {
 
+    @Autowired
+    private RedisTemplate redisTemplate;
     private JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
@@ -24,6 +28,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
         throws IOException, ServletException {
 
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
+
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
 
