@@ -1,0 +1,64 @@
+<!--配置文件如果发生改变将会重新加载，监测配置文件是否发生改变，默认时间1min，打印出logback内部日志信息-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!--日志名称，如果没有File 属性，那么只会使用FileNamePattern的文件路径规则
+            如果同时有<File>和<FileNamePattern>，那么当天日志是<File>，明天会自动把今天
+            的日志改名为今天的日期。即，<File> 的日志都是当天的。
+        -->
+        <File>${logback.logdir}/info.${logback.appname}.log</File>
+        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中,以防止日志填满整个磁盘空间-->
+            <FileNamePattern>${logback.logdir}/info.${logback.appname}.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!--只保留最近365天的日志-->
+            <maxHistory>365</maxHistory>
+            <!--用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志-->
+            <!--<totalSizeCap>1GB</totalSizeCap>-->
+        </rollingPolicy>
+        <!--日志输出编码格式化-->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d [%thread] %-5level %logger{36} %line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <!--展示格式 layout-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </pattern>
+        </layout>
+        <!--
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>ERROR</level>
+        </filter>
+         -->
+    </appender>
+
+
+    <root level="INFO">
+        <!--appender将会添加到这个loger-->
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="consoleLog"/>
+    </root>
+
+    <springProfile name="dev">
+        <logger name="devLog" level="INFO" additivity="false">
+            <appender-ref ref="consoleLog"/>
+        </logger>
+    </springProfile>
+
+    <springProfile name="prod">
+        <property name="logback.logdir" value="/root/wangjinProjects/ww_logs"></property>
+        <property name="logback.appname" value="wwlogistics"></property>
+        <logger name="prodLog" level="INFO" additivity="false">
+            <appender-ref ref="fileInfoLog"/>
+        </logger>
+    </springProfile>
+
+
+</configuration>

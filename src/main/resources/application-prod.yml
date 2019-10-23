@@ -48,7 +48,7 @@ spring:
       enabled: true #是否支持livereload
       port: 35729
     restart:
-      enabled: true #是否支持热部署
+      enabled: false #是否支持热部署
 
   #redis缓存
   redis:
@@ -99,36 +99,20 @@ spring:
     redis:
       repositories:
         enabled: false
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/ww_logs
   http:
     multipart:
       #单文件限制大小
       max-file-size: 1MB
       #一次请求限制大小
       max-request-size: 10MB
-#  resources:
-#    static-locations: classpath:/static/,file:/E/image/
+  aop:
+    auto: true
 
 
 message:
   queue:
     type: rabbitmq
-
-
-
-#mybatis配置
-#mybatis:
-## 配置mapper xml文件所在路径
-#  mapper-locations: classpath:mapper/*.xml
-#  type-aliases-package: cn.tycoding.entity
-#  configuration:
-#    # 使用jdbc的getGeneratedKeys 可以获取数据库自增主键值
-#    use-generated-keys: true
-#    # 使用列别名替换列名，默认true。如：select name as title from table
-#    use-column-label: true
-#    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
-#    map-underscore-to-camel-case: true
-
-# 打印sql
 logging:
-  level:
-    cn.tycoding.mapper: DEBUG
+  config: classpath:logback-spring.xml

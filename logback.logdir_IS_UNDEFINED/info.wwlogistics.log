@@ -1,0 +1,734 @@
+2019-10-23 14:02:30,117 [main] INFO  c.t.SpringbootSeckillApplication 50 - Starting SpringbootSeckillApplication on G7 with PID 13054 (/home/wangjin/IdeaProjects/logistics-platform/target/classes started by wangjin in /home/wangjin/IdeaProjects/logistics-platform)
+2019-10-23 14:02:30,120 [main] INFO  c.t.SpringbootSeckillApplication 684 - The following profiles are active: dev
+2019-10-23 14:02:30,145 [main] INFO  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext 590 - Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6c779568: startup date [Wed Oct 23 14:02:30 CST 2019]; root of context hierarchy
+2019-10-23 14:02:30,521 [main] WARN  o.m.s.mapper.ClassPathMapperScanner 166 - No MyBatis mapper was found in '[cn.tycoding]' package. Please check your configuration.
+2019-10-23 14:02:30,553 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate 172 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-23 14:02:30,582 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data JPA - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.FundsLogRepository.
+2019-10-23 14:02:30,590 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data JPA - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.SysLogRepository.
+2019-10-23 14:02:30,614 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate 172 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-23 14:02:30,619 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.BankAccountRepository.
+2019-10-23 14:02:30,619 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.BidRepository.
+2019-10-23 14:02:30,620 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.CargoRepository.
+2019-10-23 14:02:30,621 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.InspectionRepository.
+2019-10-23 14:02:30,621 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.InsuranceAccountRepository.
+2019-10-23 14:02:30,622 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.PlatformRepository.
+2019-10-23 14:02:30,622 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.ReceiverRepository.
+2019-10-23 14:02:30,622 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.ShipperRepository.
+2019-10-23 14:02:30,623 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.TruckRepository.
+2019-10-23 14:02:30,623 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.UserRepository.
+2019-10-23 14:02:30,790 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor 153 - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-10-23 14:02:30,837 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker 326 - Bean 'org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration' of type [org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration$$EnhancerBySpringCGLIB$$80a27e2d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-23 14:02:30,881 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker 326 - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$ba36bfff] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-23 14:02:31,153 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer 91 - Tomcat initialized with port(s): 8080 (http)
+2019-10-23 14:02:31,159 [main] INFO  o.a.coyote.http11.Http11NioProtocol 180 - Initializing ProtocolHandler ["http-nio-8080"]
+2019-10-23 14:02:31,164 [main] INFO  o.a.catalina.core.StandardService 180 - Starting service [Tomcat]
+2019-10-23 14:02:31,164 [main] INFO  o.a.catalina.core.StandardEngine 180 - Starting Servlet Engine: Apache Tomcat/8.5.34
+2019-10-23 14:02:31,166 [localhost-startStop-1] INFO  o.a.c.core.AprLifecycleListener 180 - The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib]
+2019-10-23 14:02:31,269 [localhost-startStop-1] INFO  org.apache.jasper.servlet.TldScanner 180 - At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2019-10-23 14:02:31,271 [localhost-startStop-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] 180 - Initializing Spring embedded WebApplicationContext
+2019-10-23 14:02:31,272 [localhost-startStop-1] INFO  o.s.web.context.ContextLoader 285 - Root WebApplicationContext: initialization completed in 1127 ms
+2019-10-23 14:02:31,332 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'requestContextFilter' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean 245 - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 258 - Mapping filter: 'webStatFilter' to urls: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'corsFilter' to: [/*]
+2019-10-23 14:02:31,333 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean 187 - Servlet dispatcherServlet mapped to [/]
+2019-10-23 14:02:31,334 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean 187 - Servlet statViewServlet mapped to [/druid/*]
+2019-10-23 14:02:31,355 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure 56 - Init DruidDataSource
+2019-10-23 14:02:31,557 [main] INFO  c.alibaba.druid.pool.DruidDataSource 928 - {dataSource-1} inited
+2019-10-23 14:02:31,625 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean 361 - Building JPA container EntityManagerFactory for persistence unit 'default'
+2019-10-23 14:02:31,632 [main] INFO  o.h.jpa.internal.util.LogHelper 31 - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-23 14:02:31,664 [main] INFO  org.hibernate.Version 45 - HHH000412: Hibernate Core {5.2.1.Final}
+2019-10-23 14:02:31,664 [main] INFO  org.hibernate.cfg.Environment 213 - HHH000206: hibernate.properties not found
+2019-10-23 14:02:31,665 [main] INFO  org.hibernate.cfg.Environment 318 - HHH000021: Bytecode provider name : javassist
+2019-10-23 14:02:31,684 [main] INFO  o.h.annotations.common.Version 66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2019-10-23 14:02:31,744 [main] INFO  org.hibernate.dialect.Dialect 153 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2019-10-23 14:02:33,064 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean 415 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-23 14:02:33,337 [main] INFO  org.mongodb.driver.cluster 71 - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2019-10-23 14:02:33,363 [cluster-ClusterId{value='5dafecf9d02b4432fe4bf8da', description='null'}-localhost:27017] INFO  org.mongodb.driver.connection 71 - Opened connection [connectionId{localValue:1, serverValue:164}] to localhost:27017
+2019-10-23 14:02:33,365 [cluster-ClusterId{value='5dafecf9d02b4432fe4bf8da', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster 71 - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[3, 6, 3]}, minWireVersion=0, maxWireVersion=6, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1493575}
+2019-10-23 14:02:33,818 [main] INFO  c.t.r.RedisTemplateConfig$$EnhancerBySpringCGLIB$$2dfebb6c 34 - RedisTemplate序列化配置，转化方式：org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+2019-10-23 14:02:33,931 [main] INFO  cn.tycoding.redis.JedisConfig 47 - JedisPool注入成功
+2019-10-23 14:02:33,931 [main] INFO  cn.tycoding.redis.JedisConfig 48 - redis地址：127.0.0.1:6379
+2019-10-23 14:02:33,990 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:02:34,098 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter 588 - Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6c779568: startup date [Wed Oct 23 14:02:30 CST 2019]; root of context hierarchy
+2019-10-23 14:02:34,115 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration 237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-23 14:02:34,133 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/trucks],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.truckLogin(java.lang.String,java.lang.String)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/shippers],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.shipperLogin(java.lang.String,java.lang.String)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/receivers],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.ReceiverLogin(java.lang.String,java.lang.String)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/platform],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.PlatformLogin(java.lang.String,java.lang.String)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/trucks],methods=[POST]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.AuthenticationController.truckSignin(cn.tycoding.domain.Truck)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/shippers],methods=[POST]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.AuthenticationController.shipperSignin(cn.tycoding.domain.Shipper)
+2019-10-23 14:02:34,134 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/receivers],methods=[POST]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.AuthenticationController.receiverSignin(cn.tycoding.domain.Receiver)
+2019-10-23 14:02:34,135 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bank-accounts],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.BankAccount> cn.tycoding.resource.BankAccountResource.getAll()
+2019-10-23 14:02:34,135 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bank-accounts/money-log/{id}/{type}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.BankAccountResource.findTruckById(int,java.lang.String)
+2019-10-23 14:02:34,136 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bids/{cargoId}],methods=[GET]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.BidResource.stopBid(int)
+2019-10-23 14:02:34,136 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bids],methods=[POST]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.BidResource.bidCargo(cn.tycoding.domain.Bid)
+2019-10-23 14:02:34,139 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/complete-ratio/{cargoId}/{ratio}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.refreshPosition(int,java.lang.Double)
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/position/{truckId}/{position}],methods=[PUT]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.refreshPosition(int,java.lang.String)
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}],methods=[GET]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.getCargoById(int)
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{id}/withdraw],methods=[DELETE]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.withdrawalCargo(int)
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllCargos()
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.startCargo(int)
+2019-10-23 14:02:34,140 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos],methods=[POST]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.createCargo(cn.tycoding.domain.Cargo)
+2019-10-23 14:02:34,141 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}/{freightFare}/transfer],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.getCargo(int,double)
+2019-10-23 14:02:34,141 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{part}/{id}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getTruckAllCargos(java.lang.String,int)
+2019-10-23 14:02:34,141 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status/{status}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllNormalCargos(int)
+2019-10-23 14:02:34,141 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status-13/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.statusChangeTo13(int)
+2019-10-23 14:02:34,141 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status-14/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.statusChangeTo14(int)
+2019-10-23 14:02:34,142 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/transferred-cargos/{preCargoId}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllTransCargos(int)
+2019-10-23 14:02:34,142 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/insurance-accounts],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.InsuranceAccount> cn.tycoding.resource.InsuranceAccountResource.getAll()
+2019-10-23 14:02:34,142 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/insurance-accounts/money-log/{id}/{type}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.InsuranceAccountResource.findTruckById(int,java.lang.String)
+2019-10-23 14:02:34,144 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/params],methods=[GET]}" onto public cn.tycoding.domain.Platform cn.tycoding.resource.PlatformResource.showPlatformPara()
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform],methods=[POST]}" onto public cn.tycoding.domain.Platform cn.tycoding.resource.PlatformResource.setPlatformElem(cn.tycoding.domain.Platform)
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/data],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.PlatformResource.showPlatformList()
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/bid],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Bid> cn.tycoding.resource.PlatformResource.showAllBid()
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/crtAccount],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtAccount()
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/{time}],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtIncome(java.lang.String)
+2019-10-23 14:02:34,145 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/mon],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtMonIncome()
+2019-10-23 14:02:34,146 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/day],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtDayIncome()
+2019-10-23 14:02:34,146 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/{userType}/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.PlatformResource.deleteReceiver(java.lang.String,int)
+2019-10-23 14:02:34,146 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.ReceiverResource.active(int)
+2019-10-23 14:02:34,147 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.ReceiverResource.deleteReceiver(int)
+2019-10-23 14:02:34,147 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Receiver> cn.tycoding.resource.ReceiverResource.getAllReceiverr()
+2019-10-23 14:02:34,147 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/inspections],methods=[POST]}" onto public java.lang.String cn.tycoding.resource.ReceiverResource.inspectionCargo(cn.tycoding.domain.Inspection)
+2019-10-23 14:02:34,147 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}],methods=[GET]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.ReceiverResource.getReceiversById(int)
+2019-10-23 14:02:34,147 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/qunfa],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.qunFa(java.lang.String)
+2019-10-23 14:02:34,148 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/qunfa2],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.qunFa2(java.lang.String)
+2019-10-23 14:02:34,148 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/danfa],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.danFa(java.lang.String,java.lang.String)
+2019-10-23 14:02:34,148 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.active(int)
+2019-10-23 14:02:34,149 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.ShipperResource.deleteShipper(int)
+2019-10-23 14:02:34,149 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}],methods=[GET]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.getShipperById(int)
+2019-10-23 14:02:34,149 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/ranking/{shipperId}/{rank}],methods=[PUT]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.setShipperRank(int,double)
+2019-10-23 14:02:34,149 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Shipper> cn.tycoding.resource.ShipperResource.getAllShipper()
+2019-10-23 14:02:34,150 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/upload],methods=[POST]}" onto public java.lang.String cn.tycoding.resource.TruckResource.test(org.springframework.web.multipart.MultipartFile) throws java.lang.IllegalStateException,java.io.IOException
+2019-10-23 14:02:34,150 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.active(int)
+2019-10-23 14:02:34,150 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}],methods=[GET]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.findTruckById(int)
+2019-10-23 14:02:34,150 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/departure/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.TruckResource.startShip(int)
+2019-10-23 14:02:34,151 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Truck> cn.tycoding.resource.TruckResource.getAllTruck()
+2019-10-23 14:02:34,151 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/cargoinfo/{id}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.TruckResource.findTrucksCargoNum(int)
+2019-10-23 14:02:34,151 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/destination/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.TruckResource.endShip(int)
+2019-10-23 14:02:34,151 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/ranking/{truckId}/{rank}],methods=[PUT]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.setTruckRank(int,double)
+2019-10-23 14:02:34,151 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.TruckResource.deleteTruck(int)
+2019-10-23 14:02:34,152 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-10-23 14:02:34,153 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-10-23 14:02:34,172 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:02:34,172 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:02:34,203 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration 104 - Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2019-10-23 14:02:34,205 [main] WARN  o.t.templatemode.TemplateMode 150 - [THYMELEAF][main] Template Mode 'LEGACYHTML5' is deprecated. Using Template Mode 'HTML' instead.
+2019-10-23 14:02:34,529 [main] INFO  o.s.s.web.DefaultSecurityFilterChain 43 - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1174676f, org.springframework.security.web.context.SecurityContextPersistenceFilter@bd28c86, org.springframework.security.web.header.HeaderWriterFilter@467a2584, org.springframework.web.filter.CorsFilter@375bf4d1, org.springframework.security.web.authentication.logout.LogoutFilter@2bf4fa1, cn.tycoding.security.jwt.JwtTokenAuthenticationFilter@71f8ce0e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3340ce58, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@408f70ab, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4fd92289, org.springframework.security.web.session.SessionManagementFilter@414e8b31, org.springframework.security.web.access.ExceptionTranslationFilter@2ba9f743, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@44392e64]
+2019-10-23 14:02:34,589 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.MyWebSocket_bak
+2019-10-23 14:02:34,592 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketServer
+2019-10-23 14:02:34,593 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest
+2019-10-23 14:02:34,593 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest3
+2019-10-23 14:02:34,593 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest4
+2019-10-23 14:02:34,594 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 433 - Registering beans for JMX exposure on startup
+2019-10-23 14:02:34,595 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'statFilter' has been autodetected for JMX exposure
+2019-10-23 14:02:34,595 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-10-23 14:02:34,599 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'rabbitConnectionFactory' has been autodetected for JMX exposure
+2019-10-23 14:02:34,601 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 668 - Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.spring.boot.autoconfigure:name=dataSource,type=DruidDataSourceWrapper]
+2019-10-23 14:02:34,602 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 675 - Located managed bean 'rabbitConnectionFactory': registering with JMX server as MBean [org.springframework.amqp.rabbit.connection:name=rabbitConnectionFactory,type=CachingConnectionFactory]
+2019-10-23 14:02:34,612 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 668 - Located MBean 'statFilter': registering with JMX server as MBean [com.alibaba.druid.filter.stat:name=statFilter,type=StatFilter]
+2019-10-23 14:02:34,615 [main] INFO  o.s.c.s.DefaultLifecycleProcessor 356 - Starting beans in phase 2147483647
+2019-10-23 14:02:34,621 [main] INFO  o.a.coyote.http11.Http11NioProtocol 180 - Starting ProtocolHandler ["http-nio-8080"]
+2019-10-23 14:02:34,624 [main] INFO  o.a.tomcat.util.net.NioSelectorPool 180 - Using a shared selector for servlet write/read
+2019-10-23 14:02:34,634 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer 206 - Tomcat started on port(s): 8080 (http) with context path ''
+2019-10-23 14:02:34,635 [main] INFO  c.t.SpringbootSeckillApplication 59 - Started SpringbootSeckillApplication in 4.754 seconds (JVM running for 5.04)
+2019-10-23 14:02:34,646 [main] INFO  o.h.h.i.QueryTranslatorFactoryInitiator 47 - HHH000397: Using ASTQueryTranslatorFactory
+2019-10-23 14:07:48,977 [Thread-11] INFO  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext 993 - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6c779568: startup date [Wed Oct 23 14:02:30 CST 2019]; root of context hierarchy
+2019-10-23 14:07:48,979 [Thread-11] INFO  o.s.c.s.DefaultLifecycleProcessor 369 - Stopping beans in phase 2147483647
+2019-10-23 14:07:48,979 [Thread-11] INFO  o.s.c.s.DefaultLifecycleProcessor 369 - Stopping beans in phase 0
+2019-10-23 14:07:48,982 [Thread-11] INFO  o.s.j.e.a.AnnotationMBeanExporter 451 - Unregistering JMX-exposed beans on shutdown
+2019-10-23 14:07:48,983 [Thread-11] INFO  o.s.j.e.a.AnnotationMBeanExporter 185 - Unregistering JMX-exposed beans
+2019-10-23 14:07:48,993 [Thread-11] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean 597 - Closing JPA EntityManagerFactory for persistence unit 'default'
+2019-10-23 14:07:48,994 [Thread-11] INFO  c.alibaba.druid.pool.DruidDataSource 1823 - {dataSource-1} closed
+2019-10-23 14:07:50,992 [main] ERROR o.s.boot.SpringApplication 863 - Application run failed
+java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.core.ConsoleAppender[consoleLog] - No encoder set for the appender named "consoleLog".
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:169)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:82)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:60)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:117)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:264)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:237)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:200)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:173)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:74)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:54)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:364)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:323)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1277)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1265)
+	at cn.tycoding.SpringbootSeckillApplication.main(SpringbootSeckillApplication.java:17)
+2019-10-23 14:08:16,168 [main] INFO  c.t.SpringbootSeckillApplication 50 - Starting SpringbootSeckillApplication on G7 with PID 13944 (/home/wangjin/IdeaProjects/logistics-platform/target/classes started by wangjin in /home/wangjin/IdeaProjects/logistics-platform)
+2019-10-23 14:08:16,171 [main] INFO  c.t.SpringbootSeckillApplication 684 - The following profiles are active: dev
+2019-10-23 14:08:16,198 [main] INFO  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext 590 - Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@776b83cc: startup date [Wed Oct 23 14:08:16 CST 2019]; root of context hierarchy
+2019-10-23 14:08:16,574 [main] WARN  o.m.s.mapper.ClassPathMapperScanner 166 - No MyBatis mapper was found in '[cn.tycoding]' package. Please check your configuration.
+2019-10-23 14:08:16,606 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate 172 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-23 14:08:16,637 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data JPA - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.FundsLogRepository.
+2019-10-23 14:08:16,645 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data JPA - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.SysLogRepository.
+2019-10-23 14:08:16,670 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate 172 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-23 14:08:16,674 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.BankAccountRepository.
+2019-10-23 14:08:16,675 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.BidRepository.
+2019-10-23 14:08:16,675 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.CargoRepository.
+2019-10-23 14:08:16,676 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.InspectionRepository.
+2019-10-23 14:08:16,676 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.InsuranceAccountRepository.
+2019-10-23 14:08:16,676 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.PlatformRepository.
+2019-10-23 14:08:16,677 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.ReceiverRepository.
+2019-10-23 14:08:16,677 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.ShipperRepository.
+2019-10-23 14:08:16,678 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.TruckRepository.
+2019-10-23 14:08:16,678 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport 291 - Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface cn.tycoding.repository.UserRepository.
+2019-10-23 14:08:16,851 [main] INFO  o.s.b.f.a.AutowiredAnnotationBeanPostProcessor 153 - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2019-10-23 14:08:16,907 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker 326 - Bean 'org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration' of type [org.springframework.amqp.rabbit.annotation.RabbitBootstrapConfiguration$$EnhancerBySpringCGLIB$$d77fae04] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-23 14:08:16,950 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker 326 - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$1113efd6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-23 14:08:17,226 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer 91 - Tomcat initialized with port(s): 8080 (http)
+2019-10-23 14:08:17,233 [main] INFO  o.a.coyote.http11.Http11NioProtocol 180 - Initializing ProtocolHandler ["http-nio-8080"]
+2019-10-23 14:08:17,238 [main] INFO  o.a.catalina.core.StandardService 180 - Starting service [Tomcat]
+2019-10-23 14:08:17,238 [main] INFO  o.a.catalina.core.StandardEngine 180 - Starting Servlet Engine: Apache Tomcat/8.5.34
+2019-10-23 14:08:17,241 [localhost-startStop-1] INFO  o.a.c.core.AprLifecycleListener 180 - The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib]
+2019-10-23 14:08:17,341 [localhost-startStop-1] INFO  org.apache.jasper.servlet.TldScanner 180 - At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+2019-10-23 14:08:17,344 [localhost-startStop-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] 180 - Initializing Spring embedded WebApplicationContext
+2019-10-23 14:08:17,344 [localhost-startStop-1] INFO  o.s.web.context.ContextLoader 285 - Root WebApplicationContext: initialization completed in 1146 ms
+2019-10-23 14:08:17,402 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'requestContextFilter' to: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.DelegatingFilterProxyRegistrationBean 245 - Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 258 - Mapping filter: 'webStatFilter' to urls: [/*]
+2019-10-23 14:08:17,403 [localhost-startStop-1] INFO  o.s.b.w.s.FilterRegistrationBean 245 - Mapping filter: 'corsFilter' to: [/*]
+2019-10-23 14:08:17,404 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean 187 - Servlet dispatcherServlet mapped to [/]
+2019-10-23 14:08:17,404 [localhost-startStop-1] INFO  o.s.b.w.s.ServletRegistrationBean 187 - Servlet statViewServlet mapped to [/druid/*]
+2019-10-23 14:08:17,424 [main] INFO  c.a.d.s.b.a.DruidDataSourceAutoConfigure 56 - Init DruidDataSource
+2019-10-23 14:08:17,637 [main] INFO  c.alibaba.druid.pool.DruidDataSource 928 - {dataSource-1} inited
+2019-10-23 14:08:17,704 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean 361 - Building JPA container EntityManagerFactory for persistence unit 'default'
+2019-10-23 14:08:17,710 [main] INFO  o.h.jpa.internal.util.LogHelper 31 - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-10-23 14:08:17,737 [main] INFO  org.hibernate.Version 45 - HHH000412: Hibernate Core {5.2.1.Final}
+2019-10-23 14:08:17,738 [main] INFO  org.hibernate.cfg.Environment 213 - HHH000206: hibernate.properties not found
+2019-10-23 14:08:17,739 [main] INFO  org.hibernate.cfg.Environment 318 - HHH000021: Bytecode provider name : javassist
+2019-10-23 14:08:17,757 [main] INFO  o.h.annotations.common.Version 66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2019-10-23 14:08:17,812 [main] INFO  org.hibernate.dialect.Dialect 153 - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2019-10-23 14:08:19,115 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean 415 - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-10-23 14:08:19,376 [main] INFO  org.mongodb.driver.cluster 71 - Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+2019-10-23 14:08:19,402 [cluster-ClusterId{value='5dafee53d02b443678d7741a', description='null'}-localhost:27017] INFO  org.mongodb.driver.connection 71 - Opened connection [connectionId{localValue:1, serverValue:165}] to localhost:27017
+2019-10-23 14:08:19,404 [cluster-ClusterId{value='5dafee53d02b443678d7741a', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster 71 - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[3, 6, 3]}, minWireVersion=0, maxWireVersion=6, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1244575}
+2019-10-23 14:08:19,853 [main] INFO  c.t.r.RedisTemplateConfig$$EnhancerBySpringCGLIB$$84dbeb43 34 - RedisTemplate序列化配置，转化方式：org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+2019-10-23 14:08:19,963 [main] INFO  cn.tycoding.redis.JedisConfig 47 - JedisPool注入成功
+2019-10-23 14:08:19,964 [main] INFO  cn.tycoding.redis.JedisConfig 48 - redis地址：127.0.0.1:6379
+2019-10-23 14:08:20,023 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:08:20,128 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerAdapter 588 - Looking for @ControllerAdvice: org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@776b83cc: startup date [Wed Oct 23 14:08:16 CST 2019]; root of context hierarchy
+2019-10-23 14:08:20,145 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration 237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-10-23 14:08:20,163 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/trucks],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.truckLogin(java.lang.String,java.lang.String)
+2019-10-23 14:08:20,163 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/shippers],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.shipperLogin(java.lang.String,java.lang.String)
+2019-10-23 14:08:20,164 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/receivers],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.ReceiverLogin(java.lang.String,java.lang.String)
+2019-10-23 14:08:20,164 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/login/platform],methods=[GET]}" onto public org.springframework.http.ResponseEntity cn.tycoding.resource.AuthenticationController.PlatformLogin(java.lang.String,java.lang.String)
+2019-10-23 14:08:20,164 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/trucks],methods=[POST]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.AuthenticationController.truckSignin(cn.tycoding.domain.Truck)
+2019-10-23 14:08:20,164 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/shippers],methods=[POST]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.AuthenticationController.shipperSignin(cn.tycoding.domain.Shipper)
+2019-10-23 14:08:20,164 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/auth/signin/receivers],methods=[POST]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.AuthenticationController.receiverSignin(cn.tycoding.domain.Receiver)
+2019-10-23 14:08:20,165 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bank-accounts],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.BankAccount> cn.tycoding.resource.BankAccountResource.getAll()
+2019-10-23 14:08:20,165 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bank-accounts/money-log/{id}/{type}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.BankAccountResource.findTruckById(int,java.lang.String)
+2019-10-23 14:08:20,166 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bids/{cargoId}],methods=[GET]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.BidResource.stopBid(int)
+2019-10-23 14:08:20,166 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/bids],methods=[POST]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.BidResource.bidCargo(cn.tycoding.domain.Bid)
+2019-10-23 14:08:20,169 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/position/{truckId}/{position}],methods=[PUT]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.refreshPosition(int,java.lang.String)
+2019-10-23 14:08:20,169 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/complete-ratio/{cargoId}/{ratio}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.refreshPosition(int,java.lang.Double)
+2019-10-23 14:08:20,169 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}],methods=[GET]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.getCargoById(int)
+2019-10-23 14:08:20,170 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{id}/withdraw],methods=[DELETE]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.withdrawalCargo(int)
+2019-10-23 14:08:20,170 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllCargos()
+2019-10-23 14:08:20,170 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.startCargo(int)
+2019-10-23 14:08:20,170 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos],methods=[POST]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.createCargo(cn.tycoding.domain.Cargo)
+2019-10-23 14:08:20,170 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{cargoId}/{freightFare}/transfer],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.getCargo(int,double)
+2019-10-23 14:08:20,171 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/{part}/{id}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getTruckAllCargos(java.lang.String,int)
+2019-10-23 14:08:20,171 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status/{status}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllNormalCargos(int)
+2019-10-23 14:08:20,171 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status-13/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.statusChangeTo13(int)
+2019-10-23 14:08:20,171 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/cargo-status-14/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.CargoResource.statusChangeTo14(int)
+2019-10-23 14:08:20,171 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/cargos/transferred-cargos/{preCargoId}],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Cargo> cn.tycoding.resource.CargoResource.getAllTransCargos(int)
+2019-10-23 14:08:20,172 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/insurance-accounts],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.InsuranceAccount> cn.tycoding.resource.InsuranceAccountResource.getAll()
+2019-10-23 14:08:20,172 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/insurance-accounts/money-log/{id}/{type}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.InsuranceAccountResource.findTruckById(int,java.lang.String)
+2019-10-23 14:08:20,175 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/params],methods=[GET]}" onto public cn.tycoding.domain.Platform cn.tycoding.resource.PlatformResource.showPlatformPara()
+2019-10-23 14:08:20,175 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform],methods=[POST]}" onto public cn.tycoding.domain.Platform cn.tycoding.resource.PlatformResource.setPlatformElem(cn.tycoding.domain.Platform)
+2019-10-23 14:08:20,175 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/data],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.PlatformResource.showPlatformList()
+2019-10-23 14:08:20,175 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/bid],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Bid> cn.tycoding.resource.PlatformResource.showAllBid()
+2019-10-23 14:08:20,176 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/crtAccount],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtAccount()
+2019-10-23 14:08:20,176 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/{time}],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtIncome(java.lang.String)
+2019-10-23 14:08:20,176 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/mon],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtMonIncome()
+2019-10-23 14:08:20,176 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/day],methods=[GET]}" onto public double cn.tycoding.resource.PlatformResource.getCrtDayIncome()
+2019-10-23 14:08:20,176 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/platform/{userType}/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.PlatformResource.deleteReceiver(java.lang.String,int)
+2019-10-23 14:08:20,177 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.ReceiverResource.active(int)
+2019-10-23 14:08:20,177 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.ReceiverResource.deleteReceiver(int)
+2019-10-23 14:08:20,177 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Receiver> cn.tycoding.resource.ReceiverResource.getAllReceiverr()
+2019-10-23 14:08:20,178 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/inspections],methods=[POST]}" onto public java.lang.String cn.tycoding.resource.ReceiverResource.inspectionCargo(cn.tycoding.domain.Inspection)
+2019-10-23 14:08:20,178 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/receivers/{id}],methods=[GET]}" onto public cn.tycoding.domain.Receiver cn.tycoding.resource.ReceiverResource.getReceiversById(int)
+2019-10-23 14:08:20,178 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/qunfa],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.qunFa(java.lang.String)
+2019-10-23 14:08:20,178 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/qunfa2],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.qunFa2(java.lang.String)
+2019-10-23 14:08:20,179 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/danfa],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> cn.tycoding.resource.SendMsg.danFa(java.lang.String,java.lang.String)
+2019-10-23 14:08:20,179 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.active(int)
+2019-10-23 14:08:20,179 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.ShipperResource.deleteShipper(int)
+2019-10-23 14:08:20,180 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/{id}],methods=[GET]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.getShipperById(int)
+2019-10-23 14:08:20,180 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers/ranking/{shipperId}/{rank}],methods=[PUT]}" onto public cn.tycoding.domain.Shipper cn.tycoding.resource.ShipperResource.setShipperRank(int,double)
+2019-10-23 14:08:20,180 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/shippers],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Shipper> cn.tycoding.resource.ShipperResource.getAllShipper()
+2019-10-23 14:08:20,181 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}/activate],methods=[PUT]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.active(int)
+2019-10-23 14:08:20,181 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}],methods=[GET]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.findTruckById(int)
+2019-10-23 14:08:20,181 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/departure/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.TruckResource.startShip(int)
+2019-10-23 14:08:20,181 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks],methods=[GET]}" onto public java.util.List<cn.tycoding.domain.Truck> cn.tycoding.resource.TruckResource.getAllTruck()
+2019-10-23 14:08:20,182 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/cargoinfo/{id}],methods=[GET]}" onto public java.lang.String cn.tycoding.resource.TruckResource.findTrucksCargoNum(int)
+2019-10-23 14:08:20,182 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/destination/{cargoId}],methods=[PUT]}" onto public cn.tycoding.domain.Cargo cn.tycoding.resource.TruckResource.endShip(int)
+2019-10-23 14:08:20,182 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/ranking/{truckId}/{rank}],methods=[PUT]}" onto public cn.tycoding.domain.Truck cn.tycoding.resource.TruckResource.setTruckRank(int,double)
+2019-10-23 14:08:20,182 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/{id}],methods=[DELETE]}" onto public java.lang.String cn.tycoding.resource.TruckResource.deleteTruck(int)
+2019-10-23 14:08:20,182 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/trucks/upload],methods=[POST]}" onto public java.lang.String cn.tycoding.resource.TruckResource.test(org.springframework.web.multipart.MultipartFile) throws java.lang.IllegalStateException,java.io.IOException
+2019-10-23 14:08:20,184 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-10-23 14:08:20,184 [main] INFO  o.s.w.s.m.m.a.RequestMappingHandlerMapping 549 - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-10-23 14:08:20,202 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:08:20,202 [main] INFO  o.s.w.s.h.SimpleUrlHandlerMapping 373 - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-23 14:08:20,233 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration 104 - Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2019-10-23 14:08:20,235 [main] WARN  o.t.templatemode.TemplateMode 150 - [THYMELEAF][main] Template Mode 'LEGACYHTML5' is deprecated. Using Template Mode 'HTML' instead.
+2019-10-23 14:08:20,557 [main] INFO  o.s.s.web.DefaultSecurityFilterChain 43 - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a8b22b5, org.springframework.security.web.context.SecurityContextPersistenceFilter@5f803481, org.springframework.security.web.header.HeaderWriterFilter@414e8b31, org.springframework.web.filter.CorsFilter@2e7b8cfa, org.springframework.security.web.authentication.logout.LogoutFilter@71df5f30, cn.tycoding.security.jwt.JwtTokenAuthenticationFilter@5f781173, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5383bf08, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@35d0749, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@43cf5bff, org.springframework.security.web.session.SessionManagementFilter@5ca86715, org.springframework.security.web.access.ExceptionTranslationFilter@425f94d7, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@64508788]
+2019-10-23 14:08:20,616 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.MyWebSocket_bak
+2019-10-23 14:08:20,619 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketServer
+2019-10-23 14:08:20,620 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest
+2019-10-23 14:08:20,620 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest3
+2019-10-23 14:08:20,621 [main] INFO  o.s.w.s.s.s.ServerEndpointExporter 153 - Registering @ServerEndpoint class: class cn.tycoding.websocket.WebSocketTest4
+2019-10-23 14:08:20,621 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 433 - Registering beans for JMX exposure on startup
+2019-10-23 14:08:20,622 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'statFilter' has been autodetected for JMX exposure
+2019-10-23 14:08:20,623 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-10-23 14:08:20,627 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 895 - Bean with name 'rabbitConnectionFactory' has been autodetected for JMX exposure
+2019-10-23 14:08:20,629 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 668 - Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.spring.boot.autoconfigure:name=dataSource,type=DruidDataSourceWrapper]
+2019-10-23 14:08:20,630 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 675 - Located managed bean 'rabbitConnectionFactory': registering with JMX server as MBean [org.springframework.amqp.rabbit.connection:name=rabbitConnectionFactory,type=CachingConnectionFactory]
+2019-10-23 14:08:20,640 [main] INFO  o.s.j.e.a.AnnotationMBeanExporter 668 - Located MBean 'statFilter': registering with JMX server as MBean [com.alibaba.druid.filter.stat:name=statFilter,type=StatFilter]
+2019-10-23 14:08:20,643 [main] INFO  o.s.c.s.DefaultLifecycleProcessor 356 - Starting beans in phase 2147483647
+2019-10-23 14:08:20,650 [main] INFO  o.a.coyote.http11.Http11NioProtocol 180 - Starting ProtocolHandler ["http-nio-8080"]
+2019-10-23 14:08:20,652 [main] INFO  o.a.tomcat.util.net.NioSelectorPool 180 - Using a shared selector for servlet write/read
+2019-10-23 14:08:20,663 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer 206 - Tomcat started on port(s): 8080 (http) with context path ''
+2019-10-23 14:08:20,665 [main] INFO  c.t.SpringbootSeckillApplication 59 - Started SpringbootSeckillApplication in 4.744 seconds (JVM running for 5.015)
+2019-10-23 14:08:20,676 [main] INFO  o.h.h.i.QueryTranslatorFactoryInitiator 47 - HHH000397: Using ASTQueryTranslatorFactory
+2019-10-23 14:15:47,891 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] 180 - Initializing Spring FrameworkServlet 'dispatcherServlet'
+2019-10-23 14:15:47,891 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet 494 - FrameworkServlet 'dispatcherServlet': initialization started
+2019-10-23 14:15:47,900 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet 509 - FrameworkServlet 'dispatcherServlet': initialization completed in 9 ms
+2019-10-23 14:15:47,925 [http-nio-8080-exec-1] INFO  c.t.r.AuthenticationController 50 - 承运方登录
+2019-10-23 14:15:48,021 [http-nio-8080-exec-1] INFO  org.mongodb.driver.connection 71 - Opened connection [connectionId{localValue:2, serverValue:166}] to localhost:27017
+2019-10-23 14:15:54,515 [http-nio-8080-exec-3] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:15:54,520 [http-nio-8080-exec-3] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:15:54,521 [http-nio-8080-exec-3] ERROR o.a.c.c.C.[Tomcat].[localhost] 182 - Exception Processing ErrorPage[errorCode=0, location=/error]
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:02,009 [http-nio-8080-exec-5] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:02,011 [http-nio-8080-exec-5] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:02,011 [http-nio-8080-exec-5] ERROR o.a.c.c.C.[Tomcat].[localhost] 182 - Exception Processing ErrorPage[errorCode=0, location=/error]
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:08,438 [http-nio-8080-exec-7] INFO  c.t.r.AuthenticationController 50 - 承运方登录
+2019-10-23 14:16:16,819 [http-nio-8080-exec-8] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:66)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:109)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:200)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:493)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:16,821 [http-nio-8080-exec-8] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet] 182 - Servlet.service() for servlet [dispatcherServlet] threw exception
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:16,821 [http-nio-8080-exec-8] ERROR o.a.c.c.C.[Tomcat].[localhost] 182 - Exception Processing ErrorPage[errorCode=0, location=/error]
+cn.tycoding.security.jwt.InvalidJwtAuthenticationException: Expired or invalid JWT token
+	at cn.tycoding.security.jwt.JwtTokenProvider.validateToken(JwtTokenProvider.java:76)
+	at cn.tycoding.security.jwt.JwtTokenAuthenticationFilter.doFilter(JwtTokenAuthenticationFilter.java:32)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:357)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:270)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.ApplicationDispatcher.invoke(ApplicationDispatcher.java:728)
+	at org.apache.catalina.core.ApplicationDispatcher.processRequest(ApplicationDispatcher.java:472)
+	at org.apache.catalina.core.ApplicationDispatcher.doForward(ApplicationDispatcher.java:395)
+	at org.apache.catalina.core.ApplicationDispatcher.forward(ApplicationDispatcher.java:316)
+	at org.apache.catalina.core.StandardHostValve.custom(StandardHostValve.java:395)
+	at org.apache.catalina.core.StandardHostValve.status(StandardHostValve.java:254)
+	at org.apache.catalina.core.StandardHostValve.throwable(StandardHostValve.java:349)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:175)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:81)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:800)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:806)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:748)
+2019-10-23 14:16:20,469 [http-nio-8080-exec-10] INFO  io.lettuce.core.EpollProvider 101 - Starting without optional epoll library
+2019-10-23 14:16:20,470 [http-nio-8080-exec-10] INFO  io.lettuce.core.KqueueProvider 101 - Starting without optional kqueue library
+2019-10-23 14:16:20,525 [http-nio-8080-exec-10] INFO  cn.tycoding.service.TruckService 97 - Truck插入缓存 >> 
