@@ -1,6 +1,8 @@
 <!--配置文件如果发生改变将会重新加载，监测配置文件是否发生改变，默认时间1min，打印出logback内部日志信息-->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
+    <property name="logback.logdir" value="/root/wangjinProjects/ww_logs"></property>
+    <property name="logback.appname" value="wwlogistics"></property>
     <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
         <!--日志名称，如果没有File 属性，那么只会使用FileNamePattern的文件路径规则
@@ -24,41 +26,8 @@
         </encoder>
     </appender>
 
-
-    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
-        <!--展示格式 layout-->
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>
-                <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
-            </pattern>
-        </layout>
-        <!--
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-             <level>ERROR</level>
-        </filter>
-         -->
-    </appender>
-
-
     <root level="INFO">
-        <!--appender将会添加到这个loger-->
         <appender-ref ref="fileInfoLog"/>
-        <appender-ref ref="consoleLog"/>
     </root>
-
-    <springProfile name="dev">
-        <logger name="devLog" level="INFO" additivity="false">
-            <appender-ref ref="consoleLog"/>
-        </logger>
-    </springProfile>
-
-    <springProfile name="prod">
-        <property name="logback.logdir" value="/root/wangjinProjects/ww_logs"></property>
-        <property name="logback.appname" value="wwlogistics"></property>
-        <logger name="prodLog" level="INFO" additivity="false">
-            <appender-ref ref="fileInfoLog"/>
-        </logger>
-    </springProfile>
-
 
 </configuration>

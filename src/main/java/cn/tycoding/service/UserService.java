@@ -65,4 +65,9 @@ public class UserService {
         model.put("token", token);
         return model;
     }
+
+    public String getCurrentPwd(String name,int kind){
+        User user= (User) this.userDetailsService.loadUserByUsernameAndKind(name,kind);
+        return user.getPassword();
+    }
 }

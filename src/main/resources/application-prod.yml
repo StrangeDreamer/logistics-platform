@@ -1,6 +1,6 @@
 server:
   hostname: 47.103.220.233
-  port: 8080
+  port: 8089
 spring:
   jackson:
     time-zone: GMT+8
@@ -115,4 +115,4 @@ message:
   queue:
     type: rabbitmq
 logging:
-  config: classpath:logback-spring.xml
+  config: classpath:logback-spring-prod.xml

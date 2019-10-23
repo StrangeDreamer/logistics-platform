@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +34,17 @@ import java.util.concurrent.TimeUnit;
 public class CargoService {
     private final Logger logger = LoggerFactory.getLogger(CargoService.class);
     @Autowired
-    private  CargoRepository cargoRepository;
+    private CargoRepository cargoRepository;
     @Autowired
     private CargoService cargoService;
     @Autowired
     private PlatformRepository platformRepository;
     @Autowired
-    private  TruckRepository truckRepository;
+    private TruckRepository truckRepository;
     @Autowired
-    private  ShipperRepository shipperRepository;
+    private ShipperRepository shipperRepository;
     @Autowired
-    private  ReceiverRepository receiverRepository;
+    private ReceiverRepository receiverRepository;
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
@@ -59,11 +61,10 @@ public class CargoService {
     private WebSocketTest4 webSocketTest4;
     @Autowired
     private BidRepository bidRepository;
-
-//    private final String cargoKey = "Cargo";
-//    private final String truckKey = "Truck";
-//    private final String shipperKey = "Shipper";
-//    private final String receiverKey = "Receiver";
+    @Autowired
+    private  ReceiverService receiverService;
+    @Autowired
+            private PasswordEncoder passwordEncoder;
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
@@ -83,15 +84,15 @@ public class CargoService {
     @Transactional
     public Cargo createCargo(Cargo cargo) {
         // 检查发货方是否存在，检查收货方是否存在
-        Shipper shipper = shipperRepository.findById(cargo.getShipperId()).orElseThrow(()->new ShipperException("创建订单失败！该发货方不存在！"));
-        receiverRepository.findById(cargo.getReceiverId()).orElseThrow(()->new ReceiverException("创建订单失败！该收货方不存在"));
+        Shipper shipper = shipperRepository.findById(cargo.getShipperId()).orElseThrow(() -> new ShipperException("创建订单失败！该发货方不存在！"));
+        receiverRepository.findById(cargo.getReceiverId()).orElseThrow(() -> new ReceiverException("创建订单失败！该收货方不存在"));
         Platform platform = platformRepository.findRecentPltf();
         double exhibitionFee = platform.getExhibitionFee();
 
-        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(),"shipper");
-        BankAccount bankAccountPlatform = bankAccountService.check(1,"platform");
+        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
+        BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
         // 发货方资金检查，资金充足(足够支付展位费和运费)才可以发货
-        if (bankAccountShipper.getAvailableMoney() < (cargo.getFreightFare() + exhibitionFee)){
+        if (bankAccountShipper.getAvailableMoney() < (cargo.getFreightFare() + exhibitionFee)) {
             throw new ShipperException("发货方当前可用资金不足，无法发布订单！");
         }
         // 发货方资金检查，激活才可以发货
@@ -118,14 +119,14 @@ public class CargoService {
         cargoRepository.save(c);
 
         // 发货方冻结发货资金
-        bankAccountService.addMoneyLog(bankAccountShipper,   df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "提交订单");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "提交订单");
         bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - c.getFreightFare()));
         logger.info("发货方被冻结资金" + c.getFreightFare());
 
         // 发货方支付展位费
-        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费" );
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费" );
-        bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,exhibitionFee);
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
+        bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, exhibitionFee);
         logger.info("发货方支付展位费" + exhibitionFee);
         logger.info("新订单创建成功!");
         return c;
@@ -133,12 +134,13 @@ public class CargoService {
 
     /**
      * 撤单
+     *
      * @param id
      */
     @Transactional
     public Cargo withdrawCargo(int id) {
         // 获取撤单赔偿比例
-        double  withdrawFeeRatio = platformRepository.findRecentPltf().getWithdrawFeeRatio();
+        double withdrawFeeRatio = platformRepository.findRecentPltf().getWithdrawFeeRatio();
         Cargo cargo = findCargoById(id);
 
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
@@ -147,7 +149,7 @@ public class CargoService {
         InsuranceAccount insuranceAccount = insuranceAccountService.check(cargo.getTruckId(), "truck");
         try {
             // 发布时无人接单撤单  第一阶段，货物未上挂撤单
-            if (cargo.getStatus() == 0 || cargo.getStatus() == 1 ){
+            if (cargo.getStatus() == 0 || cargo.getStatus() == 1) {
                 // 对第二阶段的撤单，还需要对所有出价的货车发送出价失败通知
                 if (cargo.getStatus() == 1) {
                     List<Bid> bidlist = bidRepository.findAllByCargoId(cargo.getId());
@@ -159,12 +161,12 @@ public class CargoService {
                 cargoRepository.save(cargo);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 delCargoRedis(id);
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回" );
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
             // 已接未运撤单  --撤单
-            else if (cargo.getStatus() == 2){
+            else if (cargo.getStatus() == 2) {
                 // 资金流动 发货方向平台支付赔偿，平台将赔偿付给车辆。赔偿金的计算。
                 double wMoney = (cargo.getFreightFare() * withdrawFeeRatio);
 
@@ -172,18 +174,18 @@ public class CargoService {
                     throw new ShipperException("发货方资金不足，无法进行撤单");
                 }
                 logger.info("查询发货方" + cargo.getShipperId() + "是否有充足的可用撤单资金" + wMoney +
-                "资金充足才允许撤单");
+                        "资金充足才允许撤单");
 
                 // 支付赔偿
-                bankAccountService.addMoneyLog(bankAccountShipper,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
-                bankAccountService.addMoneyLog(bankAccountPlatform,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
-                bankAccountService.addMoneyLog(bankAccountTruck,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
-                bankAccountService.transferMoney(bankAccountShipper,bankAccountPlatform,wMoney);
-                bankAccountService.transferMoney(bankAccountPlatform,bankAccountTruck,wMoney);
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, wMoney);
+                bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, wMoney);
 
                 // 解冻运费
-                bankAccountService.addMoneyLog(bankAccountShipper,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
-                bankAccountService.addMoneyLog(bankAccountPlatform,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
                 bankAccountService.changeAvailableMoney(bankAccountShipper, cargo.getFreightFare());
 
                 logger.info("由于货物已接未运，发货方" + cargo.getShipperId() +
@@ -192,9 +194,9 @@ public class CargoService {
                         " = " + wMoney);
 
                 // 车辆的担保额度的恢复
-                insuranceAccountService.addMoneyLog(insuranceAccount,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，货车不再需要运送该订单");
-                insuranceAccountService.changeAvailableMoney(insuranceAccount,cargo.getInsurance());
-                logger.info("车辆" +cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
+                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，货车不再需要运送该订单");
+                insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
+                logger.info("车辆" + cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(7);
 
                 cargoRepository.save(cargo);
@@ -202,7 +204,7 @@ public class CargoService {
                 delCargoRedis(id);
 
                 // 通知目标承运方撤单成功
-                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
+                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()), "5 " + cargo.getId());
             }
             // 已经运输的撤单，实际操作是为承运方新增一个订单，该订单与原订单除了出发地和目的地之外一切相同
             // 只有基于一些少见的情况下，这种做法才是或许可行的.此处不写资金结算，不予演示。
@@ -219,9 +221,9 @@ public class CargoService {
                 }
 
                 // 由于部分功能在前端实现 此处只是扣除承运方担保额度
-                insuranceAccountService.addMoneyLog(insuranceAccount,df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已运货物撤单，货车新增返程订单");
-                insuranceAccountService.changeAvailableMoney(insuranceAccount,0 - cargo.getInsurance());
-                logger.info("车辆" +cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
+                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已运货物撤单，货车新增返程订单");
+                insuranceAccountService.changeAvailableMoney(insuranceAccount, 0 - cargo.getInsurance());
+                logger.info("车辆" + cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
                 Cargo cargoBack = createCargo(cargo);
                 // 返程订单
@@ -238,7 +240,7 @@ public class CargoService {
                 // 通过发货人身份证检查是否存在撤单收货人，如果存在，则返程订单由撤单收货人作为收货人，否则，自动根据发货方信息生成撤单收货人
                 Shipper shipper = shipperRepository.findShippersById(cargo.getShipperId());
                 String bId = shipper.getIdgerenshenfenzheng();
-                if (receiverRepository.existsReceiverByIdgerenshenfenzheng(bId)){
+                if (receiverRepository.existsReceiverByIdgerenshenfenzheng(bId)) {
                     // 存在撤单收货人，直接将收货方改为该收货人
                     Receiver bReceiver = receiverRepository.findReceiverByIdgerenshenfenzheng(bId);
                     cargoBack.setReceiverId(bReceiver.getId());
@@ -247,14 +249,15 @@ public class CargoService {
                     Receiver backReciver = new Receiver();
                     backReciver.setName(shipper.getName() + "的撤单收货账号");
                     backReciver.setActivated(true);
-                    // TODO:由于无法获得发货方密码，撤单收货人的密码默认为123456
+                    // TODO:由于无法获得发货方密码，撤单收货人的密码默认为123456 DONE
                     backReciver.setPassword("123456");
                     backReciver.setAddress(shipper.getAddress());
                     backReciver.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
                     backReciver.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
                     backReciver.setOccupation(shipper.getOccupation());
                     backReciver.setTelNumber(shipper.getTelNumber());
-                    receiverRepository.save(backReciver);
+//                    receiverRepository.save(backReciver);
+                    receiverService.createReceiver(backReciver);
                     cargoBack.setReceiverId(backReciver.getId());
                 }
 
@@ -273,21 +276,21 @@ public class CargoService {
                 delCargoRedis(id);
 
                 // 通知目标承运方撤单成功
-                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()),"5 " + cargo.getId());
-            }
-            else {
-                logger.info("订单当前状态不允许撤单" );
+                webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()), "5 " + cargo.getId());
+            } else {
+                logger.info("订单当前状态不允许撤单");
             }
             cargoRepository.save(cargo);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return cargo;
     }
 
     /**
-     *  转单
+     * 转单
+     *
      * @param cargoId
      * @param freightFare
      * @return
@@ -296,7 +299,7 @@ public class CargoService {
     public Cargo updateCargoInfo(int cargoId, double freightFare) {
 
         Cargo cargo = findCargoById(cargoId);
-        if( cargo.getStatus()!=2) {
+        if (cargo.getStatus() != 2) {
             throw new CargoException("当前订单状态无法转单");
         }
 
@@ -331,13 +334,13 @@ public class CargoService {
         // 转手承运方向平台支付展位费
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
-        bankAccountService.addMoneyLog(bankAccountPlatform,df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
-        bankAccountService.addMoneyLog(bankAccountTruck,df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
-        bankAccountService.transferMoney(bankAccountTruck,bankAccountPlatform,exhibitionFee);
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
+        bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, exhibitionFee);
 
         // 转单前冻结原承运方需要支付运费
-        bankAccountService.addMoneyLog(bankAccountPlatform,df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
-        bankAccountService.addMoneyLog(bankAccountTruck,df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
         bankAccountService.changeAvailableMoney(bankAccountTruck, 0 - freightFare);
 
         logger.info("由于订单转手，承运方" + cargo.getTruckId() + "向平台支付展位费" + exhibitionFee);
@@ -352,7 +355,7 @@ public class CargoService {
         return cargoRepository.findAll();
     }
 
-    public Cargo findCargoById(int id){
+    public Cargo findCargoById(int id) {
         //        Object truck = redisTemplate.boundHashOps(truckKey).get(id);
         String key = "cargo_" + id;
         boolean hasKey = redisTemplate.hasKey(key);
@@ -374,36 +377,36 @@ public class CargoService {
 
     // 查找发货方的所有订单
     public List<Cargo> findAllByShipperId(int shipperId) {
-        shipperRepository.findById(shipperId).orElseThrow(()->new ShipperException("该发货方不存在"));
+        shipperRepository.findById(shipperId).orElseThrow(() -> new ShipperException("该发货方不存在"));
         return cargoRepository.findAllByShipperId(shipperId);
     }
 
     // 查找收货方的所有订单
     public List<Cargo> findAllByReceiverId(int receiverId) {
-        receiverRepository.findById(receiverId).orElseThrow(()->new ReceiverException("该收货方不存在"));
+        receiverRepository.findById(receiverId).orElseThrow(() -> new ReceiverException("该收货方不存在"));
         return cargoRepository.findAllByReceiverId(receiverId);
     }
 
     // 查找承运方的所有订单
     public List<Cargo> findAllByTruckId(int truckId) {
-        truckRepository.findById(truckId).orElseThrow(()->new TruckException("该承运方不存在"));
+        truckRepository.findById(truckId).orElseThrow(() -> new TruckException("该承运方不存在"));
         return cargoRepository.findAllByTruckId(truckId);
     }
 
     //查询订单流通历史
-    public List<Cargo> findAllByPreCargoId(int preCargoId){
+    public List<Cargo> findAllByPreCargoId(int preCargoId) {
         return cargoRepository.findAllByPreCargoId(preCargoId);
     }
 
-    public List<Cargo> findAllNormalCargos(){
+    public List<Cargo> findAllNormalCargos() {
         return cargoRepository.findAllByStatus(8);
     }
 
-    public List<Cargo> findAllTimeOutCargos(){
+    public List<Cargo> findAllTimeOutCargos() {
         return cargoRepository.findAllByStatus(9);
     }
 
-    public List<Cargo> findAbnormalCargos(){
+    public List<Cargo> findAbnormalCargos() {
         return cargoRepository.findAllByStatus(10);
     }
 
@@ -414,17 +417,17 @@ public class CargoService {
         Truck truck = truckService.findTruckById(truckId);
         truck.setPosition(position);
         List<Cargo> cargos = findAllByTruckId(truckId);
-        List<Cargo> res=new ArrayList<>(cargos.size());
+        List<Cargo> res = new ArrayList<>(cargos.size());
         for (Cargo c :
                 cargos) {
             if (c.getStatus() == 3) {
-                Cargo cargoRedis=findCargoById(c.getId());
+                Cargo cargoRedis = findCargoById(c.getId());
                 cargoRedis.setPosition(position);
 //                redisTemplate.boundHashOps(cargoKey).put(c.getId(),cargoRedis);
                 cargoRepository.save(cargoRedis);
                 delCargoRedis(c.getId());
                 res.add(cargoRedis);
-            }else {
+            } else {
                 res.add(c);
             }
         }
@@ -446,7 +449,7 @@ public class CargoService {
     @Transactional
     public Cargo statusChangeTo13(int cargoId) {
         Cargo cargo = findCargoById(cargoId);
-        if (cargo.getStatus() == 4 || cargo.getStatus() == 14){
+        if (cargo.getStatus() == 4 || cargo.getStatus() == 14) {
             cargo.setStatus(13);
         } else {
             logger.info("当前状态不为4或者14，无法改为状态13");
@@ -458,7 +461,7 @@ public class CargoService {
 
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
-        BankAccount bankAccountPlatform = bankAccountService.check(1,"platform");
+        BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
 
         bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
         bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
@@ -466,8 +469,8 @@ public class CargoService {
 
         delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时
-        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"4*"+String.valueOf(cargoId));
-        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"3*"+String.valueOf(cargoId));
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "4*" + String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()), "3*" + String.valueOf(cargoId));
 
         return cargo;
     }
@@ -477,7 +480,7 @@ public class CargoService {
     public Cargo statusChangeTo14(int cargoId) {
         Cargo cargo = findCargoById(cargoId);
 
-        if (cargo.getStatus() == 4){
+        if (cargo.getStatus() == 4) {
             cargo.setStatus(14);
         } else {
             logger.info("当前状态不为4，无法改为状态14");
@@ -488,8 +491,8 @@ public class CargoService {
         cargoRepository.save(cargo);
         delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时
-        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"5*"+String.valueOf(cargoId));
-        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()),"4*"+String.valueOf(cargoId));
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "5*" + String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()), "4*" + String.valueOf(cargoId));
         return cargo;
     }
 
