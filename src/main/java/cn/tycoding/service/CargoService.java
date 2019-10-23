@@ -234,11 +234,40 @@ public class CargoService {
                 cargoBack.setBidStartTime(cargo.getBidStartTime());
                 cargoBack.setPosition(cargo.getPosition());
                 cargoBack.setField(cargo.getField());
+
+                // 通过发货人身份证检查是否存在撤单收货人，如果存在，则返程订单由撤单收货人作为收货人，否则，自动根据发货方信息生成撤单收货人
+                Shipper shipper = shipperRepository.findShippersById(cargo.getShipperId());
+                String bId = shipper.getIdgerenshenfenzheng();
+                if (receiverRepository.existsReceiverByIdgerenshenfenzheng(bId)){
+                    // 存在撤单收货人，直接将收货方改为该收货人
+                    Receiver bReceiver = receiverRepository.findReceiverByIdgerenshenfenzheng(bId);
+                    cargoBack.setReceiverId(bReceiver.getId());
+                } else {
+                    // 不存在撤单收货人，则根据发货方信息新增收货人。
+                    Receiver backReciver = new Receiver();
+                    backReciver.setName(shipper.getName() + "的撤单收货账号");
+                    backReciver.setActivated(true);
+                    // TODO:由于无法获得发货方密码，撤单收货人的密码默认为123456
+                    backReciver.setPassword("123456");
+                    backReciver.setAddress(shipper.getAddress());
+                    backReciver.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
+                    backReciver.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
+                    backReciver.setOccupation(shipper.getOccupation());
+                    backReciver.setTelNumber(shipper.getTelNumber());
+                    receiverRepository.save(backReciver);
+                    cargoBack.setReceiverId(backReciver.getId());
+                }
+
                 cargoRepository.save(cargoBack);
 
-                // 将原来对订单设置为等待验货状态
-                cargo.setStatus(4);
-
+                // 原来的订单自动正常完成
+                cargo.setStatus(8);
+                InspectionService inspectionService = new InspectionService();
+                Inspection inspection = new Inspection();
+                inspection.setCargoId(cargo.getId());
+                inspection.setInspectionResult(8);
+                inspection.setTimeoutPeriod(0);
+                inspectionService.inspectionCargo(inspection);
                 cargoRepository.save(cargo);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 delCargoRedis(id);
