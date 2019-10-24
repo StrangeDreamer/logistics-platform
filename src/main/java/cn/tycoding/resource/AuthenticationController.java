@@ -55,6 +55,7 @@ public class AuthenticationController {
     /**
      * 发货方登录
      */
+    @MyLog(value = "发货方方登录")
     @GetMapping("/login/shippers")
     public ResponseEntity shipperLogin(@RequestParam String name,@RequestParam String password) {
         log.info("发货方方登录");
@@ -64,6 +65,7 @@ public class AuthenticationController {
     /**
      * 收货方登录
      */
+    @MyLog(value = "收货方登录")
     @GetMapping("/login/receivers")
     public ResponseEntity ReceiverLogin(@RequestParam String name,@RequestParam String password) {
         log.info("收货方登录");
@@ -82,6 +84,7 @@ public class AuthenticationController {
      * @param truck
      * @return
      */
+    @MyLog(value = "承运方注册")
     @PostMapping("/signin/trucks")
     public Truck truckSignin(@RequestBody Truck truck) {
         log.info("承运方注册请求");
@@ -95,6 +98,7 @@ public class AuthenticationController {
      * @param shipper
      * @return
      */
+    @MyLog(value = "发货方注册")
     @PostMapping("/signin/shippers")
     public Shipper shipperSignin(@RequestBody Shipper shipper) {
         log.info("发货方注册请求");
@@ -108,6 +112,7 @@ public class AuthenticationController {
      * @param receiver
      * @return
      */
+    @MyLog(value = "收货方注册")
     @PostMapping("/signin/receivers")
     public Receiver receiverSignin(@RequestBody Receiver receiver) {
         log.info("收货方注册请求");

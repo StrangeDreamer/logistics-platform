@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.websocket.WebSocketServer;
 import cn.tycoding.websocket.WebSocketTest;
 import org.slf4j.Logger;
@@ -55,7 +56,6 @@ public class SendMsg {
      * @param msg
      * @return
      */
-
     @GetMapping(value = "/danfa")
     public Map<String,Object> danFa(String toUser,String msg){
         Map<String,Object> res=new HashMap<>();

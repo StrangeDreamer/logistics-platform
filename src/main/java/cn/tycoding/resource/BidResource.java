@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.*;
 import cn.tycoding.exception.BidException;
 import cn.tycoding.exception.CargoException;
@@ -66,6 +67,7 @@ public class BidResource {
      * @param bid
      * @return
      */
+    @MyLog(value = "抢单请求")
     @PostMapping
     public Map<String, Object> bidCargo(@RequestBody Bid bid) {
         Map<String, Object> result = new HashMap<String, Object>();
@@ -164,6 +166,7 @@ public class BidResource {
      * @param cargoId
      * @return 抢单结果
      */
+    @MyLog(value = "平台发送停止抢单请求")
     @GetMapping("/{cargoId}")
     public Cargo stopBid(@PathVariable int cargoId) {
 

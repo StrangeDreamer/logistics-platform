@@ -30,6 +30,7 @@ public class TruckResource {
      * @param id
      * @return
      */
+    @MyLog(value = "注销 ")
     @DeleteMapping("/{id}")
     // 1.如果注册承运⽅方 有正在执⾏行行的订单，则提示⽤用户该订单并拒绝注销。
     // 2.如果承运⽅方仍然有责任纠纷未解决，则提示⽤用户该问题并拒绝注销。
@@ -45,9 +46,9 @@ public class TruckResource {
      * 查询所有承运方
      * @return
      */
+    @MyLog(value = "查询所有承运方 ")
     @GetMapping
     public List<Truck> getAllTruck(){
-        logger.info("REST 查询所有货物");
         return truckService.findAll();
     }
 
@@ -71,6 +72,7 @@ public class TruckResource {
      * @param cargoId 货号
      * @return
      */
+    @MyLog(value = "请求开始运货 ")
     @PutMapping("/departure/{cargoId}")
     public Cargo startShip(@PathVariable int cargoId){
 
@@ -83,6 +85,7 @@ public class TruckResource {
      * @param cargoId
      * @return
      */
+    @MyLog(value = " 结束运货,请求验货")
     @PutMapping("/destination/{cargoId}")
     public Cargo endShip(@PathVariable int cargoId){
         logger.info("truck已经送达，请求验货");
@@ -95,6 +98,7 @@ public class TruckResource {
      * @return
      */
 
+    @MyLog(value = " 设置承运方评级")
     @PutMapping("/ranking/{truckId}/{rank}")
     public Truck setTruckRank(@PathVariable("truckId") int truckId, @PathVariable("rank") double rank) {
         logger.info("设置承运方评级");
@@ -106,9 +110,9 @@ public class TruckResource {
      * @param id
      * @return
      */
+    @MyLog(value = "承运方激活 ")
     @PutMapping("/{id}/activate")
     public Truck active(@PathVariable("id") int id) {
-        logger.info("激活用户");
         return truckService.active(id);
     }
 
@@ -119,6 +123,7 @@ public class TruckResource {
      * @throws IllegalStateException
      * @throws IOException
      */
+    @MyLog(value = " 上传文件激活")
     @PostMapping("/upload")
     //上传的文件会转换成MultipartFile对象，file名字对应html中上传控件的name
     public String test(MultipartFile file) throws IllegalStateException, IOException {

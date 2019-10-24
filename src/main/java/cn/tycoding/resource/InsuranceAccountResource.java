@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.InsuranceAccount;
 import cn.tycoding.repository.InsuranceAccountRepository;
 import cn.tycoding.service.InsuranceAccountService;
@@ -43,6 +44,7 @@ public class InsuranceAccountResource {
      *
      * @return
      */
+    @MyLog(value = " 查询所有保险账户")
     @GetMapping()
     public List<InsuranceAccount> getAll() {
         logger.info("REST 查询所有账户");
@@ -54,6 +56,7 @@ public class InsuranceAccountResource {
      *
      * @return
      */
+    @MyLog(value = "查询账户流水 ")
     @GetMapping("/money-log/{id}/{type}")
     public String findTruckById(@PathVariable("id") int id, @PathVariable("type") String type) {
         logger.info("REST 查询账户流水");

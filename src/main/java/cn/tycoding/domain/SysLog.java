@@ -29,7 +29,5 @@ public class SysLog implements Serializable {
 
     private String ip; //ip地址
 
-
-    @CreatedDate
-    private Date createDate; //操作时间
+    private String createDate; //操作时间
 }

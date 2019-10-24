@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Bid;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.repository.PlatformRepository;
@@ -50,6 +51,7 @@ public class PlatformResource {
      * @param platform
      * @return
      */
+    @MyLog(value = " 参数设置")
     @PostMapping
     public Platform setPlatformElem(@RequestBody Platform platform) {
         String result = "参数设置";
@@ -64,6 +66,7 @@ public class PlatformResource {
      * @param
      * @return
      */
+    @MyLog(value = " 查询平台属性")
     @GetMapping("/params")
     public Platform showPlatformPara() {
         logger.info("平台属性展示");
@@ -76,6 +79,7 @@ public class PlatformResource {
      * @param
      * @return
      */
+    @MyLog(value = "查看当前车辆、货物等统计数据 ")
     @GetMapping("/data")
     public String showPlatformList() {
         logger.info("平台信息一览");
@@ -88,6 +92,7 @@ public class PlatformResource {
      * @param
      * @return
      */
+    @MyLog(value = "查看所有出价 ")
     @GetMapping("/bid")
     public List<Bid> showAllBid() {
         logger.info("出价信息一览");
@@ -100,6 +105,7 @@ public class PlatformResource {
      *
      * @return
      */
+    @MyLog(value = " 获取平台当前账户余额")
     @GetMapping("/crtAccount")
     public double getCrtAccount() {
         return bankAccountService.getAvailableMoney(accountId, accountType);
@@ -110,6 +116,7 @@ public class PlatformResource {
      *
      * @return
      */
+    @MyLog(value = " 前端异步获取当年收入")
     @GetMapping("/{time}")
     public double getCrtIncome(@PathVariable("time") String time) {
         double last, current;
@@ -138,6 +145,7 @@ public class PlatformResource {
      *
      * @return
      */
+    @MyLog(value = "前端异步获取当月收入 ")
     @GetMapping("/mon")
     public double getCrtMonIncome() {
         double last = (double) redisTemplate.opsForList().index(monKey, lastIndex);
@@ -150,6 +158,7 @@ public class PlatformResource {
      *
      * @return
      */
+    @MyLog(value = "前端异步获取当日收入 ")
     @GetMapping("/day")
     public double getCrtDayIncome() {
         double last = (double) redisTemplate.opsForList().index(dayKey, lastIndex);
@@ -164,6 +173,7 @@ public class PlatformResource {
      * @param id
      * @return
      */
+    @MyLog(value = "注销 ")
     @DeleteMapping("/{userType}/{id}")
     public String deleteReceiver(@PathVariable("userType") String userType, @PathVariable("id") int id) {
         logger.info("注销请求");
