@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Inspection;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.service.InspectionService;
@@ -27,6 +28,7 @@ public class ReceiverResource {
     }
 
 
+    @MyLog(value = "收货方注销请求 ")
     @DeleteMapping("/{id}")
     public String deleteReceiver(@PathVariable("id") int id){
         logger.info("Rest 收货方注销请求");
@@ -37,6 +39,7 @@ public class ReceiverResource {
      * 查询指定收货方
      * @return
      */
+    @MyLog(value = "查询指定收货方 ")
     @GetMapping("/{id}")
     public Receiver getReceiversById(@PathVariable("id") int id){
         logger.info("REST 查询所指定收货方");
@@ -47,6 +50,7 @@ public class ReceiverResource {
      * 查询所有发货方
      * @return
      */
+    @MyLog(value = "查询所有发货方 ")
     @GetMapping
     public List<Receiver> getAllReceiverr(){
         logger.info("REST 查询所有收货方");
@@ -58,15 +62,16 @@ public class ReceiverResource {
      * @param inspection
      * @return
      */
+    @MyLog(value = " 验货")
     @PostMapping("/inspections")
     public String inspectionCargo(@RequestBody Inspection inspection) {
         return  inspectionService.inspectionCargo(inspection);
     }
 
 
+    @MyLog(value = "收货方激活")
     @PutMapping("/{id}/activate")
     public Receiver active(@PathVariable("id") int id) {
-        logger.info("激活用户");
         return receiverService.active(id);
     }
 

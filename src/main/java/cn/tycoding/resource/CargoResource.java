@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Platform;
 import cn.tycoding.domain.Truck;
@@ -50,6 +51,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "查询所有货物")
     @GetMapping
     public List<Cargo> getAllCargos() {
         logger.info("REST 查询所有货物");
@@ -62,6 +64,7 @@ public class CargoResource {
      *
      * @return Cargo
      */
+    @MyLog(value = "查询指定订单")
     @GetMapping("/{cargoId}")
     public Cargo getCargoById(@PathVariable("cargoId") int cargoId) {
         logger.info("REST 查询所有货物");
@@ -78,6 +81,7 @@ public class CargoResource {
      * @param cargo
      * @return
      */
+    @MyLog(value = "提交订单")
     @PostMapping
     public Cargo createCargo(@RequestBody Cargo cargo) {
 
@@ -90,6 +94,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "平台确定某运单")
     @PutMapping("/{cargoId}")
     public Cargo startCargo(@PathVariable int cargoId) {
         Platform platform = platformRepository.findRecentPltf();
@@ -134,6 +139,7 @@ public class CargoResource {
      * @param id
      * @return
      */
+    @MyLog("撤单")
     @DeleteMapping("/{id}/withdraw")
     public Cargo withdrawalCargo(@PathVariable("id") int id) {
         logger.info("Rest 撤单请求{}" + id);
@@ -147,7 +153,7 @@ public class CargoResource {
      * @param id
      * @return
      */
-
+    @MyLog(value = "转单")
     @PutMapping("/{cargoId}/{freightFare}/transfer")
     public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare) {
         logger.info("REST 转单");
@@ -162,6 +168,7 @@ public class CargoResource {
      * @param id
      * @return
      */
+    @MyLog(value = "查询各方的所有订单")
     @GetMapping("/{part}/{id}")
     public List<Cargo> getTruckAllCargos(@PathVariable("part") String who, @PathVariable("id") int id) {
         if (who.equals("trucks")) {
@@ -185,6 +192,7 @@ public class CargoResource {
      * @param status
      * @return
      */
+    @MyLog(value = "查询不同状态的货物")
     @GetMapping("/cargo-status/{status}")
     public List<Cargo> getAllNormalCargos(@PathVariable int status) {
         if (status == 9) {
@@ -207,6 +215,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "货物状态更新13")
     @PutMapping("/cargo-status-13/{cargoId}")
     public Cargo statusChangeTo13(@PathVariable int cargoId) {
         return cargoService.statusChangeTo13(cargoId);
@@ -218,6 +227,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "货物状态更新14")
     @PutMapping("/cargo-status-14/{cargoId}")
     public Cargo statusChangeTo14(@PathVariable int cargoId) {
         return cargoService.statusChangeTo14(cargoId);
@@ -228,6 +238,7 @@ public class CargoResource {
      * @param preCargoId
      * @return
      */
+    @MyLog(value = "转单历史")
     @GetMapping("/transferred-cargos/{preCargoId}")
     public List<Cargo> getAllTransCargos(@PathVariable int preCargoId) {
         logger.info("REST 查询订单转运历史");
@@ -240,6 +251,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "更新承运方/货物位置信息")
     @PutMapping("/position/{truckId}/{position}")
     public List<Cargo> refreshPosition(@RequestParam("truckId") int truckId, @RequestParam("position") String position) {
         logger.info("更新承运方/货物位置信息");
@@ -252,6 +264,7 @@ public class CargoResource {
      *
      * @return
      */
+    @MyLog(value = "更新完成度")
     @PutMapping("/complete-ratio/{cargoId}/{ratio}")
     public Cargo refreshPosition(@RequestParam("cargoId") int cargoId, @RequestParam("ratio") Double ratio) {
         logger.info("更新承运方/货物位置信息");

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -64,7 +65,8 @@ public class SysLogAspect {
         String params = JSON.toJSONString(args);
         sysLog.setParams(params);
 
-        sysLog.setCreateDate(new Date());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sysLog.setCreateDate(df.format(new Date()));
         //获取用户名
         sysLog.setUsername(CurrentUserUtils.getCurrentUsername());
 

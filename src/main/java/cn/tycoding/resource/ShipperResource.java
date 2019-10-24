@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.Receiver;
 import cn.tycoding.domain.Shipper;
@@ -26,6 +27,7 @@ public class ShipperResource {
 
 
 
+    @MyLog(value = "发货方注销请求 ")
     @DeleteMapping("/{id}")
     // 1.如果该发货⽅方有尚未完成的订单，返回订单提醒⽤用户并拒绝注销。
     public String deleteShipper(@PathVariable("id") int id){
@@ -37,9 +39,9 @@ public class ShipperResource {
      * 查询指定发货方
      * @return
      */
+    @MyLog(value = "查询指定发货方")
     @GetMapping("/{id}")
     public Shipper getShipperById(@PathVariable("id") int id){
-        logger.info("REST 查询所有货物");
         return shipperService.findShipperById(id);
     }
 
@@ -47,9 +49,9 @@ public class ShipperResource {
      * 查询所有发货方
      * @return
      */
+    @MyLog(value = " 查询所有发货方")
     @GetMapping
     public List<Shipper> getAllShipper(){
-        logger.info("REST 查询所有货物");
         return shipperService.findAll();
     }
 
@@ -59,6 +61,7 @@ public class ShipperResource {
      * @return
      */
 
+    @MyLog(value = "设置发货方评级 ")
     @PutMapping("/ranking/{shipperId}/{rank}")
     public Shipper setShipperRank(@PathVariable("shipperId") int shipperId, @PathVariable("rank") double rank) {
         logger.info("设置发货方评级");
@@ -67,9 +70,9 @@ public class ShipperResource {
 
 
 
+    @MyLog(value = "发货方激活")
     @PutMapping("/{id}/activate")
     public Shipper active(@PathVariable("id") int id) {
-        logger.info("激活用户");
         return shipperService.active(id);
     }
 

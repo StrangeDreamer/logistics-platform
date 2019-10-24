@@ -1,5 +1,6 @@
 package cn.tycoding.resource;
 
+import cn.tycoding.aop.MyLog;
 import cn.tycoding.domain.BankAccount;
 import cn.tycoding.repository.BankAccountRepository;
 import cn.tycoding.service.BankAccountService;
@@ -17,9 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bank-accounts")
-
-
-
 public class BankAccountResource {
     /**
      * 1 由于只做模拟，不提供银行账户的注册注销接口；不提供设置账户初始资金的接口（使用默认值）
@@ -44,6 +42,7 @@ public class BankAccountResource {
      * 查询所有银行注册账户
      * @return
      */
+    @MyLog(value = "查询所有银行注册账户")
     @GetMapping()
     public List<BankAccount> getAll(){
         logger.info("REST 查询所有账户");
@@ -54,6 +53,7 @@ public class BankAccountResource {
      * 查询查询账户流水
      * @return
      */
+    @MyLog(value = "查询查询账户流水")
     @GetMapping("/money-log/{id}/{type}")
     public String findTruckById(@PathVariable("id") int id,@PathVariable("type") String type){
         logger.info("REST 查询账户流水");
