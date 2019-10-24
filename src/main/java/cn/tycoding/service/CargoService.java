@@ -250,7 +250,7 @@ public class CargoService {
                     backReciver.setName(shipper.getName() + "的撤单收货账号");
                     backReciver.setActivated(true);
                     // TODO:由于无法获得发货方密码，撤单收货人的密码默认为123456 DONE
-                    backReciver.setPassword("123456");
+                    backReciver.setPassword(shipper.getPassword());
                     backReciver.setAddress(shipper.getAddress());
                     backReciver.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
                     backReciver.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
