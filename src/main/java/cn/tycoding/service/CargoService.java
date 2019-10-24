@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.util.Date;
@@ -62,9 +63,11 @@ public class CargoService {
     @Autowired
     private BidRepository bidRepository;
     @Autowired
-    private ReceiverService receiverService;
+    private UserRepository userRepository;
     @Autowired
-    InspectionService inspectionService;
+    private InspectionService inspectionService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
@@ -250,17 +253,25 @@ public class CargoService {
                     Receiver backReciver = new Receiver();
                     backReciver.setName(shipper.getName() + "的撤单收货账号");
                     backReciver.setActivated(true);
-                    backReciver.setPassword("123456");
                     backReciver.setAddress(shipper.getAddress());
                     backReciver.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
                     backReciver.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
                     backReciver.setOccupation(shipper.getOccupation());
                     backReciver.setTelNumber(shipper.getTelNumber());
-//                    receiverRepository.save(backReciver);
-                    receiverService.createReceiver(backReciver);
+                    receiverRepository.save(backReciver);
+
+                    this.userRepository.save(User.builder()
+                            .username(backReciver.getName())
+                            .kind(3)
+                            .password(this.passwordEncoder.encode("123456"))
+                            .ownId(backReciver.getId())
+                            .roles(Arrays.asList( "ROLE_USER"))
+                            .build()
+
+                    );
+
                     cargoBack.setReceiverId(backReciver.getId());
                 }
-
 
 
                 // 原来的订单设置为运达目的地，并且验货正常自动正常完成

@@ -219,7 +219,7 @@ public class BidResource {
                     // 冻结资金恢复
                     BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(), "truck");
                     bankAccountService.addMoneyLog(bankAccountTruck,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货承运方" + cargo.getTruckId() + "冻结的资金恢复");
+                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货承运方" + preCargo.getTruckId() + "冻结的资金恢复");
                     bankAccountService.changeAvailableMoney(bankAccountTruck, cargo.getFreightFare());
 
                     logger.info("车辆" + cargo.getTruckId() + "的订单" + cargo.getPreCargoId() + "转手失败,展位费不予退回！");
