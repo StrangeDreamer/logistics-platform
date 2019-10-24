@@ -200,7 +200,9 @@ public class InspectionService {
 
             // 完成订单后先解冻资金
             bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
+            bankAccountService.addMoneyLog(bankAccountShipper,"\n");
             bankAccountService.transferMoney(bankAccountPreTruck, bankAccountPlatform, freightFare);
+
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
@@ -294,7 +296,7 @@ public class InspectionService {
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
         bankAccountService.addMoneyLog(bankAccountTruck,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，平台支付"
-                        + String.format("%.2f", trueTruck1Profit) + "作为红包");
+                        + String.format("%.2f", trueTruck2Profit) + "作为红包");
         bankAccountService.addMoneyLog(bankAccountShipper,
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，发货方获得红包"
                         + String.format("%.2f", trueTruck1Profit));

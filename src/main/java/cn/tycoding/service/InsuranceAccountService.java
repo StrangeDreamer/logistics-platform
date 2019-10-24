@@ -46,7 +46,7 @@ public class InsuranceAccountService {
             logger.info("该承运方账户不存在，自动为其创建承运方账户！");
             insuranceAccount.setMoney((int)(100000 + 500000 * Math.random()));
             insuranceAccount.setAvailableMoney(insuranceAccount.getMoney());
-            insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() + "参与方初始担保额为" + insuranceAccount.getMoney());
+            insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() + " 初始担保额为" + insuranceAccount.getMoney());
             insuranceAccountRepository.save(insuranceAccount);
         }
         return insuranceAccount;
@@ -55,7 +55,7 @@ public class InsuranceAccountService {
     // 查询指定注册承运方账户担保额的流水
     public String findMoneyLog(int id, String type) {
         InsuranceAccount insuranceAccount = check(id, type);
-        return insuranceAccount.getInsuranceAccountLog() + "\n参与方可用担保额为" + insuranceAccount.getMoney();
+        return insuranceAccount.getInsuranceAccountLog() + "\n 可用担保额为" + insuranceAccount.getMoney();
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结

@@ -250,8 +250,7 @@ public class CargoService {
                     Receiver backReciver = new Receiver();
                     backReciver.setName(shipper.getName() + "的撤单收货账号");
                     backReciver.setActivated(true);
-                    // TODO:由于无法获得发货方密码，撤单收货人的密码默认为123456 DONE
-                    backReciver.setPassword(shipper.getPassword());
+                    backReciver.setPassword("123456");
                     backReciver.setAddress(shipper.getAddress());
                     backReciver.setId_gongsitongyidaima(shipper.getId_gongsitongyidaima());
                     backReciver.setIdgerenshenfenzheng(shipper.getIdgerenshenfenzheng());
@@ -461,8 +460,7 @@ public class CargoService {
         if (cargo.getStatus() == 4 || cargo.getStatus() == 14) {
             cargo.setStatus(13);
         } else {
-            logger.info("当前状态不为4或者14，无法改为状态13");
-            return cargo;
+            throw new CargoException("当前状态不为4或者14，无法改为状态13");
         }
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货超时！收货方未在指定时间前对订单"
                 + cargo.getId() + "进行验收！");
@@ -472,9 +470,9 @@ public class CargoService {
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
 
-        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
-        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date() + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理"));
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
 
         delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时

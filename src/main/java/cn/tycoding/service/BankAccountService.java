@@ -40,7 +40,7 @@ public class BankAccountService {
         return bankAccountRepository.findAll();
     }
 
-    // 检查 该参与方是否存在，没有则自动创建,如果已经存在则直接返回该账户
+    // 检查 该 是否存在，没有则自动创建,如果已经存在则直接返回该账户
     @Transactional
     public synchronized BankAccount check(int id, String type) {
         if (type.equals("platform")) {
@@ -68,11 +68,11 @@ public class BankAccountService {
             }
             bankAccount.setMoney((int) (100000 + 500000 * Math.random()));
             bankAccount.setAvailableMoney(bankAccount.getMoney());
-            bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + "参与方初始资金为" + String.format("%.2f",bankAccount.getMoney())
-            + "，参与方初始可用资金为" + String.format("%.2f",bankAccount.getMoney()));
+            bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() + " 初始资金为" + String.format("%.2f",bankAccount.getMoney())
+            + "， 初始可用资金为" + String.format("%.2f",bankAccount.getMoney()));
 
             if (type.equals("发货方") || type.equals("shipper")) {
-                bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +"，参与方初始红包为" + String.format("%.2f", bankAccount.getBonus()));
+                bankAccount.setBankAccountLog(bankAccount.getBankAccountLog() +"， 初始红包为" + String.format("%.2f", bankAccount.getBonus()));
             }
 
             bankAccountRepository.save(bankAccount);
@@ -85,19 +85,8 @@ public class BankAccountService {
 
     // 查询指定注册账户的流水
     public String findMoneyLog(int id, String type) {
-
         BankAccount bankAccount = check(id, type);
-        String result = bankAccount.getBankAccountLog() + "\n参与方现有资金为" + String.format("%.2f",bankAccount.getMoney())
-                + "    可用余额为" + String.format("%.2f",bankAccount.getAvailableMoney());
-        if (type.equals("shipper") || type.equals("发货方")) {
-            result = result + "    当前红包为" + String.format("%.2f",bankAccount.getBonus());
-        }
-
-        if (type.equals("truck") || type.equals("承运方")) {
-            result = result + "\n\n" + insuranceAccountService.check(id, "truck").getInsuranceAccountLog()
-                    + "\n可用担保额为" + insuranceAccountService.check(id, "truck").getAvailableMoney();
-        }
-        return result;
+        return bankAccount.getBankAccountLog();
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结
@@ -127,7 +116,7 @@ public class BankAccountService {
         }
 
         String type = bankAccount.getType();
-        String result =  "参与方现有资金为" + String.format("%.2f",bankAccount.getMoney())
+        String result =  "现有资金为" + String.format("%.2f",bankAccount.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccount.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccount.getBonus());
@@ -189,7 +178,7 @@ public class BankAccountService {
         bankAccountRepository.save(bankAccountA);
         bankAccountRepository.save(bankAccountB);
         String type = bankAccountA.getType();
-        String result = "参与方现有资金为" + String.format("%.2f",bankAccountA.getMoney())
+        String result = " 现有资金为" + String.format("%.2f",bankAccountA.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccountA.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccountA.getBonus());
@@ -197,7 +186,7 @@ public class BankAccountService {
         addMoneyLog(bankAccountA,result);
 
         type = bankAccountB.getType();
-        result = "参与方现有资金为" + String.format("%.2f",bankAccountB.getMoney())
+        result = " 现有资金为" + String.format("%.2f",bankAccountB.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccountB.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccountB.getBonus());

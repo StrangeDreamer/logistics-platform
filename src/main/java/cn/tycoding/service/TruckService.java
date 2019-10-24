@@ -250,7 +250,7 @@ public class TruckService {
         cargo.setStatus(4);
 
         cargo.setCargoStatusLog(df.format(new Date()) + " 承运方" + truckRepository.findTruckById(cargo.getTruckId()).getName()
-                + "将订单" + cargo.getId() + "运达至" + cargo.getDestination() + ",等待收货方验货");
+                + "将订单" + cargo.getId() + "运达至" + cargo.getDestination() + ",等待收货方验货; 实际要求到达时间" + df.format(cargo.getLimitedTime()));
 
         cargoRepository.save(cargo);
         // 每交一单，同步truck缓存与数据库。truck会一直存在缓存中，不会消失

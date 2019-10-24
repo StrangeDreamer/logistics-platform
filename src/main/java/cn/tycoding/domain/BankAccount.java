@@ -38,7 +38,7 @@ public class BankAccount {
     @Column(updatable = false, nullable = false)
     private Date modifyTime;
 
-    // 参与方的资金
+    //  的资金
     private double money ;
 
     // 除去冻结实际可用资金
