@@ -221,7 +221,7 @@ public class CargoService {
                     throw new ShipperException("发货方当前可用资金不足，无法进行已运货物撤单");
                 }
 
-                // 由于部分功能在前端实现 此处只是扣除承运方担保额度
+                // 返程订单扣除担保额
                 insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已运货物撤单，货车新增返程订单");
                 insuranceAccountService.changeAvailableMoney(insuranceAccount, 0 - cargo.getInsurance());
                 logger.info("车辆" + cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
@@ -262,18 +262,23 @@ public class CargoService {
                     cargoBack.setReceiverId(backReciver.getId());
                 }
 
-                cargoRepository.save(cargoBack);
 
-                // 原来的订单自动正常完成
-                cargo.setStatus(8);
+
+                // 原来的订单设置为运达目的地，并且验货正常自动正常完成
+                cargo.setStatus(4);
+                cargoRepository.save(cargoBack);
+                cargoRepository.save(cargo);
+
+                // 返还发货方撤单返程订单的展位费
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "被接单，展位费返还");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "被接单，展位费返还");
+                bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, platformRepository.findRecentPltf().getExhibitionFee());
 
                 Inspection inspection = new Inspection();
                 inspection.setCargoId(cargo.getId());
                 inspection.setInspectionResult(8);
                 inspection.setTimeoutPeriod(0);
                 inspectionService.inspectionCargo(inspection);
-
-                cargoRepository.save(cargo);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 delCargoRedis(id);
 
