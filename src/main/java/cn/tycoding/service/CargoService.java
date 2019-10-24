@@ -62,9 +62,9 @@ public class CargoService {
     @Autowired
     private BidRepository bidRepository;
     @Autowired
-    private  ReceiverService receiverService;
+    private ReceiverService receiverService;
     @Autowired
-            private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
@@ -279,6 +279,8 @@ public class CargoService {
                 webSocketTest.sendToUser2(String.valueOf(cargo.getTruckId()), "5 " + cargo.getId());
             } else {
                 logger.info("订单当前状态不允许撤单");
+                throw new CargoException("订单当前状态不允许撤单");
+
             }
             cargoRepository.save(cargo);
 
