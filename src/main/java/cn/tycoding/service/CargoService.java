@@ -64,7 +64,8 @@ public class CargoService {
     @Autowired
     private ReceiverService receiverService;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    InspectionService inspectionService;
+
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 
@@ -265,12 +266,13 @@ public class CargoService {
 
                 // 原来的订单自动正常完成
                 cargo.setStatus(8);
-                InspectionService inspectionService = new InspectionService();
+
                 Inspection inspection = new Inspection();
                 inspection.setCargoId(cargo.getId());
                 inspection.setInspectionResult(8);
                 inspection.setTimeoutPeriod(0);
                 inspectionService.inspectionCargo(inspection);
+
                 cargoRepository.save(cargo);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 delCargoRedis(id);

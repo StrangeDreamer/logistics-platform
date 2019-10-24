@@ -79,6 +79,9 @@ public class InsuranceAccountService {
             insuranceAccount.setInsuranceAccountLog(insuranceAccount.getInsuranceAccountLog() +
                     ", " + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + String.format("%.2f",(-money)));
         }
+
+        String result =  "承运方当前担保额为" + String.format("%.2f",insuranceAccount.getMoney());
+        addMoneyLog(insuranceAccount,result);
         insuranceAccountRepository.save(insuranceAccount);
         return true;
     }

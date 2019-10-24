@@ -54,6 +54,9 @@ public class InspectionService {
     // 验货
     @Transactional
     public String inspectionCargo(Inspection inspection) {
+
+        logger.info(platformRepository.findById(5).toString());
+
         Platform platform = platformRepository.findRecentPltf();
 
         double overTimeFeeRatio = platform.getOverTimeFeeRatio();

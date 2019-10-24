@@ -127,7 +127,7 @@ public class BankAccountService {
         }
 
         String type = bankAccount.getType();
-        String result = bankAccount.getBankAccountLog() + "参与方现有资金为" + String.format("%.2f",bankAccount.getMoney())
+        String result =  "参与方现有资金为" + String.format("%.2f",bankAccount.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccount.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccount.getBonus());
@@ -189,7 +189,7 @@ public class BankAccountService {
         bankAccountRepository.save(bankAccountA);
         bankAccountRepository.save(bankAccountB);
         String type = bankAccountA.getType();
-        String result = bankAccountA.getBankAccountLog() + "参与方现有资金为" + String.format("%.2f",bankAccountA.getMoney())
+        String result = "参与方现有资金为" + String.format("%.2f",bankAccountA.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccountA.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccountA.getBonus());
@@ -197,7 +197,7 @@ public class BankAccountService {
         addMoneyLog(bankAccountA,result);
 
         type = bankAccountB.getType();
-        result = bankAccountB.getBankAccountLog() + "参与方现有资金为" + String.format("%.2f",bankAccountB.getMoney())
+        result = "参与方现有资金为" + String.format("%.2f",bankAccountB.getMoney())
                 + "    可用余额为" + String.format("%.2f",bankAccountB.getAvailableMoney());
         if (type.equals("shipper") || type.equals("发货方")) {
             result = result + "    当前红包为" + String.format("%.2f",bankAccountB.getBonus());
