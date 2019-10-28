@@ -1,7 +1,7 @@
 <!--配置文件如果发生改变将会重新加载，监测配置文件是否发生改变，默认时间1min，打印出logback内部日志信息-->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
-    <property name="logback.logdir" value="/root/wangjinProjects/ww_logs"></property>
+    <property name="logback.logdir" value="/home/wangjin/ww_logs"></property>
     <property name="logback.appname" value="wwlogistics"></property>
     <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
