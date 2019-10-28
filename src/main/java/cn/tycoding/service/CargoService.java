@@ -167,6 +167,7 @@ public class CargoService {
                 delCargoRedis(id);
                 bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
                 bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
+                bankAccountService.changeAvailableMoney(bankAccountShipper,cargo.getFreightFare());
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
             // 已接未运撤单  --撤单
