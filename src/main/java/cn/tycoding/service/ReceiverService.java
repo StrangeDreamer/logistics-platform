@@ -72,7 +72,7 @@ public class ReceiverService {
         this.userRepository.save(User.builder()
                 .username(receiver.getName())
                 .kind(3)
-                .password(receiver.getPassword())
+                .password(passwordEncoder.encode(receiver.getPassword()))
                 .ownId(receiver1.getId())
                 .roles(Arrays.asList( "ROLE_USER"))
                 .build()

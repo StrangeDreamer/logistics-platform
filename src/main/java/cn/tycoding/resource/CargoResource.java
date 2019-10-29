@@ -51,7 +51,7 @@ public class CargoResource {
      *
      * @return
      */
-    @MyLog(value = "查询所有货物")
+   // @MyLog(value = "查询所有货物")
     @GetMapping
     public List<Cargo> getAllCargos() {
         logger.info("REST 查询所有货物");
@@ -64,7 +64,7 @@ public class CargoResource {
      *
      * @return Cargo
      */
-    @MyLog(value = "查询指定订单")
+//    @MyLog(value = "查询指定订单")
     @GetMapping("/{cargoId}")
     public Cargo getCargoById(@PathVariable("cargoId") int cargoId) {
         logger.info("REST 查询所有货物");
@@ -168,7 +168,7 @@ public class CargoResource {
      * @param id
      * @return
      */
-    @MyLog(value = "查询各方的所有订单")
+  //  @MyLog(value = "查询各方的所有订单")
     @GetMapping("/{part}/{id}")
     public List<Cargo> getTruckAllCargos(@PathVariable("part") String who, @PathVariable("id") int id) {
         if (who.equals("trucks")) {
@@ -192,7 +192,7 @@ public class CargoResource {
      * @param status
      * @return
      */
-    @MyLog(value = "查询不同状态的货物")
+   // @MyLog(value = "查询不同状态的货物")
     @GetMapping("/cargo-status/{status}")
     public List<Cargo> getAllNormalCargos(@PathVariable int status) {
         if (status == 9) {

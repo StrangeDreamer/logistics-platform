@@ -125,6 +125,8 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
       13 收货方未按时验货
       
       14 提醒验货时刻
+      
+      15 承运方拒单
            
      
 **车队圈子功能：**
