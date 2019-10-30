@@ -98,6 +98,10 @@ public class Cargo implements Serializable {
      * 12 该订单为第三类撤单产生的返程订单
      *
      * 13 验收超时
+     *
+     * 14 提醒验货时刻
+     *
+     * 15 承运方拒单
      */
     private int status = 0;
 

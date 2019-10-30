@@ -49,7 +49,7 @@ public class BankAccountResource {
         return bankAccountRepository.findAll();
     }
 
-    /**TODO
+    /**
      * 查询查询账户流水
      * @return
      */

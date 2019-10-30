@@ -68,6 +68,8 @@ public class CargoService {
     private InspectionService inspectionService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TransCargoRepository transCargoRepository;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
@@ -347,6 +349,15 @@ public class CargoService {
         cargoRepository.save(cargo);
         delCargoRedis(cargoId);
         cargoRepository.save(transferredCargo);
+
+        // 产生转单transcargo实体 记录转单发货承运方
+        TransCargo transCargo = new TransCargo();
+        transCargo.setCargoId(transferredCargo.getId());
+        transCargo.setDirectShipperId(cargo.getTruckId());
+        transCargo.setDirectShipperName(truckRepository.findTruckById(cargo.getTruckId()).getName());
+        transCargoRepository.save(transCargo);
+
+
 
         // 转手承运方向平台支付展位费
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
