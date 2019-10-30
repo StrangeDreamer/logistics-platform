@@ -51,6 +51,8 @@ public class BidResource {
     private BankAccountService bankAccountService;
     @Autowired
     private InsuranceAccountService insuranceAccountService;
+    @Autowired
+    private InspectionService inspectionService;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 //         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
@@ -235,7 +237,7 @@ public class BidResource {
                 cargo.setTruckId(bidrd.getTruckId());
                 cargo.setStatus(2);
 
-                // 判断是否是转单,如果是转手订单,需要:退换发货承运方展位费;原来的订单状态设置为正常完成
+                // 判断是否是转单,如果是转手订单,需要:退还发货承运方展位费;原来的订单进行结算；
                 if (cargo.getPreCargoId() != null) {
                     //通知转单成功
                     Cargo preCargo = cargoService.findCargoById(cargo.getPreCargoId());
@@ -264,6 +266,14 @@ public class BidResource {
                     // 转手成功后，原来的车辆担保额恢复
                     logger.info("由于转手成功，转手承运方" + cargo.getTruckId() + "恢复担保额度" + cargo.getInsurance());
                     // 转单成功的资金结算 归到最终结算
+
+                    // 一单一结算 转单成功后，上一个订单自动完成
+                    Inspection inspection = new Inspection();
+                    inspection.setCargoId(cargo.getId());
+                    inspection.setInspectionResult(8);
+                    inspection.setTimeoutPeriod(0);
+                    inspectionService.inspectionCargo(inspection);
+
                 }
                 // 如果不是转手订单，只需要退换承运方展位费
                 else {

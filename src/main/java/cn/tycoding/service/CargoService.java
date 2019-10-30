@@ -316,10 +316,10 @@ public class CargoService {
      * @return
      */
     @Transactional
-    public Cargo updateCargoInfo(int cargoId, double freightFare) {
+    public Cargo updateCargoInfo(int cargoId, double freightFare, String startingPoint) {
 
         Cargo cargo = findCargoById(cargoId);
-        if (cargo.getStatus() != 2) {
+        if (cargo.getStatus() != 2 || cargo.getStatus() != 3) {
             throw new CargoException("当前订单状态无法转单");
         }
 
@@ -330,15 +330,11 @@ public class CargoService {
         transferredCargo.setType(cargo.getType());
         transferredCargo.setFreightFare(freightFare);
         transferredCargo.setReceiverId(cargo.getReceiverId());
-        transferredCargo.setDeparture(cargo.getDeparture());
+        transferredCargo.setDeparture(startingPoint);
         transferredCargo.setDestination(cargo.getDestination());
         transferredCargo.setInsurance(cargo.getInsurance());
         transferredCargo.setField(cargo.getField());
-
-        // 转单更新
         transferredCargo.setPreFare(cargo.getFreightFare());
-
-        // 首次转单以及多次转单
         transferredCargo.setPreCargoId(cargo.getId());
         transferredCargo.setShipperId(cargo.getShipperId());
         transferredCargo.setVolume(cargo.getVolume());
@@ -347,6 +343,7 @@ public class CargoService {
         // 更新新单状态
         cargo.setStatus(5);
         transferredCargo.setStatus(0);
+
         cargoRepository.save(cargo);
         delCargoRedis(cargoId);
         cargoRepository.save(transferredCargo);
@@ -363,11 +360,7 @@ public class CargoService {
         bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
         bankAccountService.changeAvailableMoney(bankAccountTruck, 0 - freightFare);
 
-        logger.info("由于订单转手，承运方" + cargo.getTruckId() + "向平台支付展位费" + exhibitionFee);
-//        transferredCargo.setStatus(5);
-//        cargoRepository.save(transferredCargo);
 
-        logger.info("转单创建成功！");
         return transferredCargo;
     }
 

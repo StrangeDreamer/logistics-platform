@@ -154,11 +154,10 @@ public class CargoResource {
      * @return
      */
     @MyLog(value = "转单")
-    @PutMapping("/{cargoId}/{freightFare}/transfer")
-    public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare) {
+    @PutMapping("/{cargoId}/{freightFare}/{staringPoint}/transfer")
+    public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare, @PathVariable("staringPoint") String startingPoint) {
         logger.info("REST 转单");
-        //return cargoService.updateCargoInfo(id,cargoInfoChangeDTO);
-        return cargoService.updateCargoInfo(id, freightFare);
+        return cargoService.updateCargoInfo(id, freightFare, startingPoint);
     }
 
 
