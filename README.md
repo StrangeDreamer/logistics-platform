@@ -89,8 +89,8 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 
 - [x] @ServerEndpoint("/websocket2/{userno}") 承运方websocket消息码 1--通知承运方抢到该单;2--通知承运方未抢到该单;3--通知承运方有新单可抢;4--转单成功通知；5--通知承运方的撤单成功请求;6\*订单号\*红包数值--红包通知
-- [x] @ServerEndpoint("/websocket3/{userno}") 发货方websocket消息码 1\*订单号--装货运输;2\*订单号--确认交货;3\*订单号\*红包数目--红包通知;4\*订单号--收货方验货订单超时;5\*订单号--提醒验货时刻
-- [x] @ServerEndpoint("/websocket4/{userno}") 收货方websocket消息码 1\*订单号--装货运输;2\*订单号--确认交货;3\*订单号--收货方验货订单超时;4\*订单号--提醒验货时刻
+- [x] @ServerEndpoint("/websocket3/{userno}") 发货方websocket消息码 1\*订单号--装货运输;2\*订单号--确认交货;3\*订单号\*红包数目--红包通知;4\*订单号--收货方验货订单超时;5\*订单号--提醒验货时刻；6\*订单号--提醒拒单
+- [x] @ServerEndpoint("/websocket4/{userno}") 收货方websocket消息码 1\*订单号--装货运输;2\*订单号--确认交货;3\*订单号--收货方验货订单超时;4\*订单号--提醒验货时刻；5\*订单号--提醒拒单
 
 
 

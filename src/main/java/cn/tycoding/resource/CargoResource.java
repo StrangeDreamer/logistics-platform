@@ -207,8 +207,8 @@ public class CargoResource {
         }
         logger.info("REST 查询所有正常完成货物");
         return cargoRepository.findAllByStatus(status);
-
     }
+
 
     /**
      * 货物状态更新13
@@ -232,6 +232,20 @@ public class CargoResource {
     public Cargo statusChangeTo14(@PathVariable int cargoId) {
         return cargoService.statusChangeTo14(cargoId);
     }
+
+
+    /**
+     * 货物状态改为15
+     *
+     * @return
+     */
+    @MyLog(value = "拒单")
+    @PutMapping("/cargo-status-15/{cargoId}")
+    public Cargo statusChangeTo15(@PathVariable int cargoId) {
+        return cargoService.statusChangeTo15(cargoId);
+    }
+
+
 
     /**
      * 转单历史

@@ -494,16 +494,37 @@ public class CargoService {
         return cargo;
     }
 
+
+
+
+    // 拒单
+    @Transactional
+    public Cargo statusChangeTo15(int cargoId) {
+        Cargo cargo = findCargoById(cargoId);
+        if (cargo.getStatus() == 2) {
+            cargo.setStatus(15);
+        } else {
+            throw new CargoException("当前状态不为2（已接未运），无法改为状态15（拒单）");
+        }
+        cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 接单承运方拒绝装货运输订单"
+                + cargo.getId() + "！订单挂起！");
+        cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
+        //通知发货方和收货方订单 订单被拒绝
+        webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "6*" + String.valueOf(cargoId));
+        webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()), "5*" + String.valueOf(cargoId));
+        return cargo;
+    }
+
+
     // 更新货物状态为 提醒验货时刻
     @Transactional
-    public Cargo statusChangeTo14(int cargoId) {
+    public Cargo statusChangeTo14 (int cargoId) {
         Cargo cargo = findCargoById(cargoId);
-
         if (cargo.getStatus() == 4) {
             cargo.setStatus(14);
         } else {
-            logger.info("当前状态不为4，无法改为状态14");
-            return cargo;
+            throw new CargoException("当前状态不为4，无法改为状态14");
         }
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 验货即将超时！提醒收货方尽快对货物"
                 + cargo.getId() + "进行验收！ ");
