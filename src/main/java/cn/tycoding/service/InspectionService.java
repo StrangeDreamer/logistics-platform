@@ -306,6 +306,9 @@ public class InspectionService {
 
         bonusService.getBonus(bankAccountShipper,trueTruck1Profit);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
+        bankAccountService.addMoneyLog(bankAccountPlatform,
+                "  平台分给发货方" + cargo.getShipperId() + "红包" + trueTruck1Profit);
+
         cargoRepository.save(cargo);
         return result;
     }

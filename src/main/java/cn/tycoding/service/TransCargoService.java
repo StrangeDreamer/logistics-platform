@@ -1,19 +1,17 @@
 package cn.tycoding.service;
 
-import cn.tycoding.domain.Bid;
+import cn.tycoding.domain.Cargo;
 import cn.tycoding.domain.TransCargo;
-import cn.tycoding.repository.BidRepository;
+import cn.tycoding.exception.CargoException;
+import cn.tycoding.repository.CargoRepository;
 import cn.tycoding.repository.TransCargoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -22,13 +20,28 @@ public class TransCargoService {
     private final Logger logger = LoggerFactory.getLogger(BidService.class);
     @Autowired
     private TransCargoRepository transCargoRepository;
+    @Autowired
+    private CargoRepository cargoRepository;
 
-    /**
-     * 判断缓存里面是否为空，以确定该订单是否有人抢
-     * @return
-     */
     public Optional findTransCargoById(int cargoId){
        return transCargoRepository.findByCargoId(cargoId);
     }
+
+    public Stack<Cargo> getTransCargoHistory(int cargoId){
+        Stack<Cargo> ans = new Stack<>();
+        if (!cargoRepository.existsById(cargoId)){
+            throw new CargoException("该货物不存在！");
+        }
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
+        ans.push(cargo);
+        while (cargo.getPreCargoId() != null) {
+            Cargo tempCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
+            ans.push(tempCargo);
+            cargo = tempCargo;
+        }
+        return ans;
+    }
+
+
 }
 
