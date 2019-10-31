@@ -348,14 +348,17 @@ public class CargoService {
 
         cargoRepository.save(cargo);
         delCargoRedis(cargoId);
-        cargoRepository.save(transferredCargo);
+
 
         // 产生转单transcargo实体 记录转单发货承运方
         TransCargo transCargo = new TransCargo();
         transCargo.setCargoId(transferredCargo.getId());
         transCargo.setDirectShipperId(cargo.getTruckId());
         transCargo.setDirectShipperName(truckRepository.findTruckById(cargo.getTruckId()).getName());
+        // 转单cargo变更相应字段
+        transferredCargo.setTransCargoName(transCargo.getDirectShipperName());
         transCargoRepository.save(transCargo);
+        cargoRepository.save(transferredCargo);
 
 
 

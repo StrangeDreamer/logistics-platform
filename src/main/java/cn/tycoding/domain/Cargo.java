@@ -114,4 +114,8 @@ public class Cargo implements Serializable {
     @Lob
     @Column(columnDefinition="TEXT")
     private String cargoStatusLog = "目前货物尚未运达";
+
+
+    // 该订单作为转单订单时，其发货承运方的名称
+    private String transCargoName = "非转手订单";
 }
