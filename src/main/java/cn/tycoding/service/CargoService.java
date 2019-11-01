@@ -20,11 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 // SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
@@ -541,6 +538,23 @@ public class CargoService {
         webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()), "5*" + String.valueOf(cargoId));
         webSocketTest4.sendToUser2(String.valueOf(cargo.getReceiverId()), "4*" + String.valueOf(cargoId));
         return cargo;
+    }
+
+
+    // 查找转单历史
+    public Stack<Cargo> getTransCargoHistory(int cargoId){
+        Stack<Cargo> ans = new Stack<>();
+        if (!cargoRepository.existsById(cargoId)){
+            throw new CargoException("该货物不存在！");
+        }
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
+        ans.push(cargo);
+        while (cargo.getPreCargoId() != null) {
+            Cargo tempCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
+            ans.push(tempCargo);
+            cargo = tempCargo;
+        }
+        return ans;
     }
 
 

@@ -27,20 +27,6 @@ public class TransCargoService {
        return transCargoRepository.findByCargoId(cargoId);
     }
 
-    public Stack<Cargo> getTransCargoHistory(int cargoId){
-        Stack<Cargo> ans = new Stack<>();
-        if (!cargoRepository.existsById(cargoId)){
-            throw new CargoException("该货物不存在！");
-        }
-        Cargo cargo = cargoRepository.findCargoById(cargoId);
-        ans.push(cargo);
-        while (cargo.getPreCargoId() != null) {
-            Cargo tempCargo = cargoRepository.findCargoById(cargo.getPreCargoId());
-            ans.push(tempCargo);
-            cargo = tempCargo;
-        }
-        return ans;
-    }
 
 
 }

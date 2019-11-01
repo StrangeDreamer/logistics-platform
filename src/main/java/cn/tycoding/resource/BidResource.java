@@ -272,6 +272,8 @@ public class BidResource {
                     inspection.setCargoId(cargo.getId());
                     inspection.setInspectionResult(8);
                     inspection.setTimeoutPeriod(0);
+                    cargo.setStatus(4);
+                    cargoRepository.save(cargo);
                     inspectionService.inspectionCargo(inspection);
 
                 }

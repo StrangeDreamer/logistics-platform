@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -252,11 +253,11 @@ public class CargoResource {
 
 
     /**
-     * 转单历史
+     * 查找转单中的上一个订单
      * @param preCargoId
      * @return
      */
-    @MyLog(value = "转单历史")
+    @MyLog(value = "上个订单")
     @GetMapping("/transferred-cargos/{preCargoId}")
     public List<Cargo> getAllTransCargos(@PathVariable int preCargoId) {
         logger.info("REST 查询订单转运历史");
@@ -288,6 +289,15 @@ public class CargoResource {
         logger.info("更新承运方/货物位置信息");
         return cargoService.refreshCompleteRatio(cargoId, ratio);
     }
+
+
+
+    @MyLog(value = "追踪转单历史")
+    @GetMapping("/history/{id}")
+    public Stack<Cargo> getTransCargoHistory(@PathVariable("id") int id){
+        return cargoService.getTransCargoHistory(id);
+    }
+
 
 
 }

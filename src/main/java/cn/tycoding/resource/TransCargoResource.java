@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Stack;
 
 @RestController
-@RequestMapping("/transCargo")
+@RequestMapping("/transCargos")
 public class TransCargoResource {
     private final Logger logger=LoggerFactory.getLogger(ShipperResource.class);
     private final TransCargoService transCargoService;
@@ -34,10 +34,5 @@ public class TransCargoResource {
     }
 
 
-    @MyLog(value = "追踪转单历史")
-    @GetMapping("/history/{id}/")
-    public Stack<Cargo> getTransCargoHistory(@PathVariable("id") int id){
-        return transCargoService.getTransCargoHistory(id);
-    }
 
 }
