@@ -321,7 +321,7 @@ public class CargoService {
     public Cargo updateCargoInfo(int cargoId, double freightFare, String startingPoint) {
 
         Cargo cargo = findCargoById(cargoId);
-        if (cargo.getStatus() != 2 || cargo.getStatus() != 3) {
+        if (cargo.getStatus() != 2 && cargo.getStatus() != 3) {
             throw new CargoException("当前订单状态无法转单");
         }
 

@@ -301,13 +301,15 @@ public class InspectionService {
                 df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，发货方获得红包"
                         + String.format("%.2f", trueTruck1Profit));
 
+        bankAccountService.addMoneyLog(bankAccountPlatform,
+                "平台发给发货方" + cargo.getShipperId() + "红包" + trueTruck1Profit + " 平台付给承运方" + cargo.getTruckId() + "红包" + trueTruck2Profit);
+
+
         webSocketTest3.sendToUser2(String.valueOf(bankAccountShipper.getId()),"3*" + String.valueOf(cargo.getId()) + "*" + String.valueOf(trueTruck1Profit));
         webSocketTest.sendToUser2(String.valueOf(bankAccountTruck.getId()), "6*" + String.valueOf(cargo.getId()) + "*"  + String.valueOf(trueTruck2Profit));
 
         bonusService.getBonus(bankAccountShipper,trueTruck1Profit);
         bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, trueTruck2Profit);
-        bankAccountService.addMoneyLog(bankAccountPlatform,
-                "  平台分给发货方" + cargo.getShipperId() + "红包" + trueTruck1Profit);
 
         cargoRepository.save(cargo);
         return result;

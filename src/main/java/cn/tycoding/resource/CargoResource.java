@@ -14,10 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/cargos")
@@ -154,11 +157,13 @@ public class CargoResource {
      * @return
      */
     @MyLog(value = "转单")
-    @PutMapping("/{cargoId}/{freightFare}/{staringPoint}/transfer")
-    public Cargo getCargo(@PathVariable("cargoId") int id, @PathVariable("freightFare") double freightFare, @PathVariable("staringPoint") String startingPoint) {
+    @PutMapping("/transfer")
+    public Cargo getCargo(@RequestParam int id, @RequestParam double freightFare, @RequestParam String startingPoint) {
         logger.info("REST 转单");
         return cargoService.updateCargoInfo(id, freightFare, startingPoint);
     }
+
+
 
 
     /**
