@@ -512,6 +512,17 @@ public class CargoService {
         }
         cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 接单承运方拒绝装货运输订单"
                 + cargo.getId() + "！订单挂起！");
+
+
+        BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
+        BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
+        BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
+
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + " 由于订单" + cargo.getId() + "被拒单，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + " 由于订单" + cargo.getId() + "被拒单，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + " 由于订单" + cargo.getId() + "被拒单，订单挂起，交给律师处理");
+
+
         cargoRepository.save(cargo);
         delCargoRedis(cargoId);
         //通知发货方和收货方订单 订单被拒绝

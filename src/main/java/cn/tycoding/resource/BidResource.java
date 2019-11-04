@@ -269,7 +269,7 @@ public class BidResource {
 
                     // 一单一结算 转单成功后，上一个订单自动完成
                     Inspection inspection = new Inspection();
-                    inspection.setCargoId(cargo.getId());
+                    inspection.setCargoId(cargo.getPreCargoId());
                     inspection.setInspectionResult(8);
                     inspection.setTimeoutPeriod(0);
                     cargo.setStatus(4);
