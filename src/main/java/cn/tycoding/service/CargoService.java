@@ -535,7 +535,7 @@ public class CargoService {
     // 更新货物状态为 提醒验货时刻
     @Transactional
     public Cargo statusChangeTo14 (int cargoId) {
-        Cargo cargo = findCargoById(cargoId);
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
         if (cargo.getStatus() == 4) {
             cargo.setStatus(14);
         } else {
