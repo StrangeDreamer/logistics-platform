@@ -571,13 +571,14 @@ public class CargoService {
 
     public Cargo recovery(int cargoId,int status){
         Cargo cargo = cargoRepository.findCargoById(cargoId);
-        if (status == 10 || status == 15) {
+        if (status == 2 || status == 4) {
 
         } else {
             throw new CargoException("状态不正确");
         }
         cargo.setStatus(status);
         cargoRepository.save(cargo);
+        delCargoRedis(cargoId);
         return cargo;
     }
 

@@ -300,7 +300,7 @@ public class CargoResource {
 
     @MyLog(value = "挂起恢复")
     @PutMapping("/recovery/{cargoId}/{status}")
-    public Cargo recovery(@RequestParam("cargoId") int cargoId, @RequestParam("status") int status){
+    public Cargo recovery(@PathVariable("cargoId") int cargoId, @PathVariable("status") int status){
         return cargoService.recovery(cargoId,status);
     }
 
