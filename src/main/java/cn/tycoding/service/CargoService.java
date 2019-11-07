@@ -472,7 +472,7 @@ public class CargoService {
     // 更新货物状态为收货方未按时验货
     @Transactional
     public Cargo statusChangeTo13(int cargoId) {
-        Cargo cargo = findCargoById(cargoId);
+        Cargo cargo = cargoRepository.findCargoById(cargoId);
         if (cargo.getStatus() == 4 || cargo.getStatus() == 14) {
             cargo.setStatus(13);
         } else {
