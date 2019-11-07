@@ -298,6 +298,12 @@ public class CargoResource {
         return cargoService.getTransCargoHistory(id);
     }
 
+    @MyLog(value = "挂起恢复")
+    @GetMapping("/recovery/{cargoId}/{status}")
+    public Cargo recovery(@RequestParam("cargoId") int cargoId, @RequestParam("status") int status){
+        return cargoService.recovery(cargoId,status);
+    }
+
 
 
 }
