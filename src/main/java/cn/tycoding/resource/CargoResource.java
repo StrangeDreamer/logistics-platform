@@ -299,7 +299,7 @@ public class CargoResource {
     }
 
     @MyLog(value = "挂起恢复")
-    @GetMapping("/recovery/{cargoId}/{status}")
+    @PutMapping("/recovery/{cargoId}/{status}")
     public Cargo recovery(@RequestParam("cargoId") int cargoId, @RequestParam("status") int status){
         return cargoService.recovery(cargoId,status);
     }
