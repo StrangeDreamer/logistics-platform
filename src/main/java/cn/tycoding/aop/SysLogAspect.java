@@ -4,6 +4,7 @@ import cn.tycoding.Utils.*;
 import cn.tycoding.domain.SysLog;
 import cn.tycoding.service.SysLogService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -62,7 +63,7 @@ public class SysLogAspect {
         //请求的参数
         Object[] args = joinPoint.getArgs();
         //将参数所在的数组转换成json
-        String params = JSON.toJSONString(args);
+        String params = JSON.toJSONString(args, SerializerFeature.IgnoreNonFieldGetter);
         sysLog.setParams(params);
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
