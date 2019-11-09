@@ -7,6 +7,7 @@ package cn.tycoding.service;
  */
 
 import cn.tycoding.domain.BankAccount;
+import cn.tycoding.domain.InsuranceAccount;
 import cn.tycoding.repository.BankAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,9 @@ public class BankAccountService {
     // 查询指定注册账户的流水
     public String findMoneyLog(int id, String type) {
         BankAccount bankAccount = check(id, type);
+        if (type.equals("truck") || type.equals("承运方")){
+            return insuranceAccountService.findMoneyLog(id,type) + "\n" + bankAccount.getBankAccountLog();
+        }
         return bankAccount.getBankAccountLog();
     }
 
