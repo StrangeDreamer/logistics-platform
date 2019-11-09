@@ -201,10 +201,9 @@ public class InspectionService {
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的运输完成");
 
             // 完成订单后先解冻资金
-            bankAccountService.changeAvailableMoney(bankAccountShipper,freightFare);
-            bankAccountService.addMoneyLog(bankAccountShipper,"\n");
+            bankAccountService.changeAvailableMoney(bankAccountPreTruck,freightFare);
+            bankAccountService.addMoneyLog(bankAccountPreTruck,"\n");
             bankAccountService.transferMoney(bankAccountPreTruck, bankAccountPlatform, freightFare);
-
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
