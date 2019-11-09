@@ -55,7 +55,7 @@ public class InsuranceAccountService {
     // 查询指定注册承运方账户担保额的流水
     public String findMoneyLog(int id, String type) {
         InsuranceAccount insuranceAccount = check(id, type);
-        return insuranceAccount.getInsuranceAccountLog() + "\n 可用担保额为" + insuranceAccount.getMoney();
+        return insuranceAccount.getInsuranceAccountLog() + "\n 可用担保额为" + insuranceAccount.getAvailableMoney();
     }
 
     // 冻结资金，如果money为正则为解冻，money为负数则为冻结
@@ -80,7 +80,7 @@ public class InsuranceAccountService {
                     ", " + insuranceAccount.getType() + insuranceAccount.getId() +"冻结担保额" + String.format("%.2f",(-money)));
         }
 
-        String result =  "承运方当前担保额为" + String.format("%.2f",insuranceAccount.getMoney());
+        String result =  "承运方当前担保额为" + String.format("%.2f",insuranceAccount.getAvailableMoney());
         addMoneyLog(insuranceAccount,result);
         insuranceAccountRepository.save(insuranceAccount);
         return true;

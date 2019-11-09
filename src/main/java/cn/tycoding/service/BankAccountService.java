@@ -88,7 +88,7 @@ public class BankAccountService {
     public String findMoneyLog(int id, String type) {
         BankAccount bankAccount = check(id, type);
         if (type.equals("truck") || type.equals("承运方")){
-            return bankAccount.getBankAccountLog() + "\n\n" + insuranceAccountService.findMoneyLog(id,type) + ;
+            return bankAccount.getBankAccountLog() + "\n\n" + insuranceAccountService.findMoneyLog(id,type) ;
         }
         return bankAccount.getBankAccountLog();
     }
