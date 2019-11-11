@@ -122,13 +122,16 @@ public class CargoService {
         cargoRepository.save(c);
 
         // 发货方冻结发货资金
-        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "提交订单");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "提交订单");
         bankAccountService.changeAvailableMoney(bankAccountShipper, (0 - c.getFreightFare()));
         logger.info("发货方被冻结资金" + c.getFreightFare());
 
         // 发货方支付展位费
-        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                + "  由于发货方" + cargo.getShipperId() + "对货物" + c.getId() + "支付展位费");
         bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, exhibitionFee);
         logger.info("发货方支付展位费" + exhibitionFee);
         logger.info("新订单创建成功!");
@@ -164,8 +167,10 @@ public class CargoService {
                 cargoRepository.save(cargo);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargo.getId());
                 delCargoRedis(id);
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                        + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                        + "由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行撤单，展位费不予退回");
                 bankAccountService.changeAvailableMoney(bankAccountShipper,cargo.getFreightFare());
                 logger.info("由于订单未被接单，直接撤单，展位费不予退换");
             }
@@ -181,15 +186,20 @@ public class CargoService {
                         "资金充足才允许撤单");
 
                 // 支付赔偿
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
-                bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
+                bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，发货方向承运方支付赔偿");
                 bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, wMoney);
                 bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, wMoney);
 
                 // 解冻运费
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");
                 bankAccountService.changeAvailableMoney(bankAccountShipper, cargo.getFreightFare());
 
                 logger.info("由于货物已接未运，发货方" + cargo.getShipperId() +
@@ -198,7 +208,8 @@ public class CargoService {
                         " = " + wMoney);
 
                 // 车辆的担保额度的恢复
-                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，货车不再需要运送该订单");
+                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，货车不再需要运送该订单");
                 insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
                 logger.info("车辆" + cargo.getTruckId() + "的担保额度恢复" + cargo.getInsurance());
                 cargo.setStatus(7);
@@ -225,7 +236,8 @@ public class CargoService {
                 }
 
                 // 返程订单扣除担保额
-                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已运货物撤单，货车新增返程订单");
+                insuranceAccountService.addMoneyLog(insuranceAccount, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已运货物撤单，货车新增返程订单");
                 insuranceAccountService.changeAvailableMoney(insuranceAccount, 0 - cargo.getInsurance());
                 logger.info("车辆" + cargo.getTruckId() + "的担保额度减少" + cargo.getInsurance());
                 // 为该车辆新创建返程订单
@@ -280,8 +292,10 @@ public class CargoService {
                 cargoRepository.save(cargo);
 
                 // 返还发货方撤单返程订单的展位费
-                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "被接单，展位费返还");
-                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "被接单，展位费返还");
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "被接单，展位费返还");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "被接单，展位费返还");
                 bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, platformRepository.findRecentPltf().getExhibitionFee());
 
                 Inspection inspection = new Inspection();
@@ -362,13 +376,17 @@ public class CargoService {
         // 转手承运方向平台支付展位费
         BankAccount bankAccountTruck = bankAccountService.check(cargo.getTruckId(), "truck");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
-        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方展位费");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方" + cargo.getTruckId() +"展位费");
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date())
+                + "  由于承运方" + cargo.getTruckId() + "转单,平台收取承运方" + cargo.getTruckId() +"展位费");
         bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, exhibitionFee);
 
         // 转单前冻结原承运方需要支付运费
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
-        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方运费");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方" + cargo.getTruckId() + "运费");
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date())
+                + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方" + cargo.getTruckId() + "运费");
         bankAccountService.changeAvailableMoney(bankAccountTruck, 0 - freightFare);
 
 
@@ -486,9 +504,12 @@ public class CargoService {
         BankAccount bankAccountShipper = bankAccountService.check(cargo.getShipperId(), "shipper");
         BankAccount bankAccountPlatform = bankAccountService.check(1, "platform");
 
-        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
-        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date()) + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date())
+                + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
+        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                + " 由于订单" + cargo.getId() + "验收超时，订单挂起，交给律师处理");
 
         delCargoRedis(cargoId);
         //通知发货方和收货方订单验货超时

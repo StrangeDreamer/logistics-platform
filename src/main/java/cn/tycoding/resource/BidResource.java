@@ -200,12 +200,14 @@ public class BidResource {
                     logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
                     // 冻结资金恢复
                     bankAccountService.addMoneyLog(bankAccountShipper,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复");
+                            df.format(new Date()) + "  由于订单" + cargo.getId()
+                                    + "无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复");
                     bankAccountService.changeAvailableMoney(bankAccountShipper, cargo.getFreightFare());
                     logger.info("由于无人接单自动撤单，发货方" + cargo.getShipperId() + "冻结的资金恢复");
 
                     bankAccountService.addMoneyLog(bankAccountShipper,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货方" + cargo.getShipperId() + "之前支付的展位费不予退换");
+                            df.format(new Date()) + "  由于订单" + cargo.getId()
+                                    + "无人接单自动撤单，发货方" + cargo.getShipperId() + "之前支付的展位费不予退换");
 
                     cargo.setStatus(6);
                     cargoRepository.save(cargo);
@@ -221,7 +223,8 @@ public class BidResource {
                     // 冻结资金恢复
                     BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(), "truck");
                     bankAccountService.addMoneyLog(bankAccountTruck,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "无人接单自动撤单，发货承运方" + preCargo.getTruckId() + "冻结的资金恢复");
+                            df.format(new Date()) + "  由于订单" + cargo.getId()
+                                    + "无人接单自动撤单，发货承运方" + preCargo.getTruckId() + "冻结的资金恢复");
                     bankAccountService.changeAvailableMoney(bankAccountTruck, cargo.getFreightFare());
 
                     logger.info("车辆" + cargo.getTruckId() + "的订单" + cargo.getPreCargoId() + "转手失败,展位费不予退回！");
@@ -300,7 +303,8 @@ public class BidResource {
                         // 担保额恢复
                         InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(), "truck");
                         insuranceAccountService.addMoneyLog(insuranceAccount,
-                                df.format(new Date()) + "  由于车辆" + bid.getTruckId() + "对订单" + cargo.getId() + "出价失败，车辆担保额恢复");
+                                df.format(new Date())
+                                        + "  由于车辆" + bid.getTruckId() + "对订单" + cargo.getId() + "出价失败，车辆担保额恢复");
                         insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
                         logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);

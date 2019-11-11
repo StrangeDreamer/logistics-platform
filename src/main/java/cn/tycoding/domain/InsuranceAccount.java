@@ -42,6 +42,6 @@ public class InsuranceAccount {
 
     @Lob
     @Column(columnDefinition="TEXT")
-    private String InsuranceAccountLog = "担保账户资金流水：\n";
+    private String InsuranceAccountLog = "\n\n担保账户资金流水：\n";
 }
 

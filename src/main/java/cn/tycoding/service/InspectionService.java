@@ -129,8 +129,10 @@ public class InspectionService {
             bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, compensation);
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, compensation);
 
-            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + " 收货方成功对订单"
-                    + cargo.getId() + "进行验收，验收结果为：订单超时" + inspection.getTimeoutPeriod() + "小时");
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date())
+                    + " 收货方" + cargo.getReceiverId()
+                    + "成功对订单" + cargo.getId()
+                    + "进行验收，验收结果为：订单超时" + inspection.getTimeoutPeriod() + "小时");
             cargoRepository.save(cargo);
         }
         // 没有超时则恢复担保额
@@ -143,10 +145,14 @@ public class InspectionService {
             InsuranceAccount insuranceAccountLastTruck = insuranceAccountService.check(cargo.getTruckId(), "truck");
             // 正常运达恢复担保额
             insuranceAccountService.addMoneyLog(insuranceAccountLastTruck,
-                    df.format(new Date()) + "  由于承运方" + truck.getId() + "对订单" + cargo.getId() + "正常运达，承运方恢复担保额");
+                    df.format(new Date())
+                            + "  由于承运方" + truck.getId()
+                            + "对订单" + cargo.getId()
+                            + "正常运达，承运方" + truck.getId() + "恢复担保额");
             insuranceAccountService.changeAvailableMoney(insuranceAccountLastTruck, cargo.getInsurance());
-            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date()) + "收货方成功对订单"
-                    + cargo.getId() + "进行验收，验收结果为：订单正常完成 ");
+            cargo.setCargoStatusLog(cargo.getCargoStatusLog() + "\n" + df.format(new Date())
+                    + "收货方成功对订单" + cargo.getId()
+                    + "进行验收，验收结果为：订单正常完成 ");
             cargoRepository.save(cargo);
         }
 
@@ -224,12 +230,12 @@ public class InspectionService {
                             " 现有资金为" + bankAccountPlatform.getMoney()
                             + "    可用余额为" + bankAccountPlatform.getAvailableMoney());
             bankAccountService.addMoneyLog(bankAccountTruck,
-                    "------------------------------------\n" +
-                            " 现有资金为" + bankAccountTruck.getMoney()
+                    "------------------------------------\n"
+                            + " 现有资金为" + bankAccountTruck.getMoney()
                             + "    可用余额为" + bankAccountTruck.getAvailableMoney());
             bankAccountService.addMoneyLog(bankAccountPreTruck,
-                    "------------------------------------\n" +
-                            " 现有资金为" + bankAccountPreTruck.getMoney()
+                    "------------------------------------\n"
+                            + " 现有资金为" + bankAccountPreTruck.getMoney()
                             + "    可用余额为" + bankAccountPreTruck.getAvailableMoney());
 
 
@@ -313,11 +319,13 @@ public class InspectionService {
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，平台支付"
                             + String.format("%.2f", trueTruck2Profit) + "作为红包");
             bankAccountService.addMoneyLog(bankAccountShipper,
-                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，发货方获得红包"
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，"
+                            + "发货方" + cargo.getShipperId() + "获得红包"
                             + String.format("%.2f", trueTruck1Profit));
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
-                    "平台发给发货方" + cargo.getShipperId() + "红包" + trueTruck1Profit + " 平台付给承运方" + cargo.getTruckId() + "红包" + trueTruck2Profit);
+                    "平台发给发货方" + cargo.getShipperId() + "红包" + trueTruck1Profit
+                            + " 平台付给承运方" + cargo.getTruckId() + "红包" + trueTruck2Profit);
 
 
             webSocketTest3.sendToUser2(String.valueOf(bankAccountShipper.getId()), "3*" + String.valueOf(cargo.getId()) + "*" + String.valueOf(trueTruck1Profit));
@@ -337,7 +345,8 @@ public class InspectionService {
             bankAccountService.addMoneyLog(bankAccountShipper,
                     "------------------------------------\n" +
                             " 现有资金为" + bankAccountShipper.getMoney()
-                            + "    可用余额为" + bankAccountShipper.getAvailableMoney());
+                            + "    可用余额为" + bankAccountShipper.getAvailableMoney()
+                            + "    当前红包为" + bankAccountShipper.getBonus());
 
             cargoRepository.save(cargo);
         }
