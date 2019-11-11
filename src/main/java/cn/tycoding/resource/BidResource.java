@@ -255,10 +255,11 @@ public class BidResource {
                             df.format(new Date()) + "  由于订单" + cargo.getId() + "被成功接单，平台返还转手承运方" + cargo.getTruckId() + "展位费");
                     bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, exhibitionFee);
 
+                    // 由于一单一结 担保额不在此处重复恢复
                     // 承运方上一单的担保额恢复
-                    insuranceAccountService.addMoneyLog(insuranceAccount,
-                            df.format(new Date()) + "  由于订单" + cargo.getId() + "转手成功，转手承运方" + cargo.getTruckId() + "恢复担保额度");
-                    insuranceAccountService.changeAvailableMoney(insuranceAccount, preCargo.getInsurance());
+//                    insuranceAccountService.addMoneyLog(insuranceAccount,
+//                            df.format(new Date()) + "  由于订单" + cargo.getId() + "转手成功，转手承运方" + cargo.getTruckId() + "恢复担保额度");
+//                    insuranceAccountService.changeAvailableMoney(insuranceAccount, preCargo.getInsurance());
 
                     logger.info("订单被成功接单，平台返还转手承运方" + cargo.getTruckId() + "展位费" + exhibitionFee);
                     //webSocketTest.sendToUser2(String.valueOf(preCargo.getTruckId()),"转单成功");
