@@ -93,7 +93,9 @@ public class BidResource {
 
         Truck truck = truckRepository.findTruckById(bid.getTruckId());
         // 对出价的合法性进行判断：包含 货车类型和货物类型相对应; 出价金额范围合理;货物体积大小符合要求；承运方需要激活;担保额度是否充足
-        if (!cargo.getType().equals(truck.getType())) {
+        if (    !(cargo.getType().equals(truck.getType()) ||
+                    (cargo.getType().equals("普通") && truck.getType().equals("冷链")))
+        ) {
             //运输类型需要符合要求
             logger.info("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
             throw new BidException("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！运输类型不符合要求！");
