@@ -317,7 +317,7 @@ public class BidResource {
 
                 int n = bidlist.size();
                 // 存在有效出价
-                if (bidrd.getPriceCorrect() == 1) {
+                if (bidrd.getBidPrice() <= cargo.getFreightFare()) {
                     // TODO:存在有效出价，通知发货方n个人出价，订单已经被接单
                     webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"8*" + cargo.getId() + "*" + n);
                     for (Bid bid : bidlist) {
