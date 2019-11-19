@@ -317,6 +317,7 @@ public class BidResource {
 
                 int n = bidlist.size();
                 // 存在有效出价
+
                 if (bidrd.getBidPrice() <= cargo.getFreightFare()) {
                     // TODO:存在有效出价，通知发货方n个人出价，订单已经被接单
                     webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"8*" + cargo.getId() + "*" + n);
@@ -330,15 +331,13 @@ public class BidResource {
                             insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
                             logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
-
                             if (bid.getPriceCorrect() == 1) {
                                 //TODO: 通知承运方n个人出价，您没有抢到订单，因为有人出价比您低
                                 webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "7*" + n);
                             } else {
                                 // TODO：通知承运方n个人出价，您没有抢到订单，因为您的出价不合理
-                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n);
+                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n + "*" + bid.getBidPrice());
                             }
-
                         } else {
                             // TODO：通知承运方n个人出价，抢到了订单
                             webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "9*" + n);
@@ -351,7 +350,7 @@ public class BidResource {
                     webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"9*" + cargo.getId() + "*" + n);
                     for (Bid bid : bidlist) {
                         // TODO:通知承运方n个人出价，您的出价不合理。
-                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n);
+                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n + "*" + bid.getBidPrice());
                     }
                 }
             }
