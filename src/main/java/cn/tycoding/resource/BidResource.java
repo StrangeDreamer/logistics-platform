@@ -333,21 +333,21 @@ public class BidResource {
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
                             if (bid.getPriceCorrect() == 1) {
                                 //TODO: 通知承运方n个人出价，您没有抢到订单，因为有人出价比您低
-                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "7*" + n);
+                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "7*" + n + "*" + bid.getBidPrice());
                             } else {
                                 // TODO：通知承运方n个人出价，您没有抢到订单，因为您的出价不合理
                                 webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n + "*" + bid.getBidPrice());
                             }
                         } else {
                             // TODO：通知承运方n个人出价，抢到了订单
-                            webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "9*" + n);
+                            webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "9*" + n + "*" + bid.getBidPrice());
                         }
                     }
                 }
                 // 不存在有效出价
                 else {
                     // TODO: 不存在有效出价，通知发货方n个人出价，但无有效出价。
-                    webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"9*" + cargo.getId() + "*" + n);
+                    webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"9*" + cargo.getId() + "*" + n );
                     for (Bid bid : bidlist) {
                         // TODO:通知承运方n个人出价，您的出价不合理。
                         webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n + "*" + bid.getBidPrice());
