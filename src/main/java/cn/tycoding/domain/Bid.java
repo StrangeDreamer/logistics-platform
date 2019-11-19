@@ -18,6 +18,7 @@ public class Bid {
     private int cargoId;
     private double bidPrice;
     private int truckId;
+    private int priceCorrect;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

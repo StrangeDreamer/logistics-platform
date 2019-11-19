@@ -81,6 +81,7 @@ public class BidResource {
         Cargo cargo = cargoService.findCargoById(bid.getCargoId());
         Platform platform = platformRepository.findRecentPltf();
         double lowestBidPriceRatio = platform.getLowestBidPriceRatio();
+        bid.setPriceCorrect(1);
 
         if (nowTime.getTime() > cargo.getBidEndTime().getTime()) {
             logger.info("错过抢单时间");
@@ -109,10 +110,13 @@ public class BidResource {
             throw new BidException("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！重量超载");
         } else if ((bid.getBidPrice() > cargo.getFreightFare())
                 || (bid.getBidPrice() < cargo.getFreightFare() * lowestBidPriceRatio)) {
-            // 出价区间合理
+            // 出价区间不合理
+            bid.setPriceCorrect(-1);
             logger.info("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！价格不合理！");
-            throw new BidException("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
-                    + cargo.getFreightFare() * lowestBidPriceRatio + "~" + cargo.getFreightFare());
+//            throw new BidException("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！价格不合理！ 请在以下范围内出价："
+//                    + cargo.getFreightFare() * lowestBidPriceRatio + "~" + cargo.getFreightFare());
+//            throw new BidException("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！价格不合理！");
+
         } else if (!truck.isActivated()) {
             // 车辆激活才可以接单
             logger.info("货车" + bid.getTruckId() + "对订单" + cargo.getId() + "出价无效！该承运方尚未激活！");
@@ -198,6 +202,9 @@ public class BidResource {
             // 订单没有人抢/时间段内不存在有效出价：对于转单订单，转手订单原订单继续执行；对于最原始的订单，直接撤单
             if (bidrd == null) {
                 // 当precargo 为null，表示最原始的订单，直接撤单
+
+                // TODO:无人出价，通知发货方无人接单
+
                 if (cargo.getPreCargoId() == null) {
                     logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
                     // 冻结资金恢复
@@ -237,6 +244,7 @@ public class BidResource {
             }
             // 订单存在有效出价/有人抢单
             else {
+
                 //将缓存中的最低价和抢单用户刷进cargo数据库中
                 cargo.setBidPrice(bidrd.getBidPrice());
                 cargo.setTruckId(bidrd.getTruckId());
@@ -297,25 +305,46 @@ public class BidResource {
                 redisTemplate.boundHashOps(bidsKey).delete(cargoId);
 //                redisTemplate.boundHashOps(cargoKey).delete(cargoId);
                 cargoService.delCargoRedis(cargoId);
-
                 // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
                 List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
-                for (Bid bid : bidlist) {
-                    if (bid.getId() != bidrd.getId()) {
-                        // 担保额恢复
-                        InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(), "truck");
-                        insuranceAccountService.addMoneyLog(insuranceAccount,
-                                df.format(new Date())
-                                        + "  由于车辆" + bid.getTruckId() + "对订单" + cargo.getId() + "出价失败，车辆担保额恢复");
-                        insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
-                        logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
+
+
+                int n = bidlist.size();
+                // 存在有效出价
+                if (bidrd.getPriceCorrect() == 1) {
+                    // TODO:存在有效出价，通知发货方n个人出价，订单已经被接单
+                    for (Bid bid : bidlist) {
+                        if (bid.getId() != bidrd.getId()) {
+                            // 担保额恢复
+                            InsuranceAccount insuranceAccount = insuranceAccountService.check(bid.getTruckId(), "truck");
+                            insuranceAccountService.addMoneyLog(insuranceAccount,
+                                    df.format(new Date())
+                                            + "  由于车辆" + bid.getTruckId() + "对订单" + cargo.getId() + "出价失败，车辆担保额恢复");
+                            insuranceAccountService.changeAvailableMoney(insuranceAccount, cargo.getInsurance());
+                            logger.info("由于车辆" + bid.getTruckId() + "出价失败，担保额恢复" + cargoRepository.findCargoById(cargoId).getInsurance());
 //                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"抱歉，您没有抢到订单" + cargoId);
-                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
-                    } else {
-                        logger.info("该承运方{}抢到订单{}", bid.getTruckId(), cargoId);
-                        //通知该在线用户抢单成功消息
-//                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()),"恭喜您抢到了订单" + cargoId);
-                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 1);
+
+                            if (bid.getPriceCorrect() == 1) {
+                                //TODO: 通知承运方n个人出价，您没有抢到订单，因为有人出价比您低
+                                webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
+                            } else {
+                                // TODO：通知承运方n个人出价，您没有抢到订单，因为您的出价不合理
+                                webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
+                            }
+
+                        } else {
+                            // TODO：通知承运方n个人出价，抢到了订单
+                            webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 1);
+                        }
+                    }
+                }
+                // 不存在有效出价
+                else {
+                    // TODO: 不存在有效出价，通知发货方n个人出价，但无有效出价。
+
+                    for (Bid bid : bidlist) {
+                        // TODO:通知承运方n个人出价，您的出价不合理。
+                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 3);
                     }
                 }
             }
