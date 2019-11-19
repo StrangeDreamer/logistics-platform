@@ -214,6 +214,11 @@ public class InspectionService {
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
+
+            bankAccountService.addMoneyLog(bankAccountPlatform,
+                    "平台付给承运方" + preCargo.getTruckId() + "红包" + trueTruck1Profit
+                            + " 平台付给承运方" + cargo.getTruckId() + "红包" + trueTruck2Profit);
+
             bankAccountService.addMoneyLog(bankAccountPreTruck,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
             bankAccountService.addMoneyLog(bankAccountTruck,
@@ -314,7 +319,8 @@ public class InspectionService {
             bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, bidPrice);
 
             bankAccountService.addMoneyLog(bankAccountPlatform,
-                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配");
+                    df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配"
+            );
             bankAccountService.addMoneyLog(bankAccountTruck,
                     df.format(new Date()) + "  由于订单" + cargo.getId() + "的利润分配，平台支付"
                             + String.format("%.2f", trueTruck2Profit) + "作为红包");

@@ -383,8 +383,6 @@ public class CargoService {
         bankAccountService.transferMoney(bankAccountTruck, bankAccountPlatform, exhibitionFee);
 
         // 转单前冻结原承运方需要支付运费
-        bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
-                + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方" + cargo.getTruckId() + "运费");
         bankAccountService.addMoneyLog(bankAccountTruck, df.format(new Date())
                 + "  由于承运方" + cargo.getTruckId() + "进行转单而发布了订单,冻结承运方" + cargo.getTruckId() + "运费");
         bankAccountService.changeAvailableMoney(bankAccountTruck, 0 - freightFare);
