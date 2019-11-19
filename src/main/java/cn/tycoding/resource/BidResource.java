@@ -7,6 +7,7 @@ import cn.tycoding.exception.CargoException;
 import cn.tycoding.repository.*;
 import cn.tycoding.service.*;
 import cn.tycoding.websocket.WebSocketTest;
+import cn.tycoding.websocket.WebSocketTest3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,10 @@ public class BidResource {
     private BidService bidService;
     @Autowired
     private WebSocketTest webSocketTest;
+    @Autowired
+    private WebSocketTest3 webSocketTest3;
+
+
     @Autowired
     private BankAccountService bankAccountService;
     @Autowired
@@ -204,6 +209,7 @@ public class BidResource {
                 // 当precargo 为null，表示最原始的订单，直接撤单
 
                 // TODO:无人出价，通知发货方无人接单
+                webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"7*" + cargo.getId());
 
                 if (cargo.getPreCargoId() == null) {
                     logger.info("抢单时间段内无有效出价，自动撤单！展位费不予退回！");
@@ -313,6 +319,7 @@ public class BidResource {
                 // 存在有效出价
                 if (bidrd.getPriceCorrect() == 1) {
                     // TODO:存在有效出价，通知发货方n个人出价，订单已经被接单
+                    webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"8*" + cargo.getId() + "*" + n);
                     for (Bid bid : bidlist) {
                         if (bid.getId() != bidrd.getId()) {
                             // 担保额恢复
@@ -326,25 +333,25 @@ public class BidResource {
 
                             if (bid.getPriceCorrect() == 1) {
                                 //TODO: 通知承运方n个人出价，您没有抢到订单，因为有人出价比您低
-                                webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
+                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "7*" + n);
                             } else {
                                 // TODO：通知承运方n个人出价，您没有抢到订单，因为您的出价不合理
-                                webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 2);
+                                webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n);
                             }
 
                         } else {
                             // TODO：通知承运方n个人出价，抢到了订单
-                            webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 1);
+                            webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "9*" + n);
                         }
                     }
                 }
                 // 不存在有效出价
                 else {
                     // TODO: 不存在有效出价，通知发货方n个人出价，但无有效出价。
-
+                    webSocketTest3.sendToUser2(String.valueOf(cargo.getShipperId()),"9*" + cargo.getId() + "*" + n);
                     for (Bid bid : bidlist) {
                         // TODO:通知承运方n个人出价，您的出价不合理。
-                        webSocketTest.sendToUser3(String.valueOf(bid.getTruckId()), 3);
+                        webSocketTest.sendToUser2(String.valueOf(bid.getTruckId()), "8*" + n);
                     }
                 }
             }
