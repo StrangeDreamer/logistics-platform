@@ -267,12 +267,18 @@ public class BidResource {
                     BankAccount bankAccountTruck = bankAccountService.check(preCargo.getTruckId(), "truck");
                     InsuranceAccount insuranceAccount = insuranceAccountService.check(preCargo.getTruckId(), "truck");
 
+                    // 不管是否为转单，在接单后返还展位费的时候都需要利润空间大于手续费才可以免除手续费
+                    double moneyReturn = exhibitionFee;
+                    if (platform.getHandlingFee() > (cargo.getFreightFare() - cargo.getBidPrice())) {
+                        moneyReturn = exhibitionFee - platform.getHandlingFee();
+                    }
+
                     // 展位费退还给承运方
                     bankAccountService.addMoneyLog(bankAccountPlatform,
                             df.format(new Date()) + "  由于订单" + cargo.getId() + "被成功接单，平台返还转手承运方" + cargo.getTruckId() + "展位费");
                     bankAccountService.addMoneyLog(bankAccountTruck,
                             df.format(new Date()) + "  由于订单" + cargo.getId() + "被成功接单，平台返还转手承运方" + cargo.getTruckId() + "展位费");
-                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, exhibitionFee);
+                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, moneyReturn);
 
                     // 由于一单一结 担保额不在此处重复恢复
                     // 承运方上一单的担保额恢复
@@ -297,15 +303,22 @@ public class BidResource {
                     inspectionService.inspectionCargo(inspection);
 
                 }
-                // 如果不是转手订单，只需要退换承运方展位费
+                // 如果不是转手订单，只需要退换发货方展位费
                 else {
-                    // 展位费退还给发货方
+
+                    // 不管是否为转单，在接单后返还展位费的时候都需要利润空间大于手续费才可以免除手续费
+                    double moneyReturn = exhibitionFee;
+                    if (platform.getHandlingFee() > (cargo.getFreightFare() - cargo.getBidPrice())) {
+                        moneyReturn = exhibitionFee - platform.getHandlingFee();
+                    }
+
+                    // 展位费退还给发货
                     bankAccountService.addMoneyLog(bankAccountPlatform,
                             df.format(new Date()) + "  订单" + cargo.getId() + "被成功接单，平台返还发货方" + cargo.getTruckId() + "展位费");
                     bankAccountService.addMoneyLog(bankAccountShipper,
                             df.format(new Date()) + "  订单" + cargo.getId() + "被成功接单，平台返还发货方" + cargo.getTruckId() + "展位费");
-                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, exhibitionFee);
-                    logger.info("订单被成功接单，平台返还发货方" + cargo.getShipperId() + "展位费" + exhibitionFee);
+                    bankAccountService.transferMoney(bankAccountPlatform, bankAccountShipper, moneyReturn);
+                    logger.info("订单被成功接单，平台返还发货方" + cargo.getShipperId() + "展位费" + moneyReturn);
                 }
 
                 redisTemplate.boundHashOps(bidsKey).delete(cargoId);
@@ -313,7 +326,6 @@ public class BidResource {
                 cargoService.delCargoRedis(cargoId);
                 // 为没有中标的车辆 恢复担保额度:先找到本次出价的所有bid，对没有中标的bid的车辆恢复担保额
                 List<Bid> bidlist = bidRepository.findAllByCargoId(cargoId);
-
 
                 int n = bidlist.size();
                 // 存在有效出价

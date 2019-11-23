@@ -195,6 +195,14 @@ public class CargoService {
                 bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, wMoney);
                 bankAccountService.transferMoney(bankAccountPlatform, bankAccountTruck, wMoney);
 
+                // 第二类撤单 扣除发货方手续费
+                bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，支付手续费");
+                bankAccountService.addMoneyLog(bankAccountPlatform, df.format(new Date())
+                        + "  由于发货方" + cargo.getShipperId() + "对货物" + cargo.getId() + "进行已接未运撤单，支付手续费");
+                bankAccountService.transferMoney(bankAccountShipper, bankAccountPlatform, platformRepository.findRecentPltf().getHandlingFee());
+
+
                 // 解冻运费
                 bankAccountService.addMoneyLog(bankAccountShipper, df.format(new Date())
                         + "  由于发货方" + cargo.getShipperId() + "的货物" + cargo.getId() + "已经取消，运费进行解冻");

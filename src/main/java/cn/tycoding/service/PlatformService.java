@@ -55,6 +55,9 @@ public class PlatformService {
         platform1.setSpeedup(platform.getSpeedup());
 
         platform1.setBonusMaxRatioInFare(platform.getBonusMaxRatioInFare());
+
+        // TODO 手续费设定 默认为50 后面可改为从外面读入
+        platform1.setHandlingFee(50);
         logger.info("保存平台参数设定");
         platformRepository.save(platform1);
         return platform1;
