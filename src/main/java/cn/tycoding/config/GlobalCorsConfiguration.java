@@ -11,13 +11,19 @@ public class GlobalCorsConfiguration {
 
     @Bean
     public CorsFilter corsFilter() {
+
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addExposedHeader("head1");
-        //corsConfiguration.addExposedHeader("Location");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addExposedHeader("Content-Type");
+        corsConfiguration.addExposedHeader( "X-Requested-With");
+        corsConfiguration.addExposedHeader("accept");
+        corsConfiguration.addExposedHeader("Origin");
+        corsConfiguration.addExposedHeader( "Access-Control-Request-Method");
+        corsConfiguration.addExposedHeader("Access-Control-Request-Headers");
+
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
