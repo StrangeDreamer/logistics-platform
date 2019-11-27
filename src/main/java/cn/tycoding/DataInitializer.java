@@ -24,9 +24,9 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if(!users.findUserByUsernameAndKind("admin",4).isPresent()){
+        if(!users.findUserByUsernameAndKind("manager",4).isPresent()){
             this.users.save(User.builder()
-                    .username("admin")
+                    .username("manager")
                     .password(this.passwordEncoder.encode("123456"))
                     .kind(4)
                     .roles(Arrays.asList("ROLE_ADMIN"))
