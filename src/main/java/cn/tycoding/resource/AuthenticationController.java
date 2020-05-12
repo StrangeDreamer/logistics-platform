@@ -59,7 +59,8 @@ public class AuthenticationController {
     @GetMapping("/login/shippers")
     public ResponseEntity shipperLogin(@RequestParam String name,@RequestParam String password) {
         log.info("发货方方登录");
-        return ok(userService.login(name, password,2));
+        //   return ok(userService.login(name, password,2));
+        return ok(userService.shipperLogin(name, password,2));
     }
 
     /**
@@ -69,7 +70,7 @@ public class AuthenticationController {
     @GetMapping("/login/receivers")
     public ResponseEntity ReceiverLogin(@RequestParam String name,@RequestParam String password) {
         log.info("收货方登录");
-        return ok(userService.login(name, password,3));
+        return ok(userService.receiverLogin(name, password,3));
     }
 
     @MyLog(value = "平台登录")
