@@ -1,5 +1,7 @@
 package cn.tycoding.security.jwt;
 
+import cn.tycoding.domain.User;
+import cn.tycoding.security.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +23,7 @@ public class JwtTokenProvider {
     JwtProperties jwtProperties;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-    
+    CustomUserDetailsService userDetailsService;
     private String secretKey;
 
     @PostConstruct
@@ -47,7 +48,9 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
+        String[] split = getUsername(token).split("\\s+");
+        UserDetails userDetails = this.userDetailsService.loadUserByUsernameAndKind(split[0],Integer.parseInt(split[1]));
+
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

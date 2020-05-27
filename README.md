@@ -160,6 +160,8 @@ java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=
 
 5 任何一方只要有Token均可访问任意api 方便前端调用
 
+6 用户名不可以包含空格（token通过 "用户名+空格+用户类型" 产生）
+
 **关于Redis**
 
 1 仿照CargoService和TruckService里面的例子，完成其他

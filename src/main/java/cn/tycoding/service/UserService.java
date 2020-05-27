@@ -37,7 +37,8 @@ public class UserService {
 
     public Object truckLogin(String name, String password, int kind) {
         User user = (User) this.userDetailsService.loadUserByUsernameAndKind(name, kind);
-        String token = jwtTokenProvider.createToken(name, user.getRoles());
+        String token = jwtTokenProvider.createToken(name + " " + kind, user.getRoles());
+
         Map<Object, Object> model = new HashMap<>();
         model.put("id", user.getOwnId());
         Truck truck=truckRepository.findTruckById(user.getOwnId());
@@ -51,7 +52,7 @@ public class UserService {
 
     public Object shipperLogin(String name, String password, int kind) {
         User user = (User) this.userDetailsService.loadUserByUsernameAndKind(name, kind);
-        String token = jwtTokenProvider.createToken(name, user.getRoles());
+        String token = jwtTokenProvider.createToken(name + " " + kind, user.getRoles());
         Map<Object, Object> model = new HashMap<>();
         model.put("id", user.getOwnId());
         Shipper shipper = shipperRepository.findShipperById(user.getOwnId());
@@ -66,7 +67,7 @@ public class UserService {
 
     public Object receiverLogin(String name, String password, int kind) {
         User user = (User) this.userDetailsService.loadUserByUsernameAndKind(name, kind);
-        String token = jwtTokenProvider.createToken(name, user.getRoles());
+        String token = jwtTokenProvider.createToken(name + " " + kind, user.getRoles());
         Map<Object, Object> model = new HashMap<>();
         model.put("id", user.getOwnId());
         Receiver receiver = receiverRepository.findReceiverById(user.getOwnId());
@@ -81,7 +82,7 @@ public class UserService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
         User user = (User) this.userDetailsService.loadUserByUsernameAndKind(name,kind);
-        String token = jwtTokenProvider.createToken(name, user.getRoles());
+        String token = jwtTokenProvider.createToken(name + " " + kind, user.getRoles());
         Map<Object, Object> model = new HashMap<>();
         model.put("name", name);
         model.put("token", token);
@@ -100,7 +101,7 @@ public class UserService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(name, password));
         User user = (User) this.userDetailsService.loadUserByUsernameAndKind(name, kind);
-        String token = jwtTokenProvider.createToken(name, user.getRoles());
+        String token = jwtTokenProvider.createToken(name + " " + kind, user.getRoles());
         Map<Object, Object> model = new HashMap<>();
         model.put("id", user.getOwnId());
         model.put("name", name);
