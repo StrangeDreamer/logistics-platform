@@ -23,8 +23,12 @@
 **[需求变更记录](https://docs.google.com/document/d/1EUJGxyS2pTmbTStve1gEUCYWkn1KCf-pr_MBShYaBlI/edit?usp=sharing)**
 
 ### 生产环境
-```$xslt
+```
+#当前运行
 java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+#后台运行
+lsof -i:8089
+nohup java -jar target/springboot-seckill-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > nohup.out &
 ```
 
 * docker使用
